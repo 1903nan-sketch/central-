@@ -957,6 +957,15 @@ html{background:var(--bg)}
 .derm-line>svg{width:18px;height:18px;flex:none}.derm-line span{flex:1;min-width:0}
 .derm-line.vencida{background:var(--bad-bg)}.derm-line.renovar{background:var(--warn-bg)}
 @media (max-width:600px){.derm-card{flex-wrap:wrap}.derm-card .btn{width:100%}}
+.grid-cep{display:grid;grid-template-columns:150px 1fr 96px;gap:14px}
+@media (max-width:860px){.grid-cep{grid-template-columns:1fr 96px}.grid-cep>.field:nth-child(2){grid-column:1/-1;order:3}}
+:root .chip.chip-add{width:34px;padding:0;justify-content:center;background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink-4)}
+:root .chip.chip-add:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+:root .chip.chip-add svg{width:16px;height:16px}
+.chip-add-in{padding:0 4px 0 12px!important;background:var(--cell)!important;box-shadow:inset 0 0 0 1.5px var(--ink)!important}
+.chip-add-in input{border:0;outline:0;background:transparent;font:inherit;font-size:14px;color:var(--ink);width:120px}
+.chip-add-in button{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink)}
+.chip-add-in button svg{width:14px;height:14px}
 </style>
 </head>
 <body>
@@ -1057,6 +1066,10 @@ const digits=s=>String(s||'').replace(/\D/g,'');
 const maskPhone=v=>{if(String(v).trim().startsWith('+'))return v;const d=digits(v).slice(0,11);if(!d)return'';if(d.length<=2)return`(${d}`;if(d.length<=6)return`(${d.slice(0,2)}) ${d.slice(2)}`;if(d.length<=10)return`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;return`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`};
 const waNum=s=>{let d=digits(s);if(!d)return'';if(d.length<=11)d='55'+d;return d};
 const waLink=(phone,text)=>`https://wa.me/${waNum(phone)}?text=${encodeURIComponent(text)}`;
+const maskCPF=v=>{const d=digits(v).slice(0,11);return d.length>9?`${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`:d.length>6?`${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6)}`:d.length>3?`${d.slice(0,3)}.${d.slice(3)}`:d};
+const cpfOk=v=>{const d=digits(v);if(d.length!==11||/^(\d)\1+$/.test(d))return false;const dv=n=>{let t=0;for(let i=0;i<n;i++)t+=+d[i]*(n+1-i);const r=t*10%11;return r===10?0:r};return dv(9)===+d[9]&&dv(10)===+d[10]};
+const fullAddr=p=>{const a=(p.address||'').split(', ').filter(Boolean);if(p.addrNum)a.splice(a.length?1:0,0,p.addrNum);return a.join(', ')};
+const maskCEP=v=>{const d=digits(v).slice(0,8);return d.length>5?`${d.slice(0,5)}-${d.slice(5)}`:d};
 const SKINS=['Normal','Seca','Oleosa','Mista','Sensível','Acneica'];
 const brToIso=v=>{const m=String(v||'').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);if(!m)return'';const d=new Date(+m[3],+m[2]-1,+m[1]);return d.getDate()===+m[1]&&d.getMonth()===+m[2]-1&&+m[3]>1900&&d<=new Date()?iso(d):''};
 const fill=(t,v)=>String(t||'').replace(/\{(\w+)\}/g,(m,k)=>v[k]!=null?v[k]:m);
@@ -1071,7 +1084,7 @@ const defaults=()=>({
   procedures:SEED_PROCS.map(([name,price,duration,kind])=>({id:uid(),name,price,duration,kind:kind||'procedimento'})),
   settings:{doctor:'',clinic:'',doctorPhone:'',summaryDay:1,lastSummary:'',
     template:'Olá, {nome}! ✨\n\nAqui é da {clinica}. Está chegando o momento do seu retorno de {procedimento}, previsto para {data}.\n\nVamos agendar o melhor dia e horário para você? 💆‍♀️\n\n{doutora}',
-    budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:',dermSeeded:true,
+    budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:',dermSeeded:true,sources:['Google','Instagram','Indicação'],
     dermTemplate:'Olá, {nome}! ✨\n\nSua consulta dermatológica completa 6 meses em {data}. Para manter o acompanhamento da sua pele em dia, vamos agendar a renovação?\n\n{doutora}\n{clinica}'}
 });
 let memoryOnly=false;
@@ -1451,7 +1464,7 @@ function spotResults(q){
     if(rec.length)groups.push({g:'Pacientes recentes',items:rec.map(({p,l})=>({av:p.name,t:p.name,s:[p.phone,l?`última visita ${fmtD(l)}`:''].filter(Boolean).join(' · ')||'sem consultas',fn:()=>openFolder(p.id)}))});
     return groups;
   }
-  const pats=db.patients.filter(p=>has(p.name)||(dq.length>=3&&digits(p.phone).includes(dq))).slice(0,6);
+  const pats=db.patients.filter(p=>has(p.name)||(dq.length>=3&&(digits(p.phone).includes(dq)||digits(p.cpf).includes(dq)))).slice(0,6);
   if(pats.length)groups.push({g:'Pacientes',items:pats.map(p=>{const st=patientStats(p.id);return{av:p.name,t:p.name,s:[p.phone,st.nextR?`retorno ${fmtD(st.nextR.date)}`:'',st.done.length?`${st.done.length} atendimento${st.done.length>1?'s':''}`:''].filter(Boolean).join(' · ')||'Ficha básica',fn:()=>openFolder(p.id)}})});
   const ap=db.appointments.filter(a=>{const pt=P(a.patientId);return pt&&(has(pt.name)||has(procNames(a.items))||fmtD(a.date).includes(q.trim())||fmtDM(a.date)===q.trim())}).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
   if(ap.length)groups.push({g:'Consultas',items:ap.map(a=>({i:'cal',t:`${P(a.patientId).name}`,s:`${fmtD(a.date)}${a.time?' às '+a.time:''} · ${procNames(a.items)||'sem procedimentos'}`,meta:money(calc(a).total),fn:()=>openAppt({id:a.id})}))});
@@ -1609,9 +1622,12 @@ function openPatient(id,cb){
     body:`<div class="stack">
       <label class="field"><span>Nome completo <em>*</em></span><input class="in" data-k="name" value="${esc(p.name)}" placeholder="Ex.: Maria Fernanda Souza" autofocus></label>
       <div class="grid2">${f('phone','WhatsApp','inputmode="tel" placeholder="(11) 99999-9999"')}<label class="field"><span>Data de nascimento</span><div class="inwrap"><input class="in" data-k="birth" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" value="${p.birth?fmtD(p.birth):''}"><button type="button" class="in-ic" data-bcal aria-label="Abrir calendário">${ic('cal')}</button></div></label></div>
-      <div class="grid2">${f('email','E-mail','type="email" placeholder="opcional"')}${f('allergies','Alergias / contraindicações','placeholder="opcional"')}</div>
+      <div class="grid2">${f('cpf','CPF','inputmode="numeric" placeholder="000.000.000-00" maxlength="14"')}${f('email','E-mail','type="email" placeholder="opcional"')}</div>
+      <div class="grid-cep"><label class="field"><span>CEP</span><input class="in" data-k="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" value="${esc(p.cep||'')}"></label><label class="field"><span>Endereço <small class="muted" data-cepmsg style="font-weight:500"></small></span><input class="in" data-k="address" value="${esc(p.address||'')}" placeholder="Rua, bairro, cidade"></label><label class="field"><span>Nº</span><input class="in" data-k="addrNum" value="${esc(p.addrNum||'')}" placeholder="123" maxlength="12"></label></div>
+      <div class="grid2"><label class="field"><span>Primeiro contato</span><div class="inwrap"><input class="in" data-k="firstContact" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" value="${fmtD(p.firstContact||(ex?(ex.createdAt?iso(new Date(ex.createdAt)):''):today()))==='—'?'':fmtD(p.firstContact||(ex?(ex.createdAt?iso(new Date(ex.createdAt)):''):today()))}"><button type="button" class="in-ic" data-fcal aria-label="Abrir calendário">${ic('cal')}</button></div></label>${f('allergies','Alergias / contraindicações','placeholder="opcional"')}</div>
+      <div class="field"><span>Como conheceu a clínica</span><div class="chips" data-src></div><input type="hidden" data-k="source" value="${esc(p.source||'')}"></div>
       <div class="field"><span>Tipo de pele <small class="muted" style="font-weight:500">· pode marcar mais de um</small></span><div class="chips" data-skin>${SKINS.map(k=>`<button type="button" class="chip ${(p.skin||'').split(/,\s*/).includes(k)?'on':''}" data-v="${k}">${k}</button>`).join('')}</div><input type="hidden" data-k="skin" value="${esc(p.skin||'')}"></div>
-      <label class="field"><span>Observações</span><textarea class="in" data-k="notes" placeholder="Histórico, preferências, como conheceu a clínica...">${esc(p.notes||'')}</textarea></label>
+      <label class="field"><span>Observações</span><textarea class="in" data-k="notes" placeholder="Histórico, preferências, observações...">${esc(p.notes||'')}</textarea></label>
       <div class="small muted">Apenas o nome é obrigatório — complete o resto quando quiser.</div>
     </div>`,
     foot:`<button class="btn" data-cancel>Cancelar</button><button class="btn dark" data-save>${ic('check')}${ex?'Salvar':'Cadastrar'}</button>`,
@@ -1619,6 +1635,21 @@ function openPatient(id,cb){
       const ph=$('[data-k="phone"]',el);ph.oninput=()=>{ph.value=maskPhone(ph.value)};
       const bi=$('[data-k="birth"]',el);bi.oninput=()=>{const d=digits(bi.value).slice(0,8);bi.value=d.length>4?`${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4)}`:d.length>2?`${d.slice(0,2)}/${d.slice(2)}`:d};
       $('[data-bcal]',el).onclick=async e=>{const cur=brToIso(bi.value)||'1990-01-01';const v=await pickDate(e.currentTarget,cur,null,true);if(v)bi.value=fmtD(v)};
+      const cpf=$('[data-k="cpf"]',el);cpf.oninput=()=>{cpf.value=maskCPF(cpf.value)};
+      const dmask=i=>{i.oninput=()=>{const d=digits(i.value).slice(0,8);i.value=d.length>4?`${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4)}`:d.length>2?`${d.slice(0,2)}/${d.slice(2)}`:d}};
+      const fc=$('[data-k="firstContact"]',el);dmask(fc);
+      $('[data-fcal]',el).onclick=async e=>{const v=await pickDate(e.currentTarget,brToIso(fc.value)||today());if(v)fc.value=fmtD(v)};
+      const cep=$('[data-k="cep"]',el),adr=$('[data-k="address"]',el),cm=$('[data-cepmsg]',el);
+      cep.oninput=async()=>{cep.value=maskCEP(cep.value);const d=digits(cep.value);if(d.length!==8)return;cm.textContent='· buscando…';
+        try{const r=await fetch(`https://viacep.com.br/ws/${d}/json/`);const j=await r.json();if(j.erro)throw 0;
+          adr.value=[j.logradouro,j.bairro,j.localidade&&`${j.localidade}/${j.uf}`].filter(Boolean).join(', ');cm.textContent='· preenchido pelo CEP';$('[data-k="addrNum"]',el).focus()}
+        catch(e){cm.textContent='· não encontrei o CEP, digite o endereço'}};
+      const srcIn=$('[data-k="source"]',el),srcBox=$('[data-src]',el);
+      const drawSrc=(adding)=>{const L=db.settings.sources||[];srcBox.innerHTML=L.map(o=>`<button type="button" class="chip ${srcIn.value===o?'on':''}" data-o="${esc(o)}">${esc(o)}</button>`).join('')+(adding?`<span class="chip chip-add-in"><input placeholder="Nova opção" maxlength="30"><button type="button" data-ok aria-label="Adicionar">${ic('check')}</button></span>`:`<button type="button" class="chip chip-add" data-add aria-label="Criar nova opção">${ic('plus')}</button>`);
+        if(adding){const inp=$('input',srcBox),ok=()=>{const v=inp.value.trim();if(v){if(!db.settings.sources.some(x=>norm(x)===norm(v)))db.settings.sources.push(v);srcIn.value=db.settings.sources.find(x=>norm(x)===norm(v));save()}drawSrc(false)};
+          inp.focus();inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();ok()}else if(e.key==='Escape'){e.stopPropagation();drawSrc(false)}};$('[data-ok]',srcBox).onclick=ok}};
+      srcBox.onclick=e=>{if(e.target.closest('[data-add]'))return drawSrc(true);const b=e.target.closest('[data-o]');if(b){srcIn.value=srcIn.value===b.dataset.o?'':b.dataset.o;drawSrc(false)}};
+      if(!db.settings.sources)db.settings.sources=defaults().settings.sources;drawSrc(false);
       const sk=$('[data-k="skin"]',el);$('[data-skin]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;b.classList.toggle('on');sk.value=$$('[data-skin] .on',el).map(x=>x.dataset.v).join(', ')};
       setTimeout(()=>$('[data-k="name"]',el).focus(),60);
       $('[data-k="name"]',el).onkeydown=e=>{if(e.key==='Enter')$('[data-save]',el).click()};
@@ -1626,6 +1657,8 @@ function openPatient(id,cb){
       $('[data-save]',el).onclick=()=>{
         $$('[data-k]',el).forEach(i=>p[i.dataset.k]=i.value.trim());
         if(p.birth){const b=brToIso(p.birth);if(!b){toast('Data de nascimento inválida (use dd/mm/aaaa)');bi.focus();return}p.birth=b}
+        if(p.firstContact){const b=brToIso(p.firstContact);if(!b){toast('Data do primeiro contato inválida (use dd/mm/aaaa)');fc.focus();return}p.firstContact=b}
+        if(p.cpf&&!cpfOk(p.cpf)){toast('CPF inválido. Confira os números.');cpf.focus();return}
         if(!p.name){toast('O nome é obrigatório');$('[data-k="name"]',el).focus();return}
         if(ex)Object.assign(ex,p);else{p.id=uid();p.createdAt=Date.now();db.patients.push(p)}
         m.close();changed();toast(ex?'Dados atualizados':'Paciente cadastrado');
@@ -1654,7 +1687,7 @@ function vPacientes(){
 function pListHTML(){
   if(!db.patients.length)return`<div class="glass">${empty('users','Nenhum paciente ainda','Cadastre com apenas o nome — rápido e prático.',`<button class="btn dark" data-act="newPatient">${ic('plus')}Cadastrar paciente</button>`)}</div>`;
   const q=norm(S.pq),qd=digits(S.pq);
-  let L=db.patients.filter(p=>!q||norm(p.name).includes(q)||(qd&&digits(p.phone).includes(qd))).map(p=>({p,s:patientStats(p.id)}));
+  let L=db.patients.filter(p=>!q||norm(p.name).includes(q)||(qd&&(digits(p.phone).includes(qd)||digits(p.cpf).includes(qd)))).map(p=>({p,s:patientStats(p.id)}));
   const srt={recent:(a,b)=>(b.s.last||'').localeCompare(a.s.last||'')||(b.p.createdAt||0)-(a.p.createdAt||0),az:(a,b)=>a.p.name.localeCompare(b.p.name),ret:(a,b)=>(a.s.nextR?.date||'9').localeCompare(b.s.nextR?.date||'9'),value:(a,b)=>b.s.total-a.s.total};
   L.sort(srt[S.psort]);
   if(!L.length)return`<div class="glass">${empty('search','Nada encontrado',`Nenhum paciente para “${esc(S.pq)}”.`,`<button class="btn dark" data-act="quickCreate">${ic('plus')}Cadastrar “${esc(S.pq)}”</button>`)}</div>`;
@@ -1685,7 +1718,7 @@ function openFolder(id,tab='hist'){
             ${x.notes?`<div class="small" style="margin-top:8px;color:var(--ink-2);white-space:pre-wrap">${esc(x.notes)}</div>`:''}</div>`}).join('')}</div>`:empty('clock','Sem atendimentos','Registre a primeira consulta desta paciente.');
         if(cur==='orc')body=B.length?`<div class="list">${B.map(b=>`<button class="item" data-eb="${b.id}">${ic('doc','style="width:20px;height:20px;opacity:.6"')}<div class="grow"><div class="t">${esc(procNames(b.items)||'Orçamento')}</div><div class="s">${fmtD(b.date)} · ${b.items.length} item(ns)</div></div><div style="text-align:right"><div class="price small">${money(calc(b).total)}</div>${badge(BST,b.status)}</div></button>`).join('')}</div>`:empty('doc','Sem orçamentos','Crie um orçamento para informar os valores.');
         if(cur==='ret')body=R.length?`<div class="list">${R.map(r=>`<div class="item"><span class="time">${fmtDM(r.date)}</span><div class="grow"><div class="t">${esc(r.note||'Retorno')}</div><div class="s">${fmtD(r.date)} · ${relDays(r.date)}</div></div>${badge(RST,r.status)}<button class="btn sm icon ghost" data-rm="${r.id}">${ic('more')}</button></div>`).join('')}</div>`:empty('ret','Sem retornos','Os retornos são criados ao salvar uma consulta.');
-        if(cur==='ficha')body=`<dl class="kv"><dt>Nome</dt><dd>${esc(p.name)}</dd><dt>WhatsApp</dt><dd>${esc(p.phone||'—')}</dd><dt>Nascimento</dt><dd>${p.birth?`${fmtD(p.birth)} (${a} anos)`:'—'}</dd><dt>E-mail</dt><dd>${esc(p.email||'—')}</dd><dt>Tipo de pele</dt><dd>${esc(p.skin||'—')}</dd><dt>Alergias</dt><dd>${esc(p.allergies||'—')}</dd><dt>Observações</dt><dd>${esc(p.notes||'—')}</dd><dt>Cliente desde</dt><dd>${p.createdAt?new Date(p.createdAt).toLocaleDateString('pt-BR'):'—'}</dd></dl>`;
+        if(cur==='ficha')body=`<dl class="kv"><dt>Nome</dt><dd>${esc(p.name)}</dd><dt>WhatsApp</dt><dd>${esc(p.phone||'—')}</dd><dt>CPF</dt><dd>${esc(p.cpf||'—')}</dd><dt>Endereço</dt><dd>${esc([fullAddr(p),p.cep&&`CEP ${p.cep}`].filter(Boolean).join(' · ')||'—')}</dd><dt>Primeiro contato</dt><dd>${p.firstContact?fmtD(p.firstContact):'—'}</dd><dt>Como conheceu</dt><dd>${esc(p.source||'—')}</dd><dt>Nascimento</dt><dd>${p.birth?`${fmtD(p.birth)} (${a} anos)`:'—'}</dd><dt>E-mail</dt><dd>${esc(p.email||'—')}</dd><dt>Tipo de pele</dt><dd>${esc(p.skin||'—')}</dd><dt>Alergias</dt><dd>${esc(p.allergies||'—')}</dd><dt>Observações</dt><dd>${esc(p.notes||'—')}</dd><dt>Cliente desde</dt><dd>${p.createdAt?new Date(p.createdAt).toLocaleDateString('pt-BR'):'—'}</dd></dl>`;
         $('[data-fb]',el).innerHTML=`<div class="f-head">${av(p.name,'lg')}<div style="flex:1;min-width:0"><h2>${esc(p.name)}</h2><div class="muted small">${[p.phone,a!==''?a+' anos':'',p.skin?'pele '+p.skin.toLowerCase():''].filter(Boolean).map(esc).join(' · ')||'Ficha básica'}</div></div>
           <div class="row">${p.phone?`<a class="btn wa sm" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener">${ic('wa')}<span class="btn-label">WhatsApp</span></a>`:''}<button class="btn sm icon" data-pm>${ic('more')}</button></div></div>
           ${p.allergies?`<div class="badge bad" style="margin-top:12px">⚠ ${esc(p.allergies)}</div>`:''}
@@ -1947,12 +1980,15 @@ Object.assign(ACT,{
 });
 
 /* ================= dados de exemplo ================= */
+function demoCPF(n){const b=String(123456780+n*1111).slice(0,9).split('').map(Number);const dv=k=>{let t=0;for(let i=0;i<k;i++)t+=b[i]*(k+1-i);const r=t*10%11;return r===10?0:r};b.push(dv(9));b.push(dv(10));return maskCPF(b.join(''))}
 function seedDemo(){
   const t=today();if(!db.procedures.length)db.procedures=defaults().procedures;const pr=db.procedures.filter(x=>x.kind!=='consulta');
   const N=['Ana Beatriz Souza','Carla Mendes','Juliana Rocha','Fernanda Lima','Patrícia Alves','Marina Costa','Renata Oliveira','Luciana Martins','Camila Ferreira','Beatriz Nogueira'];
   const back=[6,5,6,5,4,3,2,5,1,6];
   N.forEach((n,i)=>{
-    const p={id:uid(),name:n,phone:i===6?'':maskPhone(`119${String(87654321-i*1234567).slice(0,8)}`),skin:['Mista','Seca','Oleosa','Sensível','Normal'][i%5],createdAt:Date.now()-back[i]*30*864e5};db.patients.push(p);
+    const p={id:uid(),name:n,phone:i===6?'':maskPhone(`119${String(87654321-i*1234567).slice(0,8)}`),skin:['Mista','Seca','Oleosa','Sensível','Normal'][i%5],createdAt:Date.now()-back[i]*30*864e5,
+      firstContact:addDays(addMonths(t,-back[i]),-7),source:['Instagram','Indicação','Google'][i%3],cpf:i%2?'':demoCPF(i),
+      cep:i===0?'01310-100':'',address:i===0?'Avenida Paulista, Bela Vista, São Paulo/SP':'',addrNum:i===0?'1000':''};db.patients.push(p);
     const d=addDays(addMonths(t,-back[i]),(i*3)%9-3),it=[pr[i%pr.length]].concat(i%4===0?[pr[(i+3)%pr.length]]:[]).map(x=>({procId:x.id,name:x.name,price:x.price,qty:1}));
     const a={id:uid(),patientId:p.id,date:d,time:`${pad(9+i%8)}:${i%2?'30':'00'}`,status:'realizada',items:it,discountType:'pct',discountValue:i%3===0?10:0,notes:i%3===1?'Pele respondeu bem. Indicado protetor solar FPS 50.':'',createdAt:Date.now()};db.appointments.push(a);
     const rm=back[i]>=4?6:3;db.returns.push({id:uid(),patientId:p.id,date:addMonths(d,rm),note:procNames(it),status:'pendente',apptId:a.id,createdAt:Date.now()});
