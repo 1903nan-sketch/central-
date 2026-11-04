@@ -1,6 +1,6 @@
 {
-  "name": "Lumière",
-  "short_name": "Lumière",
+  "name": "Minha clínica",
+  "short_name": "Clínica",
   "description": "Gestão da clínica de estética: agenda, pacientes, orçamentos e retornos.",
   "start_url": "./",
   "scope": "./",

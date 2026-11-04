@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Lumière · Estética</title>
+<title>Minha clínica</title>
 <meta name="theme-color" content="#f2f2f7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Lumière">
+<meta name="apple-mobile-web-app-title" content="Minha clínica">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -1131,13 +1131,13 @@ function showLogin(mode,o={}){
   const pw=(k,l,ac)=>`<label class="field"><span>${l}</span><div class="inwrap"><input class="in" type="password" data-a="${k}" autocomplete="${ac}" placeholder="••••••••"><button type="button" class="in-ic" data-eye aria-label="Mostrar senha">${ic('eye')}</button></div></label>`;
   const em=`<label class="field"><span>E-mail</span><input class="in" type="email" data-a="email" autocomplete="email" inputmode="email" placeholder="seu@email.com" value="${esc(o.email||last)}"></label>`;
   const V={
-    login:{t:'Bem-vinda de volta',s:'Entre para acessar sua clínica',f:em+pw('pass','Senha','current-password'),b:'Entrar',l:`<span class="auth-help">Esqueceu a senha? Fale com o suporte.</span>`},
+    login:{t:'Bem-vinda de volta',s:brandKnown()?`Entre para acessar a ${esc(brandName())}`:'Entre para acessar sua clínica',f:em+pw('pass','Senha','current-password'),b:'Entrar',l:`<span class="auth-help">Esqueceu a senha? Fale com o suporte.</span>`},
     forgot:{t:'Recuperar senha',s:'Enviaremos um link para o seu e-mail',f:em,b:'Enviar link',l:`<button type="button" data-go="login">Voltar para <b>Entrar</b></button>`},
     reset:{t:'Nova senha',s:'Escolha uma nova senha para entrar',f:pw('pass','Nova senha','new-password')+pw('pass2','Repita a nova senha','new-password'),b:'Salvar e entrar',l:''},
     sent:{t:'Confira seu e-mail',s:o.msg||'Enviamos um link para você.',f:'',b:'',l:`<button type="button" data-go="login">Voltar para <b>Entrar</b></button>`},
     denied:{t:'Acesso não liberado',s:`A conta <b>${esc(session?session.user.email:'')}</b> ainda não tem acesso a este sistema. Fale com o administrador.`,f:'',b:'',l:`<button type="button" data-out>Sair e usar outra conta</button>`}
   }[mode];
-  $('#auth').innerHTML=`<div class="auth-card glass"><div class="brand-mark">L</div><div class="auth-brand">Lumière</div>
+  $('#auth').innerHTML=`<div class="auth-card glass"><div class="brand-mark" style="background-image:url(${brandIcon(192)})"></div><div class="auth-brand">${esc(brandName())}</div>
     <h1>${V.t}</h1><p class="muted">${V.s}</p>${o.msg&&mode!=='sent'?`<div class="auth-msg">${esc(o.msg)}</div>`:''}
     ${V.f?`<form class="stack" novalidate>${V.f}<div class="auth-err" role="alert"></div><button class="btn dark auth-btn" type="submit">${V.b}</button></form>`:''}
     <div class="auth-links">${V.l}</div></div>`;
@@ -1164,7 +1164,7 @@ function startDemo(){
   document.body.classList.remove('locked');$('#auth').innerHTML='';
   db=readLocal(localKey())||defaults();if(!db.patients.length)seedDemo();persist();S.anim=true;render();
 }
-async function boot(){
+async function boot(){applyBrand();
   if(window.LUMIERE_DEMO)return startDemo();
   const h=new URLSearchParams(location.hash.slice(1));
   if(h.get('access_token')&&h.get('refresh_token')){history.replaceState(null,'',location.pathname+location.search);
@@ -1241,8 +1241,8 @@ function pickDate(anchor,val,quick,yearFirst){return new Promise(res=>{
 /* ================= shell / navegação ================= */
 const NAV=[['agenda','Agenda','cal','Agenda'],['pacientes','Pacientes','users','Pacientes'],['orcamentos','Orçamentos','doc','Orçam.'],['retornos','Retornos','ret','Retornos'],['procedimentos','Procedimentos','tag','Proced.'],['ajustes','Ajustes','cog','Ajustes']];
 function navHTML(mob){const n=pendingCount();return NAV.filter(([k])=>mob||k!=='ajustes').map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}
-function renderShell(){
-  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<button class="theme-btn" data-theme-toggle title="${document.documentElement.dataset.theme==='dark'?'Modo claro':'Modo escuro'}">${ic(document.documentElement.dataset.theme==='dark'?'sun':'moon')}</button><div class="side-foot"><i id="syncDot" class="sync ${cloud.state}"></i><button class="gear-btn ${S.view==='ajustes'?'on':''}" data-nav="ajustes" title="Ajustes" aria-label="Ajustes">${ic('gear')}</button></div>`;
+function renderShell(){applyBrand();
+  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc(brandInitial())}</div><div><b>${esc(brandName())}</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<button class="theme-btn" data-theme-toggle title="${document.documentElement.dataset.theme==='dark'?'Modo claro':'Modo escuro'}">${ic(document.documentElement.dataset.theme==='dark'?'sun':'moon')}</button><div class="side-foot"><i id="syncDot" class="sync ${cloud.state}"></i><button class="gear-btn ${S.view==='ajustes'?'on':''}" data-nav="ajustes" title="Ajustes" aria-label="Ajustes">${ic('gear')}</button></div>`;
   $('#tabbar').innerHTML=navHTML(true);
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav);if(e.target.closest('[data-theme-toggle]'))setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
@@ -1274,7 +1274,7 @@ function vAgenda(){
   const newP=db.patients.filter(p=>p.createdAt&&mKey(iso(new Date(p.createdAt)))===mk).length;
   let html=topbar(greet,'',`<button class="btn" data-act="newPatient">${ic('user')}<span class="btn-label">Paciente</span></button><button class="btn" data-act="newBudget">${ic('doc')}<span class="btn-label">Orçamento</span></button><button class="btn dark" data-act="newAppt">${ic('plus')}Nova consulta</button>`,cap(fmtLong(t)));
   html+=`<button class="spot-trigger" data-act="spot" aria-label="Buscar">${ic('search')}<span>Buscar pacientes, consultas, orçamentos…</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform)?'⌘':'Ctrl'} K</kbd></button>`;
-  if(!db.patients.length)html+=`<div class="banner glass"><div class="ic">${ic('spark')}</div><div style="flex:1"><b>Bem-vinda ao Lumière</b><div class="small muted">Cadastre seu primeiro paciente (só o nome é obrigatório) ou veja o sistema com dados de exemplo.</div></div><button class="btn" data-act="demo">Ver exemplo</button><button class="btn dark" data-act="newPatient">Cadastrar</button></div>`;
+  if(!db.patients.length)html+=`<div class="banner glass"><div class="ic">${ic('spark')}</div><div style="flex:1"><b>Bem-vinda ao seu sistema</b><div class="small muted">Cadastre seu primeiro paciente (só o nome é obrigatório) ou veja o sistema com dados de exemplo.</div></div><button class="btn" data-act="demo">Ver exemplo</button><button class="btn dark" data-act="newPatient">Cadastrar</button></div>`;
   else if(summaryNeeded())html+=`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1"><b>Retornos de ${mName(nk)}: ${rn.length} paciente${rn.length>1?'s':''}</b><div class="small muted">Sua lista do próximo mês está pronta para organizar a agenda.</div></div><button class="btn" data-act="goRet">Ver lista</button><button class="btn wa" data-act="sendSummary">${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`;
   html+=`<div class="stats glass">
     <div class="stat"><span class="lbl">${ic('clock')}Hoje</span><span class="val">${apT.length}</span><span class="sub">consulta${apT.length===1?'':'s'} agendada${apT.length===1?'':'s'}</span></div>
@@ -1327,6 +1327,37 @@ Object.assign(ACT,{
   sendSummary:()=>sendSummary(mShift(mKey(today()),1)),
   demo:()=>{seedDemo();changed();toast('Dados de exemplo carregados')}
 });
+
+/* ================= MARCA = NOME DA CLÍNICA (muda sozinha quando a clínica muda o nome) ================= */
+const BRAND_KEY='lumiere.brand';
+const brandStored=()=>{try{return localStorage.getItem(BRAND_KEY)||''}catch(e){return''}};
+function brandName(){return ((db&&db.settings&&db.settings.clinic)||'').trim()||brandStored()||'Minha clínica'}
+const brandKnown=()=>brandName()!=='Minha clínica';
+function brandInitial(){const stop=['clinica','dra','dr','studio','estudio','espaco','instituto','centro','de','da','do','das','dos','e','minha','a','o'];
+  const w=brandName().split(/\s+/).filter(x=>x&&!stop.includes(norm(x).replace(/\./g,'')));return((w[0]||brandName()).charAt(0)||'C').toUpperCase()}
+const _iconCache={};
+function brandIcon(size){const k=brandInitial()+size+(document.fonts&&document.fonts.status);if(_iconCache[k])return _iconCache[k];
+  const c=document.createElement('canvas');c.width=c.height=size;const x=c.getContext('2d');
+  const g=x.createRadialGradient(size*.3,size*.15,0,size*.5,size*.5,size*.85);g.addColorStop(0,'#ffffff');g.addColorStop(.45,'#f2f2f7');g.addColorStop(1,'#d9dbe1');x.fillStyle=g;x.fillRect(0,0,size,size);
+  x.strokeStyle='rgba(40,44,52,.07)';x.lineWidth=Math.max(1,size/256);for(let r=size*.07;r<size*.5;r+=size*.072){x.beginPath();x.arc(size/2,size/2,r,0,Math.PI*2);x.stroke()}
+  x.fillStyle='#1d1d1f';x.font=`600 ${Math.round(size*.48)}px -apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,"Helvetica Neue",Arial,sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(brandInitial(),size/2,size*.535);
+  return _iconCache[k]=c.toDataURL('image/png')}
+let _brandApplied='';
+function applyBrand(){const name=brandName();if(brandKnown()){try{localStorage.setItem(BRAND_KEY,name)}catch(e){}}
+  const key=name+'|'+(document.fonts&&document.fonts.status);if(_brandApplied===key)return;_brandApplied=key;
+  document.title=name;
+  const set=(sel,attr,val,mk)=>{let el=document.querySelector(sel);if(!el&&mk){el=document.createElement(mk.tag);Object.assign(el,mk.props);document.head.appendChild(el)}if(el)el.setAttribute(attr,val)};
+  set('meta[name="apple-mobile-web-app-title"]','content',name);
+  set('link[rel="apple-touch-icon"]','href',brandIcon(180),{tag:'link',props:{rel:'apple-touch-icon'}});
+  set('link[rel="icon"]','href',brandIcon(64));
+  try{const base=location.href.split('#')[0].split('?')[0],dir=base.slice(0,base.lastIndexOf('/')+1);
+    const short=name.length<=12?name:name.split(/\s+/).filter(Boolean).slice(0,2).join(' ').slice(0,12);
+    const man={name,short_name:short,start_url:base,scope:dir,display:'standalone',orientation:'portrait',background_color:'#f2f2f7',theme_color:'#f2f2f7',
+      icons:[{src:brandIcon(192),sizes:'192x192',type:'image/png',purpose:'any'},{src:brandIcon(512),sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+    const old=document.querySelector('link[rel="manifest"]');if(old&&old.href.startsWith('blob:'))URL.revokeObjectURL(old.href);
+    if(location.protocol.startsWith('http'))set('link[rel="manifest"]','href',URL.createObjectURL(new Blob([JSON.stringify(man)],{type:'application/manifest+json'})))}catch(e){}
+}
+if(document.fonts)document.fonts.ready.then(()=>{_brandApplied='';applyBrand()});
 
 /* ================= JANELA DO DIA (setas + arrastar no celular) ================= */
 function syncCalendar(d){S.selDay=d;if(mKey(d)!==S.calMonth)S.calMonth=mKey(d);if(S.view==='agenda'&&$('#calCard')){$('#calCard').innerHTML=calHTML();$('#dayPanel').innerHTML=dayHTML()}}
