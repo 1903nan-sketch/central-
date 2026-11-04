@@ -489,7 +489,7 @@ const SEED_PROCS=[['Limpeza de pele profunda',180,60],['Peeling químico',260,45
 const defaults=()=>({
   patients:[],appointments:[],budgets:[],returns:[],
   procedures:SEED_PROCS.map(([name,price,duration])=>({id:uid(),name,price,duration})),
-  settings:{doctor:'',clinic:'',doctorPhone:'',summaryDay:1,lastSummary:'',autoSummary:false,callmebotKey:'',
+  settings:{doctor:'',clinic:'',doctorPhone:'',summaryDay:1,lastSummary:'',autoSummary:false,evoUrl:'',evoInstance:'',evoKey:'',evoDelay:8,
     template:'Olá, {nome}! ✨\n\nAqui é da {clinica}. Está chegando o momento do seu retorno de {procedimento}, previsto para {data}.\n\nVamos agendar o melhor dia e horário para você? 💆‍♀️\n\n{doutora}',
     budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:'}
 });
@@ -518,7 +518,7 @@ const av=(name,cls='')=>`<div class="avatar ${cls}">${esc(initials(name))}</div>
 const S={view:'agenda',anim:true,calMonth:mKey(today()),selDay:today(),calSlide:'',pq:'',psort:'recent',bf:'todos',bq:'',retMode:'month',retMonth:mKey(addMonths(today(),1)),retSel:null,retSelKey:''};
 
 /* ================= toast / modal / menu / datepicker ================= */
-function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='.3s';t.style.opacity='0';t.style.transform='translateY(8px)'},2600);setTimeout(()=>t.remove(),2950)}
+function toast(msg){const box=$('#toasts');[...box.children].forEach(c=>{if(c.textContent===msg)c.remove()});while(box.children.length>=2)box.firstChild.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='.3s';t.style.opacity='0';t.style.transform='translateY(8px)'},2600);setTimeout(()=>t.remove(),2950)}
 const layers=[];
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&layers.length){e.preventDefault();layers[layers.length-1].close()}});
 function openModal({title,size='',body,foot='',onMount,onClose}){
@@ -859,7 +859,7 @@ Object.assign(ACT,{bf:k=>{S.bf=k;render()},editBudget:id=>openBudget({id}),sendB
   budgetMenu:(id,a)=>{const b=db.budgets.find(x=>x.id===id);openMenu(a,[{label:'Converter em consulta',icon:'cal',fn:()=>budgetToAppt(b)},{label:'Enviar no WhatsApp',icon:'wa',fn:()=>sendBudget(id)},{label:'Imprimir / PDF',icon:'print',fn:()=>printBudget(b)},{label:'Abrir pasta do paciente',icon:'folder',fn:()=>openFolder(b.patientId,'orc')},{label:'Marcar como recusado',icon:'x',fn:()=>{b.status='recusado';changed()}},{label:'Excluir',icon:'trash',danger:true,fn:async()=>{if(await confirmBox('Excluir este orçamento?')){db.budgets=db.budgets.filter(x=>x!==b);changed()}}}])}});
 function budgetText(b){const p=P(b.patientId),c=calc(b),s=db.settings;
   return`${fill(s.budgetIntro,{nome:first(p.name)})}\n\n${b.items.map(i=>`• ${i.name}${(+i.qty||1)>1?` (×${i.qty})`:''} — ${money(i.price*(i.qty||1))}`).join('\n')}\n\n${c.disc?`Subtotal: ${money(c.sub)}\nDesconto: − ${money(c.disc)}\n`:''}*Total: ${money(c.total)}*${b.validUntil?`\n\nVálido até ${fmtD(b.validUntil)}.`:''}${b.notes?`\n\n${b.notes}`:''}${s.clinic||s.doctor?`\n\n${[s.doctor,s.clinic].filter(Boolean).join(' · ')}`:''}`}
-function sendBudget(id){const b=db.budgets.find(x=>x.id===id),p=P(b.patientId);if(!p.phone){toast('Paciente sem WhatsApp cadastrado');return}window.open(waLink(p.phone,budgetText(b)),'_blank');b.sentAt=today();save()}
+async function sendBudget(id){const b=db.budgets.find(x=>x.id===id),p=P(b.patientId);if(!p.phone){toast('Paciente sem WhatsApp cadastrado');return}if(evoOn()){toast('Enviando orçamento…');try{await evoSend(p.phone,budgetText(b));toast(`Orçamento enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,budgetText(b)),'_blank');b.sentAt=today();save()}
 function budgetToAppt(b){openAppt({patientId:b.patientId,items:clone(b.items),discountType:b.discountType,discountValue:b.discountValue,budgetId:b.id,date:today(),notes:b.notes})}
 function printBudget(b){const p=P(b.patientId),c=calc(b),s=db.settings,w=window.open('','_blank');if(!w){toast('Permita pop-ups para imprimir');return}
   w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Orçamento - ${esc(p.name)}</title><style>body{font-family:Inter,Arial,sans-serif;color:#1d2127;max-width:720px;margin:40px auto;padding:0 24px}h1{font-family:Georgia,serif;font-weight:500;font-size:30px;margin:0}.m{color:#7a828c;font-size:13px}table{width:100%;border-collapse:collapse;margin:28px 0}td,th{padding:11px 4px;border-bottom:1px solid #e6e8ec;text-align:left;font-size:14px}th{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#7a828c}.r{text-align:right}.t td{border:0;padding:5px 4px}.big{font-size:20px;font-weight:700}hr{border:0;border-top:1px solid #e6e8ec;margin:24px 0}</style></head><body>
@@ -911,7 +911,7 @@ function vRetornos(){
     <div class="row between wrap" style="margin-bottom:12px"><h3 style="margin:0">${S.retMode==='late'?'Retornos atrasados':`Pacientes de ${mName(S.retMonth)}`}</h3>${L.length?`<label class="row small strong" style="cursor:pointer;color:var(--ink-2)"><input type="checkbox" class="ck" data-chg="ckall" ${sel&&sel===withPhone.length?'checked':''}>Selecionar todos</label>`:''}</div>
     ${L.length?`<div class="list">${L.map(r=>{const p=P(r.patientId),on=S.retSel.has(r.id);return`<div class="item ritem ${on||!p.phone?'':'off'}" data-row="${r.id}"><label><input type="checkbox" class="ck" data-chg="ck" data-id="${r.id}" ${on?'checked':''} ${p.phone?'':'disabled'}></label>${av(p.name)}<div class="grow" data-act="folder" data-id="${p.id}" style="cursor:pointer"><div class="t">${esc(p.name)}</div><div class="s">${fmtD(r.date)} · ${esc(r.note||'Retorno')} · ${p.phone?esc(p.phone):'<span style="color:var(--bad)">sem WhatsApp</span>'}</div></div>${r.status==='avisado'?`<span class="badge info">Avisado ${r.notifiedAt?fmtDM(r.notifiedAt):''}</span>`:badge(RST,r.status)}<button class="btn sm icon ghost" data-act="rmenu" data-id="${r.id}">${ic('more')}</button></div>`}).join('')}</div>`:empty('ret',S.retMode==='late'?'Nenhum retorno atrasado':'Nenhum retorno neste mês','Os retornos aparecem aqui ao salvar consultas com “1, 3 ou 6 meses”.')}
   </div>
-    ${L.length?`<div class="rbar glass"><span class="small"><b id="selN">${sel}</b> de ${L.length} <span class="hide-m">selecionado${L.length===1?'':'s'}</span><span class="hide-m">${L.length>withPhone.length?` · ${L.length-withPhone.length} sem WhatsApp`:''}</span></span><button class="btn dark" data-act="dispatch" id="dispBtn" ${sel?'':'disabled'}>${ic('send')}Disparar mensagens</button></div>`:''}
+    ${L.length?`<div class="rbar glass"><span class="small"><b id="selN">${sel}</b> de ${L.length} <span class="hide-m">selecionado${L.length===1?'':'s'}</span><span class="hide-m">${L.length>withPhone.length?` · ${L.length-withPhone.length} sem WhatsApp`:''}</span></span><button class="btn dark" data-act="dispatch" id="dispBtn" ${sel?'':'disabled'}>${ic('send')}${evoOn()?'Enviar automático':'Disparar mensagens'}</button></div>`:''}
   <details class="glass card" style="margin-top:16px" ${S.tplOpen?'open':''} id="tplBox"><summary style="cursor:pointer;font-weight:600;list-style:none" class="row between">Mensagem de retorno <span class="small muted">editar modelo ▾</span></summary>
     <div class="grid2" style="margin-top:14px;align-items:start"><div class="field"><span>Modelo</span><textarea class="in" data-inp="tpl" style="min-height:200px">${esc(db.settings.template)}</textarea><div class="chips" style="margin-top:4px">${['nome','data','procedimento','clinica','doutora','mes'].map(v=>`<button class="chip" style="height:28px;font-size:11.5px" data-act="tplVar" data-id="${v}">{${v}}</button>`).join('')}</div></div>
     <div class="field"><span>Prévia${L[0]?` · ${esc(first(P(sample.patientId).name))}`:''}</span><div class="msg-prev" id="tplPrev">${esc(prev)}</div></div></div></details>`;
@@ -946,6 +946,7 @@ function openReturn(o){
     }});
 }
 function openQueue(L){
+  if(evoOn())return openQueueAuto(L);
   let i=0,sent=0;
   openModal({title:'Disparo de mensagens',size:'sm',body:'<div data-q></div>',onMount:(el,m)=>{
     const draw=()=>{const box=$('[data-q]',el);
@@ -962,9 +963,49 @@ function openQueue(L){
   },onClose:()=>{S.retSel=null;changed()}});
 }
 function summaryText(k){const L=returnsOfMonth(k);return`🗓️ *Retornos de ${cap(mName(k))}/${k.slice(0,4)}*\n${db.settings.clinic?db.settings.clinic+'\n':''}\n${L.map(r=>{const p=P(r.patientId);return`• ${fmtDM(r.date)} — ${p.name}${p.phone?` · ${p.phone}`:''}${r.note?`\n   ${r.note}`:''}`}).join('\n')}\n\nTotal: ${L.length} paciente${L.length===1?'':'s'}. Boa organização! ✨`}
-function sendSummary(k){if(!db.settings.doctorPhone){toast('Cadastre seu WhatsApp em Ajustes');go('ajustes');return}window.open(waLink(db.settings.doctorPhone,summaryText(k)),'_blank');if(k===mShift(mKey(today()),1)){db.settings.lastSummary=k}changed()}
-function autoSummary(){const s=db.settings;if(!s.autoSummary||!s.callmebotKey||!s.doctorPhone||!summaryNeeded())return;const k=mShift(mKey(today()),1);callmebot(summaryText(k)).then(()=>{s.lastSummary=k;changed();toast(`Resumo de ${mName(k)} enviado ao seu WhatsApp`)})}
-function callmebot(text){const s=db.settings;return fetch(`https://api.callmebot.com/whatsapp.php?phone=${waNum(s.doctorPhone)}&text=${encodeURIComponent(text)}&apikey=${encodeURIComponent(s.callmebotKey)}`,{mode:'no-cors'})}
+async function sendSummary(k){if(!db.settings.doctorPhone){toast('Cadastre seu WhatsApp em Ajustes');go('ajustes');return}if(evoOn()){try{await evoSend(db.settings.doctorPhone,summaryText(k));toast('Resumo enviado ao seu WhatsApp')}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(db.settings.doctorPhone,summaryText(k)),'_blank');if(k===mShift(mKey(today()),1)){db.settings.lastSummary=k}changed()}
+function autoSummary(){const s=db.settings;if(!s.autoSummary||!evoOn()||!s.doctorPhone||!summaryNeeded())return;const k=mShift(mKey(today()),1);evoSend(s.doctorPhone,summaryText(k)).then(()=>{s.lastSummary=k;changed();toast(`Resumo de ${mName(k)} enviado ao seu WhatsApp`)}).catch(()=>{})}
+function openQueueAuto(L){
+  let running=false,stop=false;const st=L.map(()=>'wait');
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  openModal({title:'Disparo automático',size:'sm',body:'<div data-q></div>',onMount:(el,m)=>{
+    const draw=()=>{const ok=st.filter(x=>x==='ok').length,er=st.filter(x=>x==='err').length,done=ok+er;
+      $('[data-q]',el).innerHTML=`<div class="row between small muted"><span>${running?'Enviando…':done?'Finalizado':'Pronto para enviar'}</span><span>${ok} enviada${ok===1?'':'s'}${er?` · ${er} com erro`:''}</span></div><div class="progress"><i style="width:${done/L.length*100}%"></i></div>
+      <div class="list scroll" style="max-height:300px">${L.map((r,i)=>{const p=P(r.patientId);const b={wait:'<span class="badge">Na fila</span>',send:'<span class="badge info">Enviando…</span>',ok:'<span class="badge ok">Enviada ✓</span>',err:`<span class="badge bad" title="${esc(r._err||'')}">Erro</span>`}[st[i]];return`<div class="item">${av(p.name)}<div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${esc(st[i]==='err'?r._err||'':p.phone)}</div></div>${b}</div>`}).join('')}</div>
+      <div class="small muted" style="margin:12px 0 0">Intervalo de ~${+db.settings.evoDelay||8}s entre mensagens para proteger seu número.</div>
+      <div class="row" style="margin-top:14px">${running?`<button class="btn" data-stop style="flex:1">Parar</button>`:done===L.length?`<button class="btn dark" data-end style="flex:1">Concluir</button>`:`<button class="btn" data-end style="flex:1">Cancelar</button><button class="btn dark" data-go style="flex:2">${ic('send')}Enviar ${L.length-done} mensage${L.length-done===1?'m':'ns'}</button>`}</div>`;
+      const g=$('[data-go]',el),e=$('[data-end]',el),s2=$('[data-stop]',el);if(g)g.onclick=run;if(e)e.onclick=m.close;if(s2)s2.onclick=()=>{stop=true;s2.disabled=true;s2.textContent='Parando…'}};
+    const run=async()=>{running=true;stop=false;draw();
+      for(let i=0;i<L.length;i++){if(stop)break;if(st[i]==='ok')continue;const r=L[i],p=P(r.patientId);st[i]='send';draw();
+        try{await evoSend(p.phone,fill(db.settings.template,retVars(r)));st[i]='ok';r.status='avisado';r.notifiedAt=today();save()}catch(e){st[i]='err';r._err=e.message}
+        draw();if(i<L.length-1&&!stop){const d=(+db.settings.evoDelay||8)*1000;await wait(d*0.75+Math.random()*d*0.5)}}
+      running=false;draw()};
+    m.refresh=null;draw();
+  },onClose:()=>{L.forEach(r=>delete r._err);S.retSel=null;changed()}});
+}
+function evoConnect(){if(!evoOn()){toast('Preencha URL, instância e API Key');return}
+  let timer;openModal({title:'Conectar WhatsApp',size:'sm',body:'<div data-c style="text-align:center"><div class="muted">Gerando QR Code…</div></div>',onMount:(el,m)=>{
+    const box=$('[data-c]',el);
+    const load=async()=>{try{if(await evoState()==='open'){box.innerHTML=`<div class="avatar lg" style="margin:6px auto 14px;background:var(--accent);color:#fff">${ic('check','style="width:28px;height:28px"')}</div><b>WhatsApp conectado!</b><div class="muted small" style="margin-top:6px">Os envios automáticos já estão ativos.</div>`;clearInterval(timer);return}
+      const qr=await evoQR();box.innerHTML=qr?`<img src="${qr.startsWith('data:')?qr:'data:image/png;base64,'+qr}" alt="QR Code" style="width:240px;height:240px;border-radius:18px;background:#fff;padding:10px"><div class="small muted" style="margin-top:10px">No celular da clínica: WhatsApp → Aparelhos conectados → Conectar aparelho, e aponte para o código.</div>`:'<div class="muted">Não foi possível gerar o QR Code. Verifique a instância.</div>'}catch(e){box.innerHTML=`<span class="badge bad">${esc(e.message)}</span>`;clearInterval(timer)}};
+    load();timer=setInterval(async()=>{try{if(await evoState()==='open')load()}catch(e){}},4000);
+  },onClose:()=>clearInterval(timer)});
+}
+/* ---------- Evolution API (WhatsApp automático) ---------- */
+const evoOn=()=>{const s=db.settings;return!!(s.evoUrl&&s.evoInstance&&s.evoKey)};
+async function evoFetch(path,opt={}){
+  let base=String(db.settings.evoUrl).trim().replace(/\/+$/,'');if(!/^https?:\/\//.test(base))base='https://'+base;
+  let r;try{r=await fetch(base+path,{...opt,headers:{'Content-Type':'application/json',apikey:String(db.settings.evoKey).trim()}})}catch(e){throw new Error('sem conexão com a Evolution (verifique a URL)')}
+  let j=null;try{j=await r.json()}catch(e){}
+  if(!r.ok){const m=j&&(j.response&&j.response.message||j.message||j.error);if(r.status===401)throw new Error('API Key inválida');if(r.status===404)throw new Error('instância não encontrada');throw new Error((Array.isArray(m)?m.join(' '):typeof m==='string'?m:'')||'erro '+r.status)}
+  return j;
+}
+const evoInst=()=>encodeURIComponent(String(db.settings.evoInstance).trim());
+async function evoSend(phone,text){const number=waNum(phone);if(!number)throw new Error('telefone inválido');
+  try{return await evoFetch(`/message/sendText/${evoInst()}`,{method:'POST',body:JSON.stringify({number,text})})}
+  catch(e){if(/textMessage|erro 400|Bad Request/i.test(e.message))return await evoFetch(`/message/sendText/${evoInst()}`,{method:'POST',body:JSON.stringify({number,options:{delay:1200,presence:'composing'},textMessage:{text}})});throw e}}
+async function evoState(){const j=await evoFetch(`/instance/connectionState/${evoInst()}`);return(j&&(j.instance&&j.instance.state||j.state))||'desconhecido'}
+async function evoQR(){const j=await evoFetch(`/instance/connect/${evoInst()}`);return j&&(j.base64||j.qrcode&&j.qrcode.base64)||''}
 
 /* ================= PROCEDIMENTOS ================= */
 function vProcedimentos(){
@@ -988,11 +1029,19 @@ function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><spa
     <div class="glass card"><h3>${ic('bell','style="width:18px;height:18px"')}Aviso mensal de retornos</h3><div class="stack small">
       <label class="field"><span>A partir de qual dia do mês avisar sobre o mês seguinte?</span><input class="in" type="number" min="1" max="28" data-chg="set" data-k="summaryDay" value="${+s.summaryDay||1}"></label>
       <div class="muted">Todo mês, a partir desse dia, o sistema prepara a lista de pacientes com retorno no <b>mês seguinte</b> e mostra o aviso na Agenda para enviar ao seu WhatsApp com um toque.</div>
-      <div class="box"><div class="row between"><div><b>Envio automático (CallMeBot)</b><div class="muted">Recebe o resumo sozinho ao abrir o sistema, sem tocar em nada. Gratuito.</div></div><label class="switch"><input type="checkbox" data-chg="setb" data-k="autoSummary" ${s.autoSummary?'checked':''}><i></i></label></div>
-        <div class="stack ${s.autoSummary?'':'hide'}" style="margin-top:12px">${f('callmebotKey','API key do CallMeBot','placeholder="ex.: 123456"')}<div class="muted">Para ativar: siga as instruções em <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank" rel="noopener">callmebot.com</a> (adicionar o contato deles e mandar a mensagem de autorização). Você recebe a API key no seu WhatsApp.</div><button class="btn sm" data-act="testCmb">${ic('send')}Enviar teste</button></div></div>
+      <div class="box"><div class="row between"><div><b>Enviar o resumo automaticamente</b><div class="muted">Ao abrir o sistema no início do mês, o resumo do mês seguinte chega sozinho no seu WhatsApp (requer a Evolution API configurada ao lado).</div></div><label class="switch"><input type="checkbox" data-chg="setb" data-k="autoSummary" ${s.autoSummary?'checked':''}><i></i></label></div></div>
+
     </div></div>
   </div>
   <div class="stack">
+    <div class="glass card"><h3>${ic('wa','style="width:18px;height:18px"')}WhatsApp automático · Evolution API</h3><div class="stack small">
+      <div class="muted">Com a Evolution configurada, retornos, orçamentos e o resumo mensal são enviados direto, sem abrir o WhatsApp para cada paciente.</div>
+      ${f('evoUrl','URL da Evolution (Railway)','placeholder="https://sua-evolution.up.railway.app" inputmode="url" autocomplete="off"')}
+      <div class="grid2">${f('evoInstance','Nome da instância','placeholder="ex.: clinica" autocomplete="off"')}${f('evoKey','API Key','type="password" placeholder="token da instância" autocomplete="new-password"')}</div>
+      <label class="field"><span>Intervalo entre mensagens (segundos)</span><input class="in" type="number" min="3" max="120" data-chg="set" data-k="evoDelay" value="${+s.evoDelay||8}"></label>
+      <div id="evoStatus">${evoOn()?'<span class="badge info">Configurada — clique em Testar</span>':'<span class="badge">Não configurada · modo manual (abre o WhatsApp)</span>'}</div>
+      <div class="row wrap"><button class="btn sm" data-act="evoTest">${ic('check')}Testar conexão</button><button class="btn sm" data-act="evoConnect">${ic('phone')}Conectar (QR Code)</button><button class="btn sm" data-act="evoSelf">${ic('send')}Enviar teste para mim</button></div>
+    </div></div>
     <div class="glass card"><h3>${ic('doc','style="width:18px;height:18px"')}Mensagem de orçamento</h3><label class="field"><span>Introdução</span><textarea class="in" data-chg="set" data-k="budgetIntro">${esc(s.budgetIntro)}</textarea></label><div class="small muted" style="margin-top:6px">A lista de procedimentos, desconto e total são adicionados automaticamente. O modelo de retorno é editado na aba Retornos.</div></div>
     <div class="glass card"><h3>${ic('down','style="width:18px;height:18px"')}Backup dos dados</h3><div class="small muted" style="margin-bottom:12px">Os dados ficam salvos neste aparelho/navegador. Faça backups regulares e use “Importar” para levar para outro aparelho.</div>
       <div class="row wrap"><button class="btn" data-act="exportData">${ic('down')}Exportar backup</button><label class="btn">${ic('up')}Importar<input type="file" accept=".json,application/json" data-chg="importData" hidden></label></div>
@@ -1004,7 +1053,9 @@ INP.importData=el=>{const f=el.files[0];if(!f)return;const r=new FileReader();r.
 Object.assign(ACT,{
   exportData:()=>{const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`lumiere-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)},
   reset:async()=>{if(await confirmBox('Apagar <b>todos</b> os dados? Recomendo exportar um backup antes.','Apagar tudo')){db=defaults();changed();toast('Dados apagados')}},
-  testCmb:()=>{if(!db.settings.callmebotKey||!db.settings.doctorPhone){toast('Preencha seu WhatsApp e a API key');return}callmebot('✨ Teste do Lumière: os avisos de retorno chegarão aqui.').then(()=>toast('Teste enviado — confira seu WhatsApp'))}
+  evoTest:async()=>{if(!evoOn()){toast('Preencha URL, instância e API Key');return}const el=$('#evoStatus');el.innerHTML='<span class="badge">Verificando…</span>';try{const st=await evoState();el.innerHTML=st==='open'?'<span class="badge ok">● WhatsApp conectado</span>':`<span class="badge warn">● ${esc(st==='close'?'desconectado — clique em Conectar':st)}</span>`}catch(e){el.innerHTML=`<span class="badge bad">${esc(e.message)}</span>`}},
+  evoConnect:()=>evoConnect(),
+  evoSelf:async()=>{if(!db.settings.doctorPhone){toast('Preencha seu WhatsApp no Perfil');return}try{await evoSend(db.settings.doctorPhone,'✨ Teste do Lumière: a integração com o WhatsApp está funcionando!');toast('Teste enviado — confira seu WhatsApp')}catch(e){toast('Falha: '+e.message)}}
 });
 
 /* ================= dados de exemplo ================= */
