@@ -415,6 +415,10 @@ body{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.05px}
 .tp-grid button:hover{background:var(--soft)}
 .tp-grid button.s{background:var(--accent);color:#fff;box-shadow:none}
 .tp-grid.mos{grid-template-columns:repeat(3,1fr)}.tp-grid.mos button{height:44px;text-transform:capitalize}
+.logo-drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:22px 16px;border-radius:18px;border:1.5px dashed rgba(30,35,45,.16);background:rgba(255,255,255,.5);cursor:pointer;text-align:center;transition:background .2s,border-color .2s}
+.logo-drop:hover{background:#fff;border-color:rgba(30,35,45,.3)}.logo-drop svg{width:22px;height:22px;opacity:.55;margin-bottom:4px}
+.logo-box{display:flex;flex-direction:column;gap:10px}.logo-prev{display:grid;place-items:center;padding:18px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px rgba(30,35,45,.07)}.logo-prev img{max-height:90px;max-width:100%;object-fit:contain}
+.brand-mark.has-logo{background:#fff;padding:9px;overflow:hidden}.brand-mark.has-logo img{width:100%;height:100%;object-fit:contain}
 </style>
 </head>
 <body>
@@ -592,7 +596,7 @@ function pickDate(anchor,val,quick,yearFirst){return new Promise(res=>{
 const NAV=[['agenda','Agenda','cal','Agenda'],['pacientes','Pacientes','users','Pacientes'],['orcamentos','Orçamentos','doc','Orçam.'],['retornos','Retornos','ret','Retornos'],['procedimentos','Procedimentos','tag','Proced.'],['ajustes','Ajustes','cog','Ajustes']];
 function navHTML(mob){const n=pendingCount();return NAV.map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}
 function renderShell(){
-  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">L</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<div class="side-foot" title="${esc(db.settings.doctor||'')}"><div class="who">${esc(initials(db.settings.doctor.replace(/^dra?\.?\s*/i,''))||'—')}</div></div>`;
+  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<div class="side-foot" title="${esc(db.settings.doctor||'')}"><div class="who">${esc(initials(db.settings.doctor.replace(/^dra?\.?\s*/i,''))||'—')}</div></div>`;
   $('#tabbar').innerHTML=navHTML(true);
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav)});
@@ -909,11 +913,28 @@ function budgetText(b){const p=P(b.patientId),c=calc(b),s=db.settings;
 async function sendBudget(id){const b=db.budgets.find(x=>x.id===id),p=P(b.patientId);if(!p.phone){toast('Paciente sem WhatsApp cadastrado');return}if(evoOn()){toast('Enviando orçamento…');try{await evoSend(p.phone,budgetText(b));toast(`Orçamento enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,budgetText(b)),'_blank');b.sentAt=today();save()}
 function budgetToAppt(b){openAppt({patientId:b.patientId,items:clone(b.items),discountType:b.discountType,discountValue:b.discountValue,budgetId:b.id,date:today(),notes:b.notes})}
 function printBudget(b){const p=P(b.patientId),c=calc(b),s=db.settings,w=window.open('','_blank');if(!w){toast('Permita pop-ups para imprimir');return}
-  w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Orçamento - ${esc(p.name)}</title><style>body{font-family:Inter,Arial,sans-serif;color:#1d2127;max-width:720px;margin:40px auto;padding:0 24px}h1{font-family:Georgia,serif;font-weight:500;font-size:30px;margin:0}.m{color:#7a828c;font-size:13px}table{width:100%;border-collapse:collapse;margin:28px 0}td,th{padding:11px 4px;border-bottom:1px solid #e6e8ec;text-align:left;font-size:14px}th{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#7a828c}.r{text-align:right}.t td{border:0;padding:5px 4px}.big{font-size:20px;font-weight:700}hr{border:0;border-top:1px solid #e6e8ec;margin:24px 0}</style></head><body>
-  <h1>${esc(s.clinic||'Orçamento')}</h1><div class="m">${esc(s.doctor||'')}</div><hr><div><b>Paciente:</b> ${esc(p.name)}</div><div class="m">Emitido em ${fmtD(b.date)}${b.validUntil?` · válido até ${fmtD(b.validUntil)}`:''}</div>
-  <table><tr><th>Procedimento</th><th class="r">Qtd</th><th class="r">Valor</th></tr>${b.items.map(i=>`<tr><td>${esc(i.name)}</td><td class="r">${i.qty||1}</td><td class="r">${money(i.price*(i.qty||1))}</td></tr>`).join('')}
-  <tr class="t"><td></td><td class="r m">Subtotal</td><td class="r">${money(c.sub)}</td></tr>${c.disc?`<tr class="t"><td></td><td class="r m">Desconto</td><td class="r">− ${money(c.disc)}</td></tr>`:''}<tr class="t"><td></td><td class="r"><b>Total</b></td><td class="r big">${money(c.total)}</td></tr></table>
-  ${b.notes?`<p class="m">${esc(b.notes)}</p>`:''}</body></html>`);w.document.close();setTimeout(()=>{w.focus();w.print()},350)}
+  const num=String(db.budgets.indexOf(b)+1).padStart(4,'0');
+  w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Orçamento ${num} - ${esc(p.name)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>@page{size:A4;margin:16mm}*{box-sizing:border-box}body{font-family:Manrope,Arial,sans-serif;color:#1d2127;max-width:760px;margin:32px auto;padding:0 28px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:22px;border-bottom:1px solid #e3e6ea}
+  .brand{display:flex;align-items:center;gap:16px}.logo{max-height:84px;max-width:260px;object-fit:contain}
+  .clinic{font-family:Jost,sans-serif;font-weight:400;font-size:24px;letter-spacing:-.2px;line-height:1.1}.doc{color:#7a828c;font-size:13px;margin-top:4px}
+  .tag{text-align:right}.tag small{display:block;font-size:10px;letter-spacing:2.4px;text-transform:uppercase;color:#8b929b;font-weight:700}.tag b{font-family:Jost,sans-serif;font-weight:300;font-size:30px;letter-spacing:-.5px}
+  .meta{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;margin:26px 0 8px}.meta div{background:#f3f4f6;border-radius:14px;padding:12px 14px}.meta small{display:block;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#8b929b;font-weight:700;margin-bottom:3px}.meta span{font-weight:600;font-size:14px}
+  table{width:100%;border-collapse:collapse;margin:22px 0 6px}th{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#8b929b;font-weight:700;text-align:left;padding:0 6px 10px}td{padding:13px 6px;border-top:1px solid #eceef1;font-size:14px}.r{text-align:right}
+  .sum{margin-left:auto;width:300px;margin-top:10px}.sum div{display:flex;justify-content:space-between;padding:6px 6px;font-size:14px;color:#555d68}.sum .tot{border-top:1px solid #e3e6ea;margin-top:6px;padding-top:12px;color:#1d2127;align-items:baseline}.sum .tot b{font-family:Jost,sans-serif;font-weight:400;font-size:30px;letter-spacing:-.5px}
+  .notes{margin-top:26px;background:#f3f4f6;border-radius:14px;padding:14px 16px;font-size:13px;color:#555d68;white-space:pre-wrap}.foot{margin-top:40px;padding-top:16px;border-top:1px solid #e3e6ea;color:#8b929b;font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}</style></head><body>
+  <div class="head"><div class="brand">${s.logo?`<img class="logo" src="${s.logo}" alt="${esc(s.clinic||'')}">`:`<div><div class="clinic">${esc(s.clinic||'Orçamento')}</div>${s.doctor?`<div class="doc">${esc(s.doctor)}</div>`:''}</div>`}</div><div class="tag"><small>Orçamento</small><b>Nº ${num}</b></div></div>
+  <div class="meta"><div><small>Paciente</small><span>${esc(p.name)}</span></div><div><small>Emitido em</small><span>${fmtD(b.date)}</span></div><div><small>Válido até</small><span>${b.validUntil?fmtD(b.validUntil):'—'}</span></div></div>
+  <table><tr><th>Procedimento</th><th class="r">Qtd</th><th class="r">Valor unit.</th><th class="r">Total</th></tr>${b.items.map(i=>`<tr><td>${esc(i.name)}</td><td class="r">${i.qty||1}</td><td class="r">${money(i.price)}</td><td class="r">${money(i.price*(i.qty||1))}</td></tr>`).join('')}</table>
+  <div class="sum"><div><span>Subtotal</span><span>${money(c.sub)}</span></div>${c.disc?`<div><span>Desconto${b.discountType==='pct'?` (${fmtNum(b.discountValue).replace(',00','')}%)`:''}</span><span>− ${money(c.disc)}</span></div>`:''}<div class="tot"><span>Total</span><b>${money(c.total)}</b></div></div>
+  ${b.notes?`<div class="notes">${esc(b.notes)}</div>`:''}
+  <div class="foot"><span>${esc([s.clinic,s.doctor].filter(Boolean).join(' · '))}</span><span>${esc(s.doctorPhone||'')}</span></div>
+  </body></html>`);w.document.close();
+  const go=()=>{if(go.d)return;go.d=1;w.focus();w.print()};
+  const ready=()=>Promise.all([...w.document.images].map(im=>im.complete?1:new Promise(r=>{im.onload=im.onerror=r}))).then(()=>w.document.fonts?w.document.fonts.ready:1);
+  ready().then(()=>setTimeout(go,150));setTimeout(go,2500)}
 function openBudget(o={}){
   const ex=o.id?db.budgets.find(b=>b.id===o.id):null;
   const st={patientId:ex?.patientId||o.patientId||'',date:ex?.date||today(),validUntil:ex?.validUntil||addDays(today(),15),items:clone(ex?.items||[]),discountType:ex?.discountType||'pct',discountValue:ex?.discountValue||0,notes:ex?.notes||'',status:ex?.status||'aberto'};
@@ -1062,7 +1083,7 @@ function openProc(id){const ex=db.procedures.find(p=>p.id===id);
 function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><span>${l}</span><input class="in" data-chg="set" data-k="${k}" value="${esc(s[k]||'')}" ${a}></label>`;
   return topbar('<em>Ajustes</em>','Seus dados, WhatsApp e backup')+`<div class="grid2" style="align-items:start">
   <div class="stack">
-    <div class="glass card"><h3>${ic('user','style="width:18px;height:18px"')}Perfil</h3><div class="stack">${f('doctor','Seu nome (como aparece nas mensagens)','placeholder="Ex.: Dra. Ana Lima"')}${f('clinic','Nome da clínica','placeholder="Ex.: Ana Lima Estética Avançada"')}${f('doctorPhone','Seu WhatsApp (para receber os avisos)','inputmode="tel" placeholder="(11) 99999-9999"')}</div></div>
+    <div class="glass card"><h3>${ic('user','style="width:18px;height:18px"')}Perfil</h3><div class="stack"><div class="field"><span>Logo da clínica <small class="muted" style="font-weight:500">· aparece no orçamento em PDF</small></span><div class="logo-box">${s.logo?`<div class="logo-prev"><img src="${s.logo}" alt="Logo"></div><div class="row wrap"><label class="btn sm">${ic('swap')}Trocar<input type="file" accept="image/*" data-chg="logo" hidden></label><button class="btn sm ghost danger" data-act="rmLogo">${ic('trash')}Remover</button></div>`:`<label class="logo-drop">${ic('up')}<b>Enviar logo</b><span class="small muted">PNG, JPG ou SVG · de preferência com fundo transparente</span><input type="file" accept="image/*" data-chg="logo" hidden></label>`}</div></div>${f('doctor','Seu nome (como aparece nas mensagens)','placeholder="Ex.: Dra. Ana Lima"')}${f('clinic','Nome da clínica','placeholder="Ex.: Ana Lima Estética Avançada"')}${f('doctorPhone','Seu WhatsApp (para receber os avisos)','inputmode="tel" placeholder="(11) 99999-9999"')}</div></div>
     <div class="glass card"><h3>${ic('bell','style="width:18px;height:18px"')}Aviso mensal de retornos</h3><div class="stack small">
       <label class="field"><span>A partir de qual dia do mês avisar sobre o mês seguinte?</span><input class="in" type="number" min="1" max="28" data-chg="set" data-k="summaryDay" value="${+s.summaryDay||1}"></label>
       <div class="muted">Todo mês, a partir desse dia, o sistema prepara a lista de pacientes com retorno no <b>mês seguinte</b> e mostra o aviso na Agenda para enviar ao seu WhatsApp com um toque.</div>
@@ -1077,9 +1098,13 @@ function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><spa
       <div class="row wrap" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">${db.patients.length?'':'<button class="btn sm" data-act="demo">Carregar dados de exemplo</button>'}<button class="btn sm ghost danger" data-act="reset">Apagar tudo</button></div></div>
   </div></div>`}
 INP.set=el=>{const k=el.dataset.k;let v=el.value;if(k==='doctorPhone')v=el.value=maskPhone(v);if(k==='summaryDay')v=Math.min(28,Math.max(1,+v||1));db.settings[k]=v;save();renderShell();toast('Salvo')};
+INP.logo=el=>{const f=el.files[0];el.value='';if(!f)return;if(!/^image\//.test(f.type)){toast('Escolha um arquivo de imagem');return}
+  const rd=new FileReader();rd.onload=()=>{const img=new Image();img.onload=()=>{const max=600,k=Math.min(1,max/Math.max(img.width,img.height));const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(img.width*k));cv.height=Math.max(1,Math.round(img.height*k));cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+    db.settings.logo=cv.toDataURL('image/png');if(db.settings.logo.length>900000)db.settings.logo=cv.toDataURL('image/webp',.9);save();render();toast('Logo salva')};img.onerror=()=>toast('Não foi possível ler a imagem');img.src=rd.result};rd.readAsDataURL(f)};
 INP.setb=el=>{db.settings[el.dataset.k]=el.checked;save();render()};
 INP.importData=el=>{const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const d=JSON.parse(r.result);if(!d.patients)throw 0;if(await confirmBox(`Substituir os dados atuais pelo backup (${d.patients.length} pacientes)?`,'Importar')){const def=defaults();db={...def,...d,settings:{...def.settings,...d.settings}};changed();toast('Backup importado')}}catch(e){toast('Arquivo inválido')}};r.readAsText(f);el.value=''};
 Object.assign(ACT,{
+  rmLogo:async()=>{if(await confirmBox('Remover a logo da clínica?','Remover')){delete db.settings.logo;save();render();toast('Logo removida')}},
   exportData:()=>{const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`lumiere-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)},
   reset:async()=>{if(await confirmBox('Apagar <b>todos</b> os dados? Recomendo exportar um backup antes.','Apagar tudo')){db=defaults();changed();toast('Dados apagados')}}
 });
