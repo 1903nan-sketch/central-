@@ -699,14 +699,14 @@ async function rest(path,opt={}){const t=await accessToken();let r;
   if(r.status===401){sessionExpired();throw Object.assign(new Error('sessão expirada'),{auth:true})}
   if(!r.ok)throw new Error((j&&j.message)||'erro '+r.status);return j}
 function setCloud(st){cloud.state=st;const el=$('#syncDot');if(el){el.className='sync '+st;el.title={ok:'Tudo salvo na nuvem',saving:'Salvando…',offline:'Sem conexão — será enviado quando voltar',idle:''}[st]||''}const t=$('#syncTxt');if(t)t.innerHTML=syncLabel()}
-const syncLabel=()=>({ok:'<span class="badge ok">● Tudo salvo na nuvem</span>',saving:'<span class="badge info">● Salvando…</span>',offline:'<span class="badge warn">● Sem conexão — salvo neste aparelho, envio pendente</span>',idle:'<span class="badge">●</span>'}[cloud.state]);
-function schedulePush(){if(!session)return;cloud.pending=true;setCloud('saving');clearTimeout(cloud.timer);cloud.timer=setTimeout(pushNow,900)}
+const syncLabel=()=>({ok:'<span class="badge ok">● Tudo salvo na nuvem</span>',saving:'<span class="badge info">● Salvando…</span>',offline:'<span class="badge warn">● Sem conexão — salvo neste aparelho, envio pendente</span>',idle:'<span class="badge">Demonstração: os dados ficam só neste navegador</span>'}[cloud.state]);
+function schedulePush(){if(!session||window.LUMIERE_DEMO)return;cloud.pending=true;setCloud('saving');clearTimeout(cloud.timer);cloud.timer=setTimeout(pushNow,900)}
 async function pushNow(){if(!session)return;clearTimeout(cloud.timer);if(cloud.busy){cloud.timer=setTimeout(pushNow,600);return}cloud.busy=true;cloud.pending=false;
   try{const now=new Date().toISOString();const r=await rest('lumiere_data?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({user_id:session.user.id,data:db,updated_at:now})});
     cloud.lastAt=(r&&r[0]&&r[0].updated_at)||now;if(!cloud.pending)setCloud('ok')}
   catch(e){cloud.pending=true;if(!e.auth){setCloud('offline');cloud.timer=setTimeout(pushNow,15000)}}
   finally{cloud.busy=false}}
-async function pullIfNewer(){if(!session||cloud.pending||cloud.busy||layers.length)return;
+async function pullIfNewer(){if(window.LUMIERE_DEMO||!session||cloud.pending||cloud.busy||layers.length)return;
   try{const head=await rest(`lumiere_data?select=updated_at&user_id=eq.${session.user.id}`);
     if(head[0]&&(!cloud.lastAt||new Date(head[0].updated_at)>new Date(cloud.lastAt))){const full=await rest(`lumiere_data?select=data,updated_at&user_id=eq.${session.user.id}`);
       if(cloud.pending||layers.length||!full[0])return;db=withDefaults(full[0].data);cloud.lastAt=full[0].updated_at;S.retSel=null;persist();render();toast('Dados atualizados')}
@@ -716,7 +716,7 @@ addEventListener('online',()=>{if(cloud.pending)pushNow();else pullIfNewer()});
 addEventListener('offline',()=>{if(session)setCloud('offline')});
 setInterval(()=>{if(!document.hidden)pullIfNewer()},60000);
 function sessionExpired(){if(!session)return;storeSession(null);showLogin('login',{msg:'Sua sessão expirou. Entre novamente.'})}
-async function logout(){if(cloud.pending){try{await pushNow()}catch(e){}}const t=session&&session.access_token;authReq('logout',{},{token:t}).catch(()=>{});
+async function logout(){if(window.LUMIERE_DEMO){try{localStorage.removeItem(localKey())}catch(e){}db=defaults();seedDemo();persist();S.retSel=null;render();toast('Demonstração reiniciada');return}if(cloud.pending){try{await pushNow()}catch(e){}}const t=session&&session.access_token;authReq('logout',{},{token:t}).catch(()=>{});
   try{localStorage.removeItem(localKey())}catch(e){}storeSession(null);db=defaults();layers.slice().forEach(l=>l.close());showLogin('login',{msg:'Você saiu com segurança.'})}
 
 async function startApp(){
@@ -770,7 +770,13 @@ function showLogin(mode,o={}){
     }catch(x){err.textContent=x.message;btn.disabled=false;btn.textContent=old}};
 }
 
+function startDemo(){
+  session={access_token:'',refresh_token:'',expires_at:9e12,user:{id:'demo',email:'Demonstração'}};
+  document.body.classList.remove('locked');$('#auth').innerHTML='';
+  db=readLocal(localKey())||defaults();if(!db.patients.length)seedDemo();persist();S.anim=true;render();
+}
 async function boot(){
+  if(window.LUMIERE_DEMO)return startDemo();
   const h=new URLSearchParams(location.hash.slice(1));
   if(h.get('access_token')&&h.get('refresh_token')){history.replaceState(null,'',location.pathname+location.search);
     try{const tok={access_token:h.get('access_token'),refresh_token:h.get('refresh_token'),expires_in:h.get('expires_in'),expires_at:h.get('expires_at')};
@@ -1360,7 +1366,7 @@ Object.assign(ACT,{
   rmLogo:async()=>{if(await confirmBox('Remover a logo da clínica?','Remover')){delete db.settings.logo;save();render();toast('Logo removida')}},
   theme:k=>setTheme(k),
   logout:async()=>{if(await confirmBox('Sair da sua conta neste aparelho?','Sair'))logout()},
-  exportData:()=>{const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`lumiere-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)},
+  exportData:()=>{if(window.LUMIERE_DEMO){toast('Na demonstração não dá para baixar arquivos');return}const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`lumiere-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)},
   reset:async()=>{if(await confirmBox('Apagar <b>todos</b> os dados? Recomendo exportar um backup antes.','Apagar tudo')){db=defaults();changed();toast('Dados apagados')}}
 });
 
