@@ -808,6 +808,39 @@ button.item:hover,.item.click:hover{background:rgba(255,255,255,.78)}
 :root .ie-cat{max-height:none;overflow:visible}
 :root .m-body{scrollbar-width:none}
 :root .m-body::-webkit-scrollbar{display:none}
+:root .seg button{white-space:nowrap}
+:root .grid3:has(.seg){grid-template-columns:1fr 1fr auto}
+@media (max-width:860px){:root .grid3:has(.seg){grid-template-columns:1fr}}
+.spot-trigger{display:flex;align-items:center;gap:10px;width:100%;height:46px;padding:0 16px;margin:0 0 18px;border-radius:999px;color:var(--ink-3);font-size:16px;text-align:left;
+  background:var(--lg-sheen),var(--lg-tint-strong);backdrop-filter:blur(24px) saturate(200%);-webkit-backdrop-filter:blur(24px) saturate(200%);border:1px solid var(--lg-edge);box-shadow:var(--lg-shadow);transition:transform .35s var(--spring)}
+.spot-trigger svg{width:19px;height:19px;flex:none}
+.spot-trigger span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spot-trigger kbd{font-family:var(--sf);font-size:12px;font-weight:600;color:var(--ink-3);background:var(--fill);border-radius:7px;padding:3px 7px}
+.spot-trigger:active{transform:scale(.985)}
+.spot-ov{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.14);display:flex;justify-content:center;align-items:flex-start;padding:max(10vh,env(safe-area-inset-top)) 16px 16px;animation:fade .2s ease}
+[data-theme="dark"] .spot-ov{background:rgba(0,0,0,.45)}
+.spot-ov.closing{animation:fadeOut .18s ease forwards}
+.spot{width:min(680px,100%);max-height:min(72vh,640px);display:flex;flex-direction:column;border-radius:28px;overflow:hidden;animation:sheetIn .45s var(--spring);
+  background:var(--lg-sheen),var(--lg-tint-strong);backdrop-filter:blur(34px) saturate(220%);-webkit-backdrop-filter:blur(34px) saturate(220%);border:1px solid var(--lg-edge);box-shadow:var(--lg-shadow)}
+.spot-in{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:.5px solid var(--line)}
+.spot-in>svg{width:22px;height:22px;color:var(--ink-3);flex:none}
+.spot-in input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-family:var(--sf);font-size:22px;font-weight:400;letter-spacing:-.02em;color:var(--ink)}
+.spot-in input::placeholder{color:var(--ink-4)}
+.spot-x{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--fill-2);color:var(--ink-2)}.spot-x svg{width:13px;height:13px}
+.spot-res{padding:6px 10px 12px;overflow:auto;scrollbar-width:none}.spot-res::-webkit-scrollbar{display:none}
+.spot-g{font-size:13px;font-weight:700;color:var(--ink-3);padding:12px 10px 6px;letter-spacing:-.01em}
+.spot-list{display:flex;flex-direction:column}
+.spot-it{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:14px;text-align:left;width:100%;color:var(--ink)}
+.spot-it.hl,.spot-it:hover{background:var(--fill)}
+.spot-it .avatar{width:34px;height:34px;font-size:12px}
+.spot-ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--fill-2);color:var(--ink)}
+.spot-ic svg{width:18px;height:18px}
+.spot-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.spot-tx b{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spot-tx small{font-size:13px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spot-meta{font-size:13px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.spot-empty{padding:28px 12px;text-align:center;color:var(--ink-3);display:flex;flex-direction:column;align-items:center;gap:14px}
+@media (max-width:860px){.spot-ov{padding-top:max(14px,env(safe-area-inset-top))}.spot{max-height:80vh}.spot-in input{font-size:18px}.spot-trigger kbd{display:none}}
 </style>
 </head>
 <body>
@@ -1148,6 +1181,7 @@ function vAgenda(){
   const rn=returnsOfMonth(nk);
   const newP=db.patients.filter(p=>p.createdAt&&mKey(iso(new Date(p.createdAt)))===mk).length;
   let html=topbar(greet,'',`<button class="btn" data-act="newPatient">${ic('user')}<span class="btn-label">Paciente</span></button><button class="btn" data-act="newBudget">${ic('doc')}<span class="btn-label">Orçamento</span></button><button class="btn dark" data-act="newAppt">${ic('plus')}Nova consulta</button>`,cap(fmtLong(t)));
+  html+=`<button class="spot-trigger" data-act="spot" aria-label="Buscar">${ic('search')}<span>Buscar pacientes, consultas, orçamentos…</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform)?'⌘':'Ctrl'} K</kbd></button>`;
   if(!db.patients.length)html+=`<div class="banner glass"><div class="ic">${ic('spark')}</div><div style="flex:1"><b>Bem-vinda ao Lumière</b><div class="small muted">Cadastre seu primeiro paciente (só o nome é obrigatório) ou veja o sistema com dados de exemplo.</div></div><button class="btn" data-act="demo">Ver exemplo</button><button class="btn dark" data-act="newPatient">Cadastrar</button></div>`;
   else if(summaryNeeded())html+=`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1"><b>Retornos de ${mName(nk)}: ${rn.length} paciente${rn.length>1?'s':''}</b><div class="small muted">Sua lista do próximo mês está pronta para organizar a agenda.</div></div><button class="btn" data-act="goRet">Ver lista</button><button class="btn wa" data-act="sendSummary">${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`;
   html+=`<div class="stats glass">
@@ -1201,6 +1235,68 @@ Object.assign(ACT,{
   sendSummary:()=>sendSummary(mShift(mKey(today()),1)),
   demo:()=>{seedDemo();changed();toast('Dados de exemplo carregados')}
 });
+
+/* ================= BUSCA GERAL (estilo Spotlight do iPhone) ================= */
+function spotResults(q){
+  const n=norm(q),dq=digits(q),has=t=>norm(t).includes(n);
+  const A=[
+    ['Nova consulta','plus','Agendar um atendimento',()=>openAppt({date:today()})],
+    ['Novo paciente','user','Cadastrar só com o nome',()=>openPatient()],
+    ['Novo orçamento','doc','Montar valores e enviar',()=>openBudget()],
+    ['Novo retorno','ret','Lembrar alguém de voltar',()=>openReturn({})],
+    ['Agenda','cal','Calendário e dia de hoje',()=>go('agenda')],
+    ['Pacientes','users','Todas as pastas',()=>go('pacientes')],
+    ['Orçamentos','doc','Abertos, aprovados e recusados',()=>go('orcamentos')],
+    ['Retornos','ret','Avisar quem precisa voltar',()=>go('retornos')],
+    ['Procedimentos','tag','Serviços e valores',()=>go('procedimentos')],
+    ['Ajustes','gear','Perfil, aparência e conta',()=>go('ajustes')],
+    [document.documentElement.dataset.theme==='dark'?'Modo claro':'Modo escuro',document.documentElement.dataset.theme==='dark'?'sun':'moon','Trocar a aparência',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')]
+  ].map(([t,i,s2,fn])=>({t,i,s:s2,fn}));
+  const groups=[];
+  if(!n){
+    groups.push({g:'Sugestões',items:A.slice(0,4)});
+    const rec=[...db.patients].map(p=>({p,l:patientStats(p.id).last||''})).sort((a,b)=>b.l.localeCompare(a.l)||(b.p.createdAt||0)-(a.p.createdAt||0)).slice(0,5);
+    if(rec.length)groups.push({g:'Pacientes recentes',items:rec.map(({p,l})=>({av:p.name,t:p.name,s:[p.phone,l?`última visita ${fmtD(l)}`:''].filter(Boolean).join(' · ')||'sem consultas',fn:()=>openFolder(p.id)}))});
+    return groups;
+  }
+  const pats=db.patients.filter(p=>has(p.name)||(dq.length>=3&&digits(p.phone).includes(dq))).slice(0,6);
+  if(pats.length)groups.push({g:'Pacientes',items:pats.map(p=>{const st=patientStats(p.id);return{av:p.name,t:p.name,s:[p.phone,st.nextR?`retorno ${fmtD(st.nextR.date)}`:'',st.done.length?`${st.done.length} atendimento${st.done.length>1?'s':''}`:''].filter(Boolean).join(' · ')||'Ficha básica',fn:()=>openFolder(p.id)}})});
+  const ap=db.appointments.filter(a=>{const pt=P(a.patientId);return pt&&(has(pt.name)||has(procNames(a.items))||fmtD(a.date).includes(q.trim())||fmtDM(a.date)===q.trim())}).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
+  if(ap.length)groups.push({g:'Consultas',items:ap.map(a=>({i:'cal',t:`${P(a.patientId).name}`,s:`${fmtD(a.date)}${a.time?' às '+a.time:''} · ${procNames(a.items)||'sem procedimentos'}`,meta:money(calc(a).total),fn:()=>openAppt({id:a.id})}))});
+  const bu=db.budgets.filter(b=>{const pt=P(b.patientId);return pt&&(has(pt.name)||has(procNames(b.items)))}).slice(0,4);
+  if(bu.length)groups.push({g:'Orçamentos',items:bu.map(b=>({i:'doc',t:P(b.patientId).name,s:`${fmtD(b.date)} · ${procNames(b.items)}`,meta:money(calc(b).total),fn:()=>openBudget({id:b.id})}))});
+  const rt=activeReturns().filter(r=>has(P(r.patientId).name)||has(r.note)).slice(0,4);
+  if(rt.length)groups.push({g:'Retornos',items:rt.map(r=>({i:'ret',t:P(r.patientId).name,s:`${fmtD(r.date)} · ${r.note||'Retorno'}`,meta:(RST[r.status]||[''])[0],fn:()=>openFolder(r.patientId,'ret')}))});
+  const pr=db.procedures.filter(x=>has(x.name)).slice(0,4);
+  if(pr.length)groups.push({g:'Procedimentos',items:pr.map(x=>({i:'tag',t:x.name,s:x.duration?`${x.duration} min`:'Procedimento',meta:money(x.price),fn:()=>openProc(x.id)}))});
+  const ac=A.filter(a=>has(a.t));
+  if(ac.length)groups.push({g:'Atalhos',items:ac});
+  return groups;
+}
+function openSpotlight(initial=''){
+  if($('.spot-ov'))return;
+  const ov=document.createElement('div');ov.className='spot-ov';
+  ov.innerHTML=`<div class="spot" role="dialog" aria-label="Buscar"><div class="spot-in">${ic('search')}<input placeholder="Buscar em tudo" autocomplete="off" spellcheck="false" aria-label="Buscar em tudo"><button class="spot-x" aria-label="Limpar">${ic('x')}</button></div><div class="spot-res scroll"></div></div>`;
+  document.body.appendChild(ov);
+  const L={close(){ov.classList.add('closing');setTimeout(()=>ov.remove(),180);const i=layers.indexOf(L);if(i>-1)layers.splice(i,1)}};layers.push(L);
+  const inp=$('input',ov),res=$('.spot-res',ov);let flat=[],hl=0;
+  const draw=()=>{const g=spotResults(inp.value);flat=[];
+    res.innerHTML=g.length?g.map(gr=>`<div class="spot-g">${gr.g}</div><div class="spot-list">${gr.items.map(it=>{const k=flat.push(it)-1;return`<button class="spot-it ${k===hl?'hl':''}" data-k="${k}">${it.av?av(it.av):`<span class="spot-ic">${ic(it.i)}</span>`}<span class="spot-tx"><b>${esc(it.t)}</b><small>${esc(it.s||'')}</small></span>${it.meta?`<span class="spot-meta">${esc(it.meta)}</span>`:''}</button>`}).join('')}</div>`).join('')
+      :`<div class="spot-empty">Nada encontrado para “${esc(inp.value)}”.<button class="btn dark sm" data-new>${ic('plus')}Cadastrar “${esc(inp.value.trim())}”</button></div>`;
+    const nb=$('[data-new]',res);if(nb)nb.onclick=()=>{const name=inp.value.trim();L.close();const p={id:uid(),name,createdAt:Date.now()};db.patients.push(p);changed();toast('Paciente cadastrado');openFolder(p.id)};
+    $('.spot-x',ov).style.visibility=inp.value?'visible':'hidden'};
+  const run=k=>{const it=flat[k];if(!it)return;L.close();setTimeout(()=>it.fn(),60)};
+  inp.oninput=()=>{hl=0;draw();res.scrollTop=0};
+  inp.onkeydown=e=>{if(e.key==='ArrowDown'){e.preventDefault();hl=Math.min(hl+1,flat.length-1);draw();$('.spot-it.hl',res)?.scrollIntoView({block:'nearest'})}
+    else if(e.key==='ArrowUp'){e.preventDefault();hl=Math.max(hl-1,0);draw();$('.spot-it.hl',res)?.scrollIntoView({block:'nearest'})}
+    else if(e.key==='Enter'){e.preventDefault();run(hl)}};
+  res.onclick=e=>{const b=e.target.closest('[data-k]');if(b)run(+b.dataset.k)};
+  $('.spot-x',ov).onclick=()=>{inp.value='';hl=0;draw();inp.focus()};
+  ov.addEventListener('mousedown',e=>{if(e.target===ov)L.close()});
+  inp.value=initial;draw();setTimeout(()=>inp.focus(),30);
+}
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&!document.body.classList.contains('locked')){e.preventDefault();openSpotlight()}});
+ACT.spot=()=>openSpotlight();
 
 /* ================= seletor de paciente ================= */
 function patientPicker(host,st){
@@ -1271,7 +1367,7 @@ function openAppt(o={}){
       <div class="field"><span>Paciente <em>*</em></span><div data-pp></div></div>
       <div class="grid3">
         <div class="field"><span>Data da consulta</span><button type="button" class="in dateBtn" data-date></button></div>
-        <div class="field"><span>Horário</span><div class="inwrap"><input class="in" data-time inputmode="numeric" placeholder="--:--" maxlength="5" value="${esc(st.time)}" autocomplete="off"><button type="button" class="in-ic" data-tbtn aria-label="Escolher horário">${ic('clock')}</button></div></div>
+        <label class="field"><span>Horário</span><input class="in" data-time inputmode="numeric" placeholder="Ex.: 14:30" maxlength="5" value="${esc(st.time)}" autocomplete="off"></label>
         <div class="field"><span>Status</span><div class="seg" data-st style="width:100%;display:flex">${Object.entries(ST).map(([k,[l]])=>`<button type="button" data-v="${k}" style="flex:1">${l}</button>`).join('')}</div></div>
       </div>
       <div class="box"><div class="lbl">Procedimentos e valores</div><div data-ie></div></div>
@@ -1288,8 +1384,7 @@ function openAppt(o={}){
       const drawRet=()=>{const d=retDate();$('[data-rc]',el).innerHTML=RET_OPTS.map(([k,l])=>`<button type="button" class="chip ${ret.mode===k?'on':''}" data-k="${k}">${l}</button>`).join('')+`<button type="button" class="chip ${ret.mode==='custom'?'on':''}" data-k="custom">${ic('cal')}${ret.mode==='custom'&&ret.date?fmtD(ret.date):'Escolher data'}</button>`;$('[data-ri]',el).textContent=d?`${fmtD(d)} · ${relDays(d)}`:'nenhum retorno será lembrado'};
       drawDate();drawSt();drawRet();
       const ti=$('[data-time]',el);ti.oninput=()=>{const d=digits(ti.value).slice(0,4);ti.value=d.length>2?`${d.slice(0,2)}:${d.slice(2)}`:d};
-      const openT=async()=>{const v=await pickTime(ti,ti.value);if(v)ti.value=v};
-      $('[data-tbtn]',el).onclick=openT;ti.onclick=()=>{if(!ti.value)openT()};
+      ti.onblur=()=>{const d=digits(ti.value);if(d.length===1||d.length===2)ti.value=`${pad(Math.min(23,+d))}:00`;else if(d.length===3)ti.value=`0${d[0]}:${d.slice(1)}`};
       dBtn.onclick=async()=>{const v=await pickDate(dBtn,st.date,[['Hoje',today()],['Amanhã',addDays(today(),1)],['+7 dias',addDays(today(),7)]]);if(v){st.date=v;if(!touched){st.status=v<=today()?'realizada':'agendada';drawSt()}drawDate();drawRet()}};
       $('[data-st]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){st.status=b.dataset.v;touched=true;drawSt()}};
       $('[data-rc]',el).onclick=async e=>{const b=e.target.closest('[data-k]');if(!b)return;if(b.dataset.k==='custom'){const base=ret.date||addMonths(st.date,6);const v=await pickDate(b,base,[['2 meses',addMonths(st.date,2)],['4 meses',addMonths(st.date,4)],['9 meses',addMonths(st.date,9)]]);if(v){ret.mode='custom';ret.date=v}}else ret.mode=b.dataset.k;drawRet()};
