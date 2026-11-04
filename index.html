@@ -419,6 +419,23 @@ body{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.05px}
 .logo-drop:hover{background:#fff;border-color:rgba(30,35,45,.3)}.logo-drop svg{width:22px;height:22px;opacity:.55;margin-bottom:4px}
 .logo-box{display:flex;flex-direction:column;gap:10px}.logo-prev{display:grid;place-items:center;padding:18px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px rgba(30,35,45,.07)}.logo-prev img{max-height:90px;max-width:100%;object-fit:contain}
 .brand-mark.has-logo{background:#fff;padding:9px;overflow:hidden}.brand-mark.has-logo img{width:100%;height:100%;object-fit:contain}
+body.locked .app,body.locked .tabbar{display:none}
+.auth{display:none}
+body.locked .auth{display:grid;position:fixed;inset:0;z-index:30;place-items:center;padding:20px;overflow:auto}
+.auth-card{width:min(420px,100%);padding:34px 30px 26px;border-radius:34px;text-align:left;animation:pop .45s var(--ease)}
+.auth-card .brand-mark{margin:0 auto 10px;width:58px;height:58px}
+.auth-brand{text-align:center;font-family:var(--serif);font-weight:300;font-size:15px;letter-spacing:5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:22px}
+.auth-card h1{font-family:var(--serif);font-weight:300;font-size:30px;letter-spacing:-.4px;margin:0;text-align:center}
+.auth-card>p{text-align:center;margin:6px 0 22px}
+.auth-btn{width:100%;height:48px;margin-top:4px;font-size:14.5px}
+.auth-err{color:var(--bad);font-size:13px;font-weight:500;min-height:0}.auth-err:empty{display:none}
+.auth-msg{background:var(--info-bg);color:var(--info);border-radius:14px;padding:10px 14px;font-size:13px;font-weight:500;margin:-8px 0 16px;text-align:center}
+.auth-links{display:flex;flex-direction:column;gap:2px;align-items:center;margin-top:16px}
+.auth-links button{font-size:13px;color:var(--ink-2);padding:8px 12px;border-radius:999px}.auth-links button:hover{background:rgba(255,255,255,.7)}
+.side-foot{position:relative}.side-foot .who{cursor:pointer}
+.sync{position:absolute;top:-2px;left:calc(50% + 10px);width:11px;height:11px;border-radius:50%;border:2px solid #fff;background:var(--ink-4);z-index:1}
+.sync.ok{background:var(--ok)}.sync.saving{background:#6b86b0;animation:pulse 1s ease-in-out infinite}.sync.offline{background:var(--warn)}
+@keyframes pulse{50%{opacity:.35}}
 </style>
 </head>
 <body>
@@ -428,6 +445,7 @@ body{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.05px}
   <main class="main"><div class="view scroll" id="view"></div></main>
 </div>
 <nav class="tabbar glass" id="tabbar"></nav>
+<div class="auth" id="auth"></div>
 <div class="toasts" id="toasts"></div>
 <script>
 "use strict";
@@ -470,6 +488,8 @@ print:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2
 swap:'<path d="M7 16V4M3 8l4-4 4 4M17 8v12M21 16l-4 4-4-4"/>',
 spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>',
 copy:'<rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
 user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>'
 };
 const ic=(n,a='')=>n==='wa'?`<svg viewBox="-1.5 -1.5 27 27" fill="currentColor" ${a}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>`:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ${a}>${I[n]||''}</svg>`;
@@ -522,12 +542,129 @@ const defaults=()=>({
     budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:'}
 });
 let memoryOnly=false;
-function load(){try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw),def=defaults();return{...def,...d,settings:{...def.settings,...(d.settings||{})}}}}catch(e){memoryOnly=true}return defaults()}
-let db=load(),saveT;
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){memoryOnly=true}}
-function save(){clearTimeout(saveT);saveT=setTimeout(persist,80)}
-addEventListener('beforeunload',persist);
+const withDefaults=d=>{const def=defaults();return{...def,...d,settings:{...def.settings,...((d&&d.settings)||{})}}};
+const localKey=()=>KEY+':'+(session?session.user.id:'anon');
+function readLocal(k){try{const raw=localStorage.getItem(k);return raw?withDefaults(JSON.parse(raw)):null}catch(e){memoryOnly=true;return null}}
+let db=defaults(),saveT;
+function persist(){if(!session)return;try{localStorage.setItem(localKey(),JSON.stringify(db))}catch(e){memoryOnly=true}}
+function save(){clearTimeout(saveT);saveT=setTimeout(persist,80);schedulePush()}
+addEventListener('beforeunload',e=>{persist();if(cloud.pending){e.preventDefault();e.returnValue=''}});
 addEventListener('pagehide',persist);
+
+/* ================= nuvem (Supabase) — login e sincronização ================= */
+const SB={url:'https://xraygbmishqxyrtiwyxy.supabase.co',key:'sb_publishable_jXk4NFg_HOVtfq0KXJ375w_egKlnJXz'};
+const SESS_KEY='lumiere.session.v1';
+let session=null;
+const cloud={state:'idle',pending:false,lastAt:null,timer:null,busy:false};
+function loadSession(){try{return JSON.parse(localStorage.getItem(SESS_KEY))}catch(e){return null}}
+function storeSession(x){session=x;try{x?localStorage.setItem(SESS_KEY,JSON.stringify(x)):localStorage.removeItem(SESS_KEY)}catch(e){}}
+const toSession=(j,user)=>({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:+j.expires_at||Math.floor(Date.now()/1000)+(+j.expires_in||3600),user:{id:(user||j.user).id,email:(user||j.user).email}});
+function authMsg(j,status){const m=`${j.error_code||j.code||''} ${j.msg||j.message||j.error_description||j.error||''}`;
+  if(/invalid_credentials|invalid login|invalid_grant/i.test(m))return'E-mail ou senha incorretos.';
+  if(/email_not_confirmed|not confirmed/i.test(m))return'Confirme seu e-mail pelo link que enviamos antes de entrar.';
+  if(/user_already_exists|already registered/i.test(m))return'Este e-mail já tem conta. Use “Entrar”.';
+  if(/weak_password|at least|password should/i.test(m))return'A senha precisa ter pelo menos 6 caracteres.';
+  if(/rate|too many|over_email/i.test(m)||status===429)return'Muitas tentativas. Aguarde um minuto e tente de novo.';
+  if(/signup.*disabled|signups not allowed/i.test(m))return'Cadastro desativado. Fale com o administrador.';
+  if(/same_password|different from the old/i.test(m))return'A nova senha precisa ser diferente da anterior.';
+  return j.msg||j.message||j.error_description||'Não foi possível concluir. Tente novamente.'}
+async function authReq(path,body,{method='POST',token}={}){
+  let r;try{r=await fetch(SB.url+'/auth/v1/'+path,{method,headers:{'Content-Type':'application/json',apikey:SB.key,...(token?{Authorization:'Bearer '+token}:{})},body:method==='GET'?undefined:JSON.stringify(body||{})})}catch(e){throw new Error('Sem conexão com a internet.')}
+  let j={};try{j=await r.json()}catch(e){}
+  if(!r.ok){const er=new Error(authMsg(j,r.status));er.status=r.status;throw er}return j}
+async function accessToken(){if(!session)throw Object.assign(new Error('sessão encerrada'),{auth:true});
+  if(session.expires_at-60<Date.now()/1000){try{storeSession(toSession(await authReq('token?grant_type=refresh_token',{refresh_token:session.refresh_token})))}catch(e){if(e.status&&e.status<500){sessionExpired();throw Object.assign(e,{auth:true})}throw e}}
+  return session.access_token}
+async function rest(path,opt={}){const t=await accessToken();let r;
+  try{r=await fetch(SB.url+'/rest/v1/'+path,{...opt,headers:{'Content-Type':'application/json',apikey:SB.key,Authorization:'Bearer '+t,...(opt.headers||{})}})}catch(e){throw new Error('offline')}
+  let j=null;try{j=await r.json()}catch(e){}
+  if(r.status===401){sessionExpired();throw Object.assign(new Error('sessão expirada'),{auth:true})}
+  if(!r.ok)throw new Error((j&&j.message)||'erro '+r.status);return j}
+function setCloud(st){cloud.state=st;const el=$('#syncDot');if(el){el.className='sync '+st;el.title={ok:'Tudo salvo na nuvem',saving:'Salvando…',offline:'Sem conexão — será enviado quando voltar',idle:''}[st]||''}const t=$('#syncTxt');if(t)t.innerHTML=syncLabel()}
+const syncLabel=()=>({ok:'<span class="badge ok">● Tudo salvo na nuvem</span>',saving:'<span class="badge info">● Salvando…</span>',offline:'<span class="badge warn">● Sem conexão — salvo neste aparelho, envio pendente</span>',idle:'<span class="badge">●</span>'}[cloud.state]);
+function schedulePush(){if(!session)return;cloud.pending=true;setCloud('saving');clearTimeout(cloud.timer);cloud.timer=setTimeout(pushNow,900)}
+async function pushNow(){if(!session)return;clearTimeout(cloud.timer);if(cloud.busy){cloud.timer=setTimeout(pushNow,600);return}cloud.busy=true;cloud.pending=false;
+  try{const now=new Date().toISOString();const r=await rest('lumiere_data?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({user_id:session.user.id,data:db,updated_at:now})});
+    cloud.lastAt=(r&&r[0]&&r[0].updated_at)||now;if(!cloud.pending)setCloud('ok')}
+  catch(e){cloud.pending=true;if(!e.auth){setCloud('offline');cloud.timer=setTimeout(pushNow,15000)}}
+  finally{cloud.busy=false}}
+async function pullIfNewer(){if(!session||cloud.pending||cloud.busy||layers.length)return;
+  try{const head=await rest(`lumiere_data?select=updated_at&user_id=eq.${session.user.id}`);
+    if(head[0]&&(!cloud.lastAt||new Date(head[0].updated_at)>new Date(cloud.lastAt))){const full=await rest(`lumiere_data?select=data,updated_at&user_id=eq.${session.user.id}`);
+      if(cloud.pending||layers.length||!full[0])return;db=withDefaults(full[0].data);cloud.lastAt=full[0].updated_at;S.retSel=null;persist();render();toast('Dados atualizados')}
+    if(cloud.state==='offline')setCloud('ok')}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)pullIfNewer()});
+addEventListener('online',()=>{if(cloud.pending)pushNow();else pullIfNewer()});
+addEventListener('offline',()=>{if(session)setCloud('offline')});
+setInterval(()=>{if(!document.hidden)pullIfNewer()},60000);
+function sessionExpired(){if(!session)return;storeSession(null);showLogin('login',{msg:'Sua sessão expirou. Entre novamente.'})}
+async function logout(){if(cloud.pending){try{await pushNow()}catch(e){}}const t=session&&session.access_token;authReq('logout',{},{token:t}).catch(()=>{});
+  try{localStorage.removeItem(localKey())}catch(e){}storeSession(null);db=defaults();layers.slice().forEach(l=>l.close());showLogin('login',{msg:'Você saiu com segurança.'})}
+
+async function startApp(){
+  document.body.classList.remove('locked');$('#auth').innerHTML='';
+  const cached=readLocal(localKey());
+  if(cached){db=cached;S.anim=true;render()}else{$('#view').innerHTML='<div class="empty" style="padding-top:20vh">Carregando seus dados…</div>'}
+  setCloud('saving');
+  try{
+    const ok=await rest('rpc/lumiere_is_allowed',{method:'POST',body:'{}'});
+    if(ok!==true){try{localStorage.removeItem(localKey())}catch(e){}db=defaults();return showLogin('denied')}
+    const rows=await rest(`lumiere_data?select=data,updated_at&user_id=eq.${session.user.id}`);
+    if(rows.length){if(!cloud.pending){db=withDefaults(rows[0].data);cloud.lastAt=rows[0].updated_at;persist()}}
+    else{const legacy=readLocal(KEY);if(legacy&&(legacy.patients.length||legacy.appointments.length)){db=legacy;toast('Os dados deste aparelho foram enviados para a nuvem')}
+      else if(!cached)db=defaults();await pushNow();try{localStorage.removeItem(KEY)}catch(e){}}
+    S.anim=!cached;render();setCloud(cloud.pending?'saving':'ok');if(cloud.pending)pushNow();
+  }catch(e){if(e.auth)return;setCloud('offline');if(!cached){db=defaults();render()}toast('Sem conexão — usando os dados salvos neste aparelho')}
+  setTimeout(autoSummary,1500);
+}
+
+/* ---------- tela de login ---------- */
+function showLogin(mode,o={}){
+  document.body.classList.add('locked');const last=(()=>{try{return localStorage.getItem('lumiere.lastEmail')||''}catch(e){return''}})();
+  const pw=(k,l,ac)=>`<label class="field"><span>${l}</span><div class="inwrap"><input class="in" type="password" data-a="${k}" autocomplete="${ac}" placeholder="••••••••"><button type="button" class="in-ic" data-eye aria-label="Mostrar senha">${ic('eye')}</button></div></label>`;
+  const em=`<label class="field"><span>E-mail</span><input class="in" type="email" data-a="email" autocomplete="email" inputmode="email" placeholder="seu@email.com" value="${esc(o.email||last)}"></label>`;
+  const V={
+    login:{t:'Bem-vinda de volta',s:'Entre para acessar sua clínica',f:em+pw('pass','Senha','current-password'),b:'Entrar',l:`<button type="button" data-go="forgot">Esqueci minha senha</button><button type="button" data-go="signup">Primeiro acesso? <b>Criar senha</b></button>`},
+    signup:{t:'Primeiro acesso',s:'Crie a senha da sua conta',f:em+pw('pass','Crie uma senha','new-password')+pw('pass2','Repita a senha','new-password'),b:'Criar conta',l:`<button type="button" data-go="login">Já tenho conta · <b>Entrar</b></button>`},
+    forgot:{t:'Recuperar senha',s:'Enviaremos um link para o seu e-mail',f:em,b:'Enviar link',l:`<button type="button" data-go="login">Voltar para <b>Entrar</b></button>`},
+    reset:{t:'Nova senha',s:'Escolha uma nova senha para entrar',f:pw('pass','Nova senha','new-password')+pw('pass2','Repita a nova senha','new-password'),b:'Salvar e entrar',l:''},
+    sent:{t:'Confira seu e-mail',s:o.msg||'Enviamos um link para você.',f:'',b:'',l:`<button type="button" data-go="login">Voltar para <b>Entrar</b></button>`},
+    denied:{t:'Acesso não liberado',s:`A conta <b>${esc(session?session.user.email:'')}</b> ainda não tem acesso a este sistema. Fale com o administrador.`,f:'',b:'',l:`<button type="button" data-out>Sair e usar outra conta</button>`}
+  }[mode];
+  $('#auth').innerHTML=`<div class="auth-card glass"><div class="brand-mark">L</div><div class="auth-brand">Lumière</div>
+    <h1>${V.t}</h1><p class="muted">${V.s}</p>${o.msg&&mode!=='sent'?`<div class="auth-msg">${esc(o.msg)}</div>`:''}
+    ${V.f?`<form class="stack" novalidate>${V.f}<div class="auth-err" role="alert"></div><button class="btn dark auth-btn" type="submit">${V.b}</button></form>`:''}
+    <div class="auth-links">${V.l}</div></div>`;
+  const card=$('#auth .auth-card'),err=$('.auth-err',card),btn=$('.auth-btn',card),val=k=>{const i=$(`[data-a="${k}"]`,card);return i?i.value.trim():''};
+  card.onclick=e=>{const g=e.target.closest('[data-go]');if(g)return showLogin(g.dataset.go,{email:val('email')});const eye=e.target.closest('[data-eye]');if(eye){const i=eye.previousElementSibling;i.type=i.type==='password'?'text':'password'}if(e.target.closest('[data-out]'))logout()};
+  const first=$('input',card);if(first)setTimeout(()=>{(val('email')&&$('[data-a="pass"]',card)||first).focus()},80);
+  const form=$('form',card);if(!form)return;
+  form.onsubmit=async e=>{e.preventDefault();err.textContent='';const email=val('email'),pass=$('[data-a="pass"]',card)?$('[data-a="pass"]',card).value:'',pass2=$('[data-a="pass2"]',card)?$('[data-a="pass2"]',card).value:'';
+    if(mode!=='reset'&&!/^\S+@\S+\.\S+$/.test(email))return err.textContent='Digite um e-mail válido.';
+    if((mode==='signup'||mode==='reset')&&pass.length<6)return err.textContent='A senha precisa ter pelo menos 6 caracteres.';
+    if((mode==='signup'||mode==='reset')&&pass!==pass2)return err.textContent='As senhas não são iguais.';
+    if(mode==='login'&&!pass)return err.textContent='Digite sua senha.';
+    btn.disabled=true;const old=btn.textContent;btn.textContent='Aguarde…';
+    try{try{localStorage.setItem('lumiere.lastEmail',email||'')}catch(x){}
+      const redirect=location.href.split('#')[0];
+      if(mode==='login'){storeSession(toSession(await authReq('token?grant_type=password',{email,password:pass})));return startApp()}
+      if(mode==='signup'){const j=await authReq('signup?redirect_to='+encodeURIComponent(redirect),{email,password:pass});
+        if(j.access_token){storeSession(toSession(j));return startApp()}
+        return showLogin('sent',{msg:`Enviamos um link de confirmação para ${email}. Clique nele e depois entre aqui com sua senha.`})}
+      if(mode==='forgot'){await authReq('recover?redirect_to='+encodeURIComponent(redirect),{email});return showLogin('sent',{msg:`Se ${email} tiver conta, você receberá um link para criar uma nova senha.`})}
+      if(mode==='reset'){await authReq('user',{password:pass},{method:'PUT',token:session.access_token});toast('Senha alterada');return startApp()}
+    }catch(x){err.textContent=x.message;btn.disabled=false;btn.textContent=old}};
+}
+
+async function boot(){
+  const h=new URLSearchParams(location.hash.slice(1));
+  if(h.get('access_token')&&h.get('refresh_token')){history.replaceState(null,'',location.pathname+location.search);
+    try{const tok={access_token:h.get('access_token'),refresh_token:h.get('refresh_token'),expires_in:h.get('expires_in'),expires_at:h.get('expires_at')};
+      const user=await authReq('user',null,{method:'GET',token:tok.access_token});storeSession(toSession(tok,user));
+      if(h.get('type')==='recovery')return showLogin('reset');return startApp()}catch(e){return showLogin('login',{msg:'Link inválido ou expirado. Entre ou peça um novo link.'})}}
+  if(h.get('error_description')){history.replaceState(null,'',location.pathname+location.search);return showLogin('login',{msg:'Link inválido ou expirado. Peça um novo.'})}
+  session=loadSession();if(!session)return showLogin('login');startApp();
+}
 
 const P=id=>db.patients.find(p=>p.id===id);
 const calc=o=>{const sub=(o.items||[]).reduce((s,i)=>s+(+i.price||0)*(+i.qty||1),0);const v=+o.discountValue||0;const disc=o.discountType==='pct'?sub*Math.min(100,v)/100:Math.min(sub,v);return{sub,disc,total:Math.max(0,sub-disc)}};
@@ -596,7 +733,7 @@ function pickDate(anchor,val,quick,yearFirst){return new Promise(res=>{
 const NAV=[['agenda','Agenda','cal','Agenda'],['pacientes','Pacientes','users','Pacientes'],['orcamentos','Orçamentos','doc','Orçam.'],['retornos','Retornos','ret','Retornos'],['procedimentos','Procedimentos','tag','Proced.'],['ajustes','Ajustes','cog','Ajustes']];
 function navHTML(mob){const n=pendingCount();return NAV.map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}
 function renderShell(){
-  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<div class="side-foot" title="${esc(db.settings.doctor||'')}"><div class="who">${esc(initials(db.settings.doctor.replace(/^dra?\.?\s*/i,''))||'—')}</div></div>`;
+  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<div class="side-foot" title="${esc(db.settings.doctor||'')}"><i id="syncDot" class="sync ${cloud.state}"></i><div class="who" data-nav="ajustes">${esc(initials(db.settings.doctor.replace(/^dra?\.?\s*/i,''))||'—')}</div></div>`;
   $('#tabbar').innerHTML=navHTML(true);
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav)});
@@ -1092,8 +1229,9 @@ function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><spa
     </div></div>
   </div>
   <div class="stack">
+    <div class="glass card"><h3>${ic('user','style="width:18px;height:18px"')}Sua conta</h3><div class="stack small"><div class="row between wrap"><div><div class="muted">Conectada como</div><b style="font-size:14px">${esc(session?session.user.email:'')}</b></div><button class="btn sm" data-act="logout">${ic('logout')}Sair</button></div><div id="syncTxt">${syncLabel()}</div><div class="muted">Seus dados ficam salvos na nuvem e aparecem em qualquer aparelho em que você entrar.</div></div></div>
     <div class="glass card"><h3>${ic('doc','style="width:18px;height:18px"')}Mensagem de orçamento</h3><label class="field"><span>Introdução</span><textarea class="in" data-chg="set" data-k="budgetIntro">${esc(s.budgetIntro)}</textarea></label><div class="small muted" style="margin-top:6px">A lista de procedimentos, desconto e total são adicionados automaticamente. O modelo de retorno é editado na aba Retornos.</div></div>
-    <div class="glass card"><h3>${ic('down','style="width:18px;height:18px"')}Backup dos dados</h3><div class="small muted" style="margin-bottom:12px">Os dados ficam salvos neste aparelho/navegador. Faça backups regulares e use “Importar” para levar para outro aparelho.</div>
+    <div class="glass card"><h3>${ic('down','style="width:18px;height:18px"')}Backup dos dados</h3><div class="small muted" style="margin-bottom:12px">Além da nuvem, você pode baixar uma cópia de segurança dos seus dados quando quiser.</div>
       <div class="row wrap"><button class="btn" data-act="exportData">${ic('down')}Exportar backup</button><label class="btn">${ic('up')}Importar<input type="file" accept=".json,application/json" data-chg="importData" hidden></label></div>
       <div class="row wrap" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">${db.patients.length?'':'<button class="btn sm" data-act="demo">Carregar dados de exemplo</button>'}<button class="btn sm ghost danger" data-act="reset">Apagar tudo</button></div></div>
   </div></div>`}
@@ -1105,6 +1243,7 @@ INP.setb=el=>{db.settings[el.dataset.k]=el.checked;save();render()};
 INP.importData=el=>{const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const d=JSON.parse(r.result);if(!d.patients)throw 0;if(await confirmBox(`Substituir os dados atuais pelo backup (${d.patients.length} pacientes)?`,'Importar')){const def=defaults();db={...def,...d,settings:{...def.settings,...d.settings}};changed();toast('Backup importado')}}catch(e){toast('Arquivo inválido')}};r.readAsText(f);el.value=''};
 Object.assign(ACT,{
   rmLogo:async()=>{if(await confirmBox('Remover a logo da clínica?','Remover')){delete db.settings.logo;save();render();toast('Logo removida')}},
+  logout:async()=>{if(await confirmBox('Sair da sua conta neste aparelho?','Sair'))logout()},
   exportData:()=>{const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`lumiere-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)},
   reset:async()=>{if(await confirmBox('Apagar <b>todos</b> os dados? Recomendo exportar um backup antes.','Apagar tudo')){db=defaults();changed();toast('Dados apagados')}}
 });
@@ -1129,8 +1268,7 @@ function seedDemo(){
 }
 
 /* ================= início ================= */
-render();
-setTimeout(autoSummary,1500);
+boot();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
