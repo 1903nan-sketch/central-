@@ -389,7 +389,7 @@ body{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.05px}
 /* painel do dia */
 .daypanel .bigday{display:flex;align-items:flex-end;gap:14px;margin:6px 0 18px}
 .daypanel .bigday b{font-family:var(--serif);font-weight:200;font-size:80px;line-height:.8;letter-spacing:-3px}
-.daypanel .bigday span{font-family:var(--serif);font-weight:300;font-size:19px;color:var(--ink-2);line-height:1.15;padding-bottom:4px;text-transform:capitalize}
+.daypanel .bigday span{font-family:var(--serif);font-weight:300;font-size:19px;color:var(--ink-2);line-height:1.15;padding-bottom:4px}
 .sec-t{font-size:10px;letter-spacing:2px;font-weight:700}
 .time{background:none;box-shadow:inset 0 0 0 1px rgba(30,35,45,.12);border-radius:999px;font-weight:700}
 .item{border-radius:18px}
@@ -518,6 +518,32 @@ html{transition:background-color .3s}.theme-btn+.side-foot{margin-top:0}
 [data-theme="dark"] .gear-btn:hover{background:rgba(255,255,255,.13)}
 [data-theme="dark"] .gear-btn.on{background:linear-gradient(180deg,#f5f6f8,#d3d7dd);color:var(--accent-ink)}
 .side-foot .sync{top:0;left:calc(50% + 12px)}
+
+/* ================= POLIMENTO (skills: frontend-design, impeccable, taste) ================= */
+:root{--ink-3:#6b737e}
+:root[data-theme="dark"]{--ink-3:#959da8}
+.topbar h1 em{font-style:normal;font-weight:inherit;color:inherit}
+.topbar p{color:var(--ink-2);font-size:14.5px}
+.topbar p::first-letter{text-transform:uppercase}
+.cal-week div,.sec-t,.stats .stat .lbl,.pcard .meta small,.f-stats small,.tp-g,.daypanel .dp-date{text-transform:none;letter-spacing:0}
+.cal-week div{font-size:12.5px;font-weight:500}
+.sec-t{font-size:13px;font-weight:600;color:var(--ink-2);margin:20px 2px 8px}
+.stats .stat .lbl{font-size:12.5px;font-weight:500;color:var(--ink-2)}
+.stats .stat .lbl svg{opacity:.7}
+.pcard .meta small,.f-stats small{font-size:11.5px;font-weight:500;margin-bottom:2px}
+.tp-g{font-size:12.5px;font-weight:600;color:var(--ink-2);margin:12px 2px 6px}
+.auth-brand{text-transform:none;letter-spacing:.3px;font-size:19px;color:var(--ink-2)}
+.daypanel .bigday span small{display:block;font-family:Manrope,sans-serif;font-size:12.5px;font-weight:600;color:var(--ink-3);margin-top:6px;text-transform:none}
+.daypanel .bigday span small::first-letter,.daypanel .bigday span::first-letter{text-transform:uppercase}
+.pcard:hover{transform:none;box-shadow:0 14px 34px -20px rgba(30,40,60,.3)}
+/* superfícies do navegador */
+::selection{background:rgba(42,46,53,.16)}
+[data-theme="dark"] ::selection{background:rgba(255,255,255,.22)}
+input,textarea{caret-color:var(--ink)}
+button:focus-visible,a:focus-visible,.pcard:focus-visible,.day:focus-visible,summary:focus-visible{outline:2px solid var(--ink-2);outline-offset:2px}
+.in:focus-visible{outline:none}
+.price,.time,.stat .val,.totals,.f-stats b,.day .n,.pill,.dp-g button,.tp-grid button,.ie-row .in,.badge{font-variant-numeric:tabular-nums}
+@media (max-width:860px){.btn.sm{height:40px;padding:0 14px}.btn.sm.icon{width:40px}.chip{height:38px}}
 </style>
 </head>
 <body>
@@ -837,7 +863,7 @@ const ACT={},INP={},AFTER={};
 $('#view').addEventListener('click',e=>{const a=e.target.closest('[data-act]');if(a&&ACT[a.dataset.act]){e.stopPropagation();ACT[a.dataset.act](a.dataset.id,a,e)}});
 $('#view').addEventListener('input',e=>{const k=e.target.dataset.inp;if(k&&INP[k])INP[k](e.target)});
 $('#view').addEventListener('change',e=>{const k=e.target.dataset.chg;if(k&&INP[k])INP[k](e.target)});
-const topbar=(title,sub,actions='',eyebrow='')=>`<div class="topbar"><div>${eyebrow?`<div class="eyebrow">${eyebrow}</div>`:''}<h1>${title}</h1>${sub?`<p>${sub}</p>`:''}</div><div class="actions">${actions}</div></div>`;
+const topbar=(title,sub,actions='',eyebrow='')=>`<div class="topbar"><div><h1>${title}</h1>${sub||eyebrow?`<p>${sub||eyebrow}</p>`:''}</div><div class="actions">${actions}</div></div>`;
 const empty=(icon,t,s,btn='')=>`<div class="empty">${ic(icon)}<b>${t}</b><div class="small">${s}</div>${btn?`<div style="margin-top:14px">${btn}</div>`:''}</div>`;
 
 /* ================= AGENDA ================= */
@@ -856,7 +882,7 @@ function vAgenda(){
   else if(summaryNeeded())html+=`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1"><b>Retornos de ${mName(nk)}: ${rn.length} paciente${rn.length>1?'s':''}</b><div class="small muted">Sua lista do próximo mês está pronta para organizar a agenda.</div></div><button class="btn" data-act="goRet">Ver lista</button><button class="btn wa" data-act="sendSummary">${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`;
   html+=`<div class="stats glass">
     <div class="stat"><span class="lbl">${ic('clock')}Hoje</span><span class="val">${apT.length}</span><span class="sub">consulta${apT.length===1?'':'s'} agendada${apT.length===1?'':'s'}</span></div>
-    <div class="stat click" data-act="goRet" style="cursor:pointer"><span class="lbl">${ic('ret')}Retornos em ${mName(nk)}</span><span class="val">${rn.length}</span><span class="sub">${lateReturns().length?`${lateReturns().length} atrasado(s)`:'organize-se com antecedência'}</span></div>
+    <div class="stat click" data-act="goRet" style="cursor:pointer"><span class="lbl">${ic('ret')}Retornos em ${mName(nk)}</span><span class="val">${rn.length}</span><span class="sub">${lateReturns().length?`${lateReturns().length} ${lateReturns().length===1?'atrasado':'atrasados'}`:'organize-se com antecedência'}</span></div>
     <div class="stat"><span class="lbl">${ic('money')}Faturado em ${mName(mk)}</span><span class="val">${money(rev)}</span><span class="sub">${prev?`+ ${money(prev)} previsto`:'consultas realizadas'}</span></div>
     <div class="stat"><span class="lbl">${ic('users')}Pacientes</span><span class="val">${db.patients.length}</span><span class="sub">${newP} novo${newP===1?'':'s'} este mês</span></div>
   </div>
@@ -883,7 +909,7 @@ function apptItem(a,showDate){const p=P(a.patientId),c=calc(a);return`<button cl
 function dayHTML(){
   const s=S.selDay,A=db.appointments.filter(a=>a.date===s).sort((a,b)=>(a.time||'99').localeCompare(b.time||'99')),R=activeReturns().filter(r=>r.date===s);
   const up=db.appointments.filter(a=>a.date>today()&&a.status==='agendada').sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||''))).slice(0,5);
-  const dd=parse(s);return `<div class="dp-date eyebrow">${s===today()?'Hoje':relDays(s)}</div><div class="bigday"><b>${dd.getDate()}</b><span>${dd.toLocaleDateString('pt-BR',{weekday:'long'})}<br>${MONTHS[dd.getMonth()]}</span></div>
+  const dd=parse(s);return `<div class="bigday"><b>${dd.getDate()}</b><span>${dd.toLocaleDateString('pt-BR',{weekday:'long'})}<br>${MONTHS[dd.getMonth()]}<small>${s===today()?'hoje':relDays(s)}</small></span></div>
   <button class="btn dark" data-act="newAppt" data-id="${s}" style="width:100%">${ic('plus')}Agendar neste dia</button>
   <div class="scroll" style="margin:0 -6px;padding:0 6px">
   <div class="sec-t">Consultas</div>${A.length?`<div class="list">${A.map(a=>apptItem(a)).join('')}</div>`:`<div class="small muted" style="padding:4px 2px">Nenhuma consulta neste dia.</div>`}
@@ -1062,7 +1088,7 @@ function patientStats(id){
   return{A,done,total:done.reduce((s,a)=>s+calc(a).total,0),last:done[0]?.date||'',nextR,nextA};
 }
 function vPacientes(){
-  return topbar('Suas <em>pacientes</em>',`${db.patients.length} cadastrado${db.patients.length===1?'':'s'} · cada paciente tem sua pasta completa`,`<button class="btn dark" data-act="newPatient">${ic('plus')}Novo paciente</button>`)+
+  return topbar('Pacientes',db.patients.length?`${db.patients.length} ${db.patients.length===1?'cadastro':'cadastros'}. Toque em um nome para abrir a pasta.`:'Cadastre com apenas o nome.',`<button class="btn dark" data-act="newPatient">${ic('plus')}Novo paciente</button>`)+
   `<div class="row wrap" style="margin-bottom:16px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar por nome ou telefone..." data-inp="pq" value="${esc(S.pq)}"></div>
   <div class="seg">${[['recent','Recentes'],['az','A–Z'],['ret','Próx. retorno'],['value','Maior valor']].map(([k,l])=>`<button class="${S.psort===k?'on':''}" data-act="psort" data-id="${k}">${l}</button>`).join('')}</div></div>
   <div id="plist">${pListHTML()}</div>`;
@@ -1125,7 +1151,7 @@ function openFolder(id,tab='hist'){
 function vOrcamentos(){
   const L=db.budgets.filter(b=>S.bf==='todos'||b.status===S.bf).filter(b=>!S.bq||norm(P(b.patientId)?.name).includes(norm(S.bq))).sort((a,b)=>b.date.localeCompare(a.date));
   const open=db.budgets.filter(b=>b.status==='aberto'),conv=db.budgets.filter(b=>b.status==='aprovado');
-  return topbar('<em>Orçamentos</em>','Monte valores, aplique descontos e envie pelo WhatsApp',`<button class="btn dark" data-act="newBudget">${ic('plus')}Novo orçamento</button>`)+
+  return topbar('Orçamentos','Monte os valores, aplique desconto e envie pelo WhatsApp.',`<button class="btn dark" data-act="newBudget">${ic('plus')}Novo orçamento</button>`)+
   `<div class="stats glass" style="grid-template-columns:repeat(3,1fr)"><div class="stat"><span class="lbl">Em aberto</span><span class="val">${open.length}</span><span class="sub">${money(open.reduce((s,b)=>s+calc(b).total,0))}</span></div><div class="stat"><span class="lbl">Aprovados</span><span class="val">${conv.length}</span><span class="sub">${money(conv.reduce((s,b)=>s+calc(b).total,0))}</span></div><div class="stat"><span class="lbl">Conversão</span><span class="val">${db.budgets.length?Math.round(conv.length/db.budgets.length*100):0}%</span><span class="sub">orçamentos aprovados</span></div></div>
   <div class="row wrap" style="margin-bottom:14px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar paciente..." data-inp="bq" value="${esc(S.bq)}"></div><div class="seg">${[['todos','Todos'],['aberto','Em aberto'],['aprovado','Aprovados'],['recusado','Recusados']].map(([k,l])=>`<button class="${S.bf===k?'on':''}" data-act="bf" data-id="${k}">${l}</button>`).join('')}</div></div>
   <div class="glass card tlist">${L.length?`<div class="list">${L.map(b=>{const p=P(b.patientId),c=calc(b);const exp=b.validUntil&&b.validUntil<today()&&b.status==='aberto';return`<div class="item click" data-act="editBudget" data-id="${b.id}">${av(p?.name)}<div class="grow"><div class="t">${esc(p?.name||'—')}</div><div class="s">${fmtD(b.date)} · ${esc(procNames(b.items)||'sem itens')}</div></div><div style="text-align:right"><div class="price">${c.disc?`<span class="strike">${money(c.sub)}</span> `:''}${money(c.total)}</div>${exp?'<span class="badge">Vencido</span>':badge(BST,b.status)}</div>${p?.phone?`<button class="btn sm icon" data-act="sendBudget" data-id="${b.id}" title="Enviar no WhatsApp">${ic('wa')}</button>`:''}<button class="btn sm icon ghost" data-act="budgetMenu" data-id="${b.id}">${ic('more')}</button></div>`}).join('')}</div>`:empty('doc','Nenhum orçamento','Crie orçamentos para saber valores antes de agendar.',`<button class="btn dark" data-act="newBudget">${ic('plus')}Criar orçamento</button>`)}</div>`;
@@ -1149,7 +1175,7 @@ function printBudget(b){const p=P(b.patientId),c=calc(b),s=db.settings,w=window.
   .meta{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;margin:26px 0 8px}.meta div{background:#f3f4f6;border-radius:14px;padding:12px 14px}.meta small{display:block;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#8b929b;font-weight:700;margin-bottom:3px}.meta span{font-weight:600;font-size:14px}
   table{width:100%;border-collapse:collapse;margin:22px 0 6px}th{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#8b929b;font-weight:700;text-align:left;padding:0 6px 10px}td{padding:13px 6px;border-top:1px solid #eceef1;font-size:14px}.r{text-align:right}
   .sum{margin-left:auto;width:300px;margin-top:10px}.sum div{display:flex;justify-content:space-between;padding:6px 6px;font-size:14px;color:#555d68}.sum .tot{border-top:1px solid #e3e6ea;margin-top:6px;padding-top:12px;color:#1d2127;align-items:baseline}.sum .tot b{font-family:Jost,sans-serif;font-weight:400;font-size:30px;letter-spacing:-.5px}
-  .notes{margin-top:26px;background:#f3f4f6;border-radius:14px;padding:14px 16px;font-size:13px;color:#555d68;white-space:pre-wrap}.foot{margin-top:40px;padding-top:16px;border-top:1px solid #e3e6ea;color:#8b929b;font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}</style></head><body>
+  .notes{margin-top:26px;background:#f3f4f6;border-radius:14px;padding:14px 16px;font-size:13px;color:#555d68;white-space:pre-wrap}.foot{margin-top:40px;padding-top:16px;border-top:1px solid #e3e6ea;color:#8b929b;font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.tag small,.meta small,th{text-transform:none!important;letter-spacing:0!important;font-size:12px!important;font-weight:600!important}td,.sum,.tag b{font-variant-numeric:tabular-nums}</style></head><body>
   <div class="head"><div class="brand">${s.logo?`<img class="logo" src="${s.logo}" alt="${esc(s.clinic||'')}">`:`<div><div class="clinic">${esc(s.clinic||'Orçamento')}</div>${s.doctor?`<div class="doc">${esc(s.doctor)}</div>`:''}</div>`}</div><div class="tag"><small>Orçamento</small><b>Nº ${num}</b></div></div>
   <div class="meta"><div><small>Paciente</small><span>${esc(p.name)}</span></div><div><small>Emitido em</small><span>${fmtD(b.date)}</span></div><div><small>Válido até</small><span>${b.validUntil?fmtD(b.validUntil):'—'}</span></div></div>
   <table><tr><th>Procedimento</th><th class="r">Qtd</th><th class="r">Valor unit.</th><th class="r">Total</th></tr>${b.items.map(i=>`<tr><td>${esc(i.name)}</td><td class="r">${i.qty||1}</td><td class="r">${money(i.price)}</td><td class="r">${money(i.price*(i.qty||1))}</td></tr>`).join('')}</table>
@@ -1194,12 +1220,12 @@ function vRetornos(){
   const withPhone=L.filter(r=>P(r.patientId).phone),sel=L.filter(r=>S.retSel.has(r.id)).length;
   const sample=L[0]||{patientId:null};
   const prev=L[0]?fill(db.settings.template,retVars(L[0])):fill(db.settings.template,{nome:'Maria',data:fmtD(addMonths(today(),1)),procedimento:'limpeza de pele',clinica:db.settings.clinic||'nossa clínica',doutora:db.settings.doctor||'',mes:mName(n)});
-  return topbar('<em>Retornos</em>','Lembre suas pacientes na hora certa — sempre um mês à frente',`<button class="btn" data-act="newReturn">${ic('plus')}<span class="btn-label">Retorno manual</span></button>`)+
+  return topbar('Retornos','Quem precisa voltar, com a mensagem pronta para enviar.',`<button class="btn" data-act="newReturn">${ic('plus')}<span class="btn-label">Retorno manual</span></button>`)+
   `<div class="row wrap between" style="margin-bottom:14px;gap:10px">
     <div class="chips"><button class="chip ${S.retMode==='late'?'on':''}" data-act="rmode" data-id="late">Atrasados${late?` · ${late}`:''}</button><button class="chip ${S.retMode==='month'&&S.retMonth===t?'on':''}" data-act="rmonth" data-id="${t}">Este mês</button><button class="chip ${S.retMode==='month'&&S.retMonth===n?'on':''}" data-act="rmonth" data-id="${n}">Próximo mês</button></div>
     <div class="row glass" style="padding:4px;border-radius:14px;${S.retMode==='late'?'opacity:.4;pointer-events:none':''}"><button class="btn sm icon ghost" data-act="rprev">${ic('chevL')}</button><b style="min-width:130px;text-align:center;text-transform:capitalize">${mLabel(S.retMonth)}</b><button class="btn sm icon ghost" data-act="rnext">${ic('chevR')}</button></div>
   </div>
-  ${S.retMode==='month'?`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1;min-width:0"><b>Resumo para a doutora · ${cap(mLabel(S.retMonth))}</b><div class="small muted">${L.length} paciente${L.length===1?'':'s'} com retorno no mês${db.settings.lastSummary===S.retMonth?' · já enviado ✓':''}${db.settings.doctorPhone?'':' · cadastre seu WhatsApp em Ajustes'}</div></div><button class="btn sm icon" data-act="copySummary" title="Copiar">${ic('copy')}</button><button class="btn wa sm" data-act="sendSummaryM" ${L.length?'':'disabled'}>${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`:''}
+  ${S.retMode==='month'?`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1;min-width:0"><b>Resumo de ${mName(S.retMonth)} para a doutora</b><div class="small muted">${L.length} paciente${L.length===1?'':'s'} com retorno no mês${db.settings.lastSummary===S.retMonth?' · já enviado ✓':''}${db.settings.doctorPhone?'':' · cadastre seu WhatsApp em Ajustes'}</div></div><button class="btn sm icon" data-act="copySummary" title="Copiar">${ic('copy')}</button><button class="btn wa sm" data-act="sendSummaryM" ${L.length?'':'disabled'}>${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`:''}
   <div class="glass card">
     <div class="row between wrap" style="margin-bottom:12px"><h3 style="margin:0">${S.retMode==='late'?'Retornos atrasados':`Pacientes de ${mName(S.retMonth)}`}</h3>${L.length?`<label class="row small strong" style="cursor:pointer;color:var(--ink-2)"><input type="checkbox" class="ck" data-chg="ckall" ${sel&&sel===withPhone.length?'checked':''}>Selecionar todos</label>`:''}</div>
     ${L.length?`<div class="list">${L.map(r=>{const p=P(r.patientId),on=S.retSel.has(r.id);return`<div class="item ritem ${on||!p.phone?'':'off'}" data-row="${r.id}"><label><input type="checkbox" class="ck" data-chg="ck" data-id="${r.id}" ${on?'checked':''} ${p.phone?'':'disabled'}></label>${av(p.name)}<div class="grow" data-act="folder" data-id="${p.id}" style="cursor:pointer"><div class="t">${esc(p.name)}</div><div class="s">${fmtD(r.date)} · ${esc(r.note||'Retorno')} · ${p.phone?esc(p.phone):'<span style="color:var(--bad)">sem WhatsApp</span>'}</div></div>${r.status==='avisado'?`<span class="badge info">Avisado ${r.notifiedAt?fmtDM(r.notifiedAt):''}</span>`:badge(RST,r.status)}<button class="btn sm icon ghost" data-act="rmenu" data-id="${r.id}">${ic('more')}</button></div>`}).join('')}</div>`:empty('ret',S.retMode==='late'?'Nenhum retorno atrasado':'Nenhum retorno neste mês','Os retornos aparecem aqui ao salvar consultas com “1, 3 ou 6 meses”.')}
@@ -1293,7 +1319,7 @@ async function evoSend(phone,text){const number=waNum(phone);if(!number)throw ne
 /* ================= PROCEDIMENTOS ================= */
 function vProcedimentos(){
   const use={};db.appointments.forEach(a=>a.status==='realizada'&&a.items.forEach(i=>{if(i.procId){use[i.procId]=use[i.procId]||{n:0,v:0};use[i.procId].n+=+i.qty||1;use[i.procId].v+=(+i.price||0)*(+i.qty||1)}}));
-  return topbar('<em>Procedimentos</em>','Seu catálogo de serviços e valores — usado nas consultas e orçamentos',`<button class="btn dark" data-act="newProc">${ic('plus')}Novo procedimento</button>`)+
+  return topbar('Procedimentos','Serviços e valores usados nas consultas e nos orçamentos.',`<button class="btn dark" data-act="newProc">${ic('plus')}Novo procedimento</button>`)+
   `<div class="glass card tlist">${db.procedures.length?`<div class="list">${[...db.procedures].sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<button class="item" data-act="editProc" data-id="${p.id}"><div class="avatar">${ic('tag','style="width:17px;height:17px"')}</div><div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${p.duration?p.duration+' min · ':''}${use[p.id]?`realizado ${use[p.id].n}× · ${money(use[p.id].v)}`:'ainda não realizado'}</div></div><div class="price">${money(p.price)}</div></button>`).join('')}</div>`:empty('tag','Catálogo vazio','Cadastre seus procedimentos e valores.')}</div>`;
 }
 Object.assign(ACT,{newProc:()=>openProc(),editProc:id=>openProc(id)});
@@ -1306,7 +1332,7 @@ function openProc(id){const ex=db.procedures.find(p=>p.id===id);
 
 /* ================= AJUSTES ================= */
 function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><span>${l}</span><input class="in" data-chg="set" data-k="${k}" value="${esc(s[k]||'')}" ${a}></label>`;
-  return topbar('<em>Ajustes</em>','Seus dados, WhatsApp e backup')+`<div class="grid2" style="align-items:start">
+  return topbar('Ajustes','Perfil, aparência, conta e cópia de segurança.')+`<div class="grid2" style="align-items:start">
   <div class="stack">
     <div class="glass card"><h3>${ic('user','style="width:18px;height:18px"')}Perfil</h3><div class="stack"><div class="field"><span>Logo da clínica <small class="muted" style="font-weight:500">· aparece no orçamento em PDF</small></span><div class="logo-box">${s.logo?`<div class="logo-prev"><img src="${s.logo}" alt="Logo"></div><div class="row wrap"><label class="btn sm">${ic('swap')}Trocar<input type="file" accept="image/*" data-chg="logo" hidden></label><button class="btn sm ghost danger" data-act="rmLogo">${ic('trash')}Remover</button></div>`:`<label class="logo-drop">${ic('up')}<b>Enviar logo</b><span class="small muted">PNG, JPG ou SVG · de preferência com fundo transparente</span><input type="file" accept="image/*" data-chg="logo" hidden></label>`}</div></div>${f('doctor','Seu nome (como aparece nas mensagens)','placeholder="Ex.: Dra. Ana Lima"')}${f('clinic','Nome da clínica','placeholder="Ex.: Ana Lima Estética Avançada"')}${f('doctorPhone','Seu WhatsApp (para receber os avisos)','inputmode="tel" placeholder="(11) 99999-9999"')}</div></div>
     <div class="glass card"><h3>${ic('bell','style="width:18px;height:18px"')}Aviso mensal de retornos</h3><div class="stack small">
