@@ -15,14 +15,24 @@ Sistema web leve (um único `index.html`, sem instalação) com visual em vidro 
 Abra o `index.html` no navegador ou publique a pasta em qualquer hospedagem estática (GitHub Pages, Netlify, Vercel). No celular, use “Adicionar à tela inicial” para abrir como aplicativo.
 
 ## Login e nuvem (Supabase)
-- O sistema pede **e-mail e senha**. Os dados ficam na nuvem (tabela `lumiere_data`) e aparecem em qualquer aparelho.
-- Só entram os e-mails autorizados na tabela `lumiere_allowed`. Para liberar a doutora, rode no **SQL Editor** do Supabase:
-  ```sql
-  insert into public.lumiere_allowed (email) values ('email-da-dra@exemplo.com');
-  ```
-- No primeiro acesso, ela clica em **“Primeiro acesso? Criar senha”** e confirma o e-mail.
-- Para que os links de confirmação e de “Esqueci minha senha” voltem para o sistema, em **Authentication → URL Configuration** coloque o endereço publicado em **Site URL** (e em **Redirect URLs**).
-- Se a pessoa já tinha dados neste aparelho antes do login, eles são enviados para a nuvem no primeiro acesso.
+As contas são criadas **só pelo administrador**, no painel do Supabase. A tela do sistema tem apenas **Entrar**.
+
+**Criar o acesso da doutora**
+1. Supabase → **Authentication → Users → Add user → Create new user**.
+2. Preencha o e-mail e a senha e marque **Auto Confirm User**.
+3. No **SQL Editor**, libere o e-mail no sistema:
+   ```sql
+   insert into public.lumiere_allowed (email) values ('email-da-dra@exemplo.com');
+   ```
+
+**Trocar a senha (quando ela esquecer)**
+O Supabase não mostra senhas, porque elas ficam criptografadas. Defina uma nova no **SQL Editor** e envie para ela:
+```sql
+update auth.users set encrypted_password = crypt('NOVA-SENHA', gen_salt('bf'))
+where email = 'email-da-dra@exemplo.com';
+```
+
+Os dados ficam na tabela `lumiere_data` e aparecem em qualquer aparelho em que ela entrar.
 
 ## Aparência
 Claro, Escuro ou Automático (segue o aparelho), em **Ajustes → Aparência** ou pelo botão de sol/lua no menu lateral.

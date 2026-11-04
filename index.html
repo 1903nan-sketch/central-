@@ -431,7 +431,7 @@ body.locked .auth{display:grid;position:fixed;inset:0;z-index:30;place-items:cen
 .auth-err{color:var(--bad);font-size:13px;font-weight:500;min-height:0}.auth-err:empty{display:none}
 .auth-msg{background:var(--info-bg);color:var(--info);border-radius:14px;padding:10px 14px;font-size:13px;font-weight:500;margin:-8px 0 16px;text-align:center}
 .auth-links{display:flex;flex-direction:column;gap:2px;align-items:center;margin-top:16px}
-.auth-links button{font-size:13px;color:var(--ink-2);padding:8px 12px;border-radius:999px}.auth-links button:hover{background:rgba(255,255,255,.7)}
+.auth-links button{font-size:13px;color:var(--ink-2);padding:8px 12px;border-radius:999px}.auth-links button:hover{background:rgba(255,255,255,.7)}.auth-help{font-size:12.5px;color:var(--ink-3)}
 .side-foot{position:relative}.side-foot .who{cursor:pointer}
 .sync{position:absolute;top:-2px;left:calc(50% + 10px);width:11px;height:11px;border-radius:50%;border:2px solid #fff;background:var(--ink-4);z-index:1}
 .sync.ok{background:var(--ok)}.sync.saving{background:#6b86b0;animation:pulse 1s ease-in-out infinite}.sync.offline{background:var(--warn)}
@@ -707,8 +707,7 @@ function showLogin(mode,o={}){
   const pw=(k,l,ac)=>`<label class="field"><span>${l}</span><div class="inwrap"><input class="in" type="password" data-a="${k}" autocomplete="${ac}" placeholder="••••••••"><button type="button" class="in-ic" data-eye aria-label="Mostrar senha">${ic('eye')}</button></div></label>`;
   const em=`<label class="field"><span>E-mail</span><input class="in" type="email" data-a="email" autocomplete="email" inputmode="email" placeholder="seu@email.com" value="${esc(o.email||last)}"></label>`;
   const V={
-    login:{t:'Bem-vinda de volta',s:'Entre para acessar sua clínica',f:em+pw('pass','Senha','current-password'),b:'Entrar',l:`<button type="button" data-go="forgot">Esqueci minha senha</button><button type="button" data-go="signup">Primeiro acesso? <b>Criar senha</b></button>`},
-    signup:{t:'Primeiro acesso',s:'Crie a senha da sua conta',f:em+pw('pass','Crie uma senha','new-password')+pw('pass2','Repita a senha','new-password'),b:'Criar conta',l:`<button type="button" data-go="login">Já tenho conta · <b>Entrar</b></button>`},
+    login:{t:'Bem-vinda de volta',s:'Entre para acessar sua clínica',f:em+pw('pass','Senha','current-password'),b:'Entrar',l:`<span class="auth-help">Esqueceu a senha? Fale com o suporte.</span>`},
     forgot:{t:'Recuperar senha',s:'Enviaremos um link para o seu e-mail',f:em,b:'Enviar link',l:`<button type="button" data-go="login">Voltar para <b>Entrar</b></button>`},
     reset:{t:'Nova senha',s:'Escolha uma nova senha para entrar',f:pw('pass','Nova senha','new-password')+pw('pass2','Repita a nova senha','new-password'),b:'Salvar e entrar',l:''},
     sent:{t:'Confira seu e-mail',s:o.msg||'Enviamos um link para você.',f:'',b:'',l:`<button type="button" data-go="login">Voltar para <b>Entrar</b></button>`},
@@ -724,16 +723,13 @@ function showLogin(mode,o={}){
   const form=$('form',card);if(!form)return;
   form.onsubmit=async e=>{e.preventDefault();err.textContent='';const email=val('email'),pass=$('[data-a="pass"]',card)?$('[data-a="pass"]',card).value:'',pass2=$('[data-a="pass2"]',card)?$('[data-a="pass2"]',card).value:'';
     if(mode!=='reset'&&!/^\S+@\S+\.\S+$/.test(email))return err.textContent='Digite um e-mail válido.';
-    if((mode==='signup'||mode==='reset')&&pass.length<6)return err.textContent='A senha precisa ter pelo menos 6 caracteres.';
-    if((mode==='signup'||mode==='reset')&&pass!==pass2)return err.textContent='As senhas não são iguais.';
+    if(mode==='reset'&&pass.length<6)return err.textContent='A senha precisa ter pelo menos 6 caracteres.';
+    if(mode==='reset'&&pass!==pass2)return err.textContent='As senhas não são iguais.';
     if(mode==='login'&&!pass)return err.textContent='Digite sua senha.';
     btn.disabled=true;const old=btn.textContent;btn.textContent='Aguarde…';
     try{try{localStorage.setItem('lumiere.lastEmail',email||'')}catch(x){}
       const redirect=location.href.split('#')[0];
       if(mode==='login'){storeSession(toSession(await authReq('token?grant_type=password',{email,password:pass})));return startApp()}
-      if(mode==='signup'){const j=await authReq('signup?redirect_to='+encodeURIComponent(redirect),{email,password:pass});
-        if(j.access_token){storeSession(toSession(j));return startApp()}
-        return showLogin('sent',{msg:`Enviamos um link de confirmação para ${email}. Clique nele e depois entre aqui com sua senha.`})}
       if(mode==='forgot'){await authReq('recover?redirect_to='+encodeURIComponent(redirect),{email});return showLogin('sent',{msg:`Se ${email} tiver conta, você receberá um link para criar uma nova senha.`})}
       if(mode==='reset'){await authReq('user',{password:pass},{method:'PUT',token:session.access_token});toast('Senha alterada');return startApp()}
     }catch(x){err.textContent=x.message;btn.disabled=false;btn.textContent=old}};
