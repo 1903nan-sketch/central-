@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#eceef2;
@@ -585,6 +585,164 @@ button.item:hover,.item.click:hover{background:rgba(255,255,255,.78)}
 [data-theme="dark"] .day.sel{background:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 18px 34px -16px rgba(0,0,0,.8)}
 [data-theme="dark"] .side .nav.on{background:linear-gradient(160deg,#fbfbfc,#cfd3d9);box-shadow:inset 0 1px 0 #fff,0 14px 28px -12px rgba(0,0,0,.8)}
 @media (max-width:860px){.topbar h1{font-size:36px}.stats .stat .val{font-size:32px}.daypanel .bigday b{font-size:88px}.bg i:nth-child(2){width:80vw;height:80vw;right:-30vw;top:30vh}}
+
+/* ================= APPLE · LIQUID GLASS =================
+   Conteúdo em superfícies limpas (como o app Ajustes); vidro líquido só no chrome
+   (menu lateral, barra de abas, botões, controles, janelas). */
+:root{
+  --sf:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter","Helvetica Neue",Arial,sans-serif;
+  --serif:var(--sf);
+  --bg:#f2f2f7;--ink:#1d1d1f;--ink-2:#424245;--ink-3:#6e6e73;--ink-4:#aeaeb2;--line:rgba(60,60,67,.13);
+  --platter:rgba(255,255,255,.82);--group:#ffffff;--fill:rgba(120,120,128,.12);--fill-2:rgba(120,120,128,.2);
+  --chrome:rgba(255,255,255,.52);--rim:rgba(255,255,255,.9);--rim-2:rgba(255,255,255,.4);--lift:0 10px 34px -10px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.06);
+  --accent:#1d1d1f;--accent-ink:#ffffff;--soft:rgba(120,120,128,.12);
+  --ok:#248a3d;--ok-bg:rgba(52,199,89,.15);--warn:#b25000;--warn-bg:rgba(255,149,0,.15);--bad:#d70015;--bad-bg:rgba(255,59,48,.12);--info:#0a59c9;--info-bg:rgba(0,122,255,.11);
+  --spring:cubic-bezier(.32,.72,0,1)}
+:root[data-theme="dark"]{
+  --bg:#000000;--ink:#f5f5f7;--ink-2:#d1d1d6;--ink-3:#98989d;--ink-4:#636366;--line:rgba(84,84,88,.55);
+  --platter:rgba(28,28,30,.8);--group:#1c1c1e;--fill:rgba(118,118,128,.24);--fill-2:rgba(118,118,128,.34);
+  --chrome:rgba(44,44,46,.55);--rim:rgba(255,255,255,.16);--rim-2:rgba(255,255,255,.05);--lift:0 12px 40px -10px rgba(0,0,0,.7),0 1px 3px rgba(0,0,0,.4);
+  --accent:#f5f5f7;--accent-ink:#000000;--soft:rgba(118,118,128,.24);
+  --ok:#30d158;--ok-bg:rgba(48,209,88,.16);--warn:#ff9f0a;--warn-bg:rgba(255,159,10,.16);--bad:#ff453a;--bad-bg:rgba(255,69,58,.16);--info:#64a8ff;--info-bg:rgba(10,132,255,.18)}
+:root body{font-family:var(--sf);font-size:15px;letter-spacing:-.011em;background:var(--bg)}
+/* papel de parede suave (estilo macOS) */
+:root .bg{background:radial-gradient(120% 90% at 10% 0%,#ffffff 0%,#eef0f4 40%,#e4e7ec 100%)}
+:root .bg i{filter:blur(80px);opacity:.9;animation-duration:40s}
+:root .bg i:nth-child(1){background:radial-gradient(circle,#ffffff,rgba(255,255,255,0) 70%)}
+:root .bg i:nth-child(2){background:radial-gradient(circle,#c9ced6,rgba(201,206,214,0) 70%)}
+:root .bg i:nth-child(3){background:radial-gradient(circle,#d8dce2,rgba(216,220,226,0) 70%)}
+:root .bg i:nth-child(4){background:radial-gradient(circle,#f8f9fb,rgba(248,249,251,0) 70%)}
+:root .bg::before{opacity:.55}
+:root .bg::after{display:none}
+:root[data-theme="dark"] .bg{background:radial-gradient(120% 90% at 10% 0%,#1c1c1f 0%,#0b0b0d 55%,#000 100%)}
+:root[data-theme="dark"] .bg i:nth-child(1){background:radial-gradient(circle,#2c2c31,rgba(44,44,49,0) 70%)}
+:root[data-theme="dark"] .bg i:nth-child(2){background:radial-gradient(circle,#3a3a40,rgba(58,58,64,0) 70%);opacity:.7}
+:root[data-theme="dark"] .bg i:nth-child(3){background:radial-gradient(circle,#232327,rgba(35,35,39,0) 70%)}
+:root[data-theme="dark"] .bg i:nth-child(4){background:radial-gradient(circle,#2a2a2f,rgba(42,42,47,0) 70%);opacity:.5}
+
+/* --- conteúdo: superfícies limpas --- */
+:root .glass{background:var(--platter);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:0;border-radius:22px;box-shadow:0 0 0 .5px var(--line),0 6px 24px -14px rgba(0,0,0,.16)}
+:root .card{padding:22px}
+:root .card h3{font-family:var(--sf);font-size:20px;font-weight:700;letter-spacing:-.02em}
+/* --- chrome: vidro líquido --- */
+:root .side,:root .tabbar,:root .rbar,:root .auth-card{background:linear-gradient(180deg,var(--chrome),var(--chrome)),linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,0) 45%);backdrop-filter:blur(26px) saturate(200%) brightness(1.04);-webkit-backdrop-filter:blur(26px) saturate(200%) brightness(1.04);
+  border:1px solid var(--rim-2);box-shadow:inset 0 1px 1px var(--rim),inset 0 -1px 1px var(--rim-2),inset 0 0 22px rgba(255,255,255,.18),var(--lift)}
+:root[data-theme="dark"] .side,:root[data-theme="dark"] .tabbar,:root[data-theme="dark"] .rbar,:root[data-theme="dark"] .auth-card{background:linear-gradient(180deg,var(--chrome),var(--chrome)),linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%);box-shadow:inset 0 1px 1px var(--rim),inset 0 0 22px rgba(255,255,255,.03),var(--lift)}
+:root .side{border-radius:32px;padding:16px 10px}
+:root .tabbar{border-radius:34px}
+/* tipografia Apple: títulos grandes */
+:root .topbar h1{font-family:var(--sf);font-size:34px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
+:root .topbar p{font-size:15px;color:var(--ink-3)}
+:root .m-head h2{font-family:var(--sf);font-size:18px;font-weight:700;letter-spacing:-.02em}
+:root .cal-head h2{font-family:var(--sf);font-size:26px;font-weight:700;letter-spacing:-.025em}
+:root .cal-head h2 em{color:var(--ink-3);font-weight:400}
+:root .stats .stat .val{font-family:var(--sf);font-size:32px;font-weight:600;letter-spacing:-.03em}
+:root .stats .stat .lbl{font-size:13px;font-weight:600;color:var(--ink-3)}
+:root .stats{border-radius:22px;padding:4px}
+:root .stats .stat+.stat{border-left:.5px solid var(--line)}
+:root .daypanel .bigday b{font-family:var(--sf);font-size:76px;font-weight:300;letter-spacing:-.04em;line-height:.85}
+:root .daypanel .bigday span{font-family:var(--sf);font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+:root .daypanel .bigday span small{font-weight:500;color:var(--ink-3);font-size:14px}
+:root .sec-t{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin:22px 4px 10px}
+:root .price{font-family:var(--sf);font-weight:600;font-size:15px}
+:root .totals .big{font-family:var(--sf);font-size:28px;font-weight:700;letter-spacing:-.03em}
+:root .brand-mark{width:48px;height:48px;border-radius:13px;font-family:var(--sf);font-weight:600;font-size:22px;background:linear-gradient(180deg,#ffffff,#e5e5ea);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08),0 4px 12px -4px rgba(0,0,0,.25)}
+:root[data-theme="dark"] .brand-mark{background:linear-gradient(180deg,#3a3a3c,#1c1c1e);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),0 4px 12px -4px rgba(0,0,0,.6)}
+/* menu lateral: seleção como no macOS */
+:root .side .nav{border-radius:14px;color:var(--ink-2);font-size:11px;font-weight:600;gap:4px}
+:root .side .nav svg{width:22px;height:22px}
+:root .side .nav:hover{background:var(--fill)}
+:root .side .nav.on,:root .tabbar .nav.on{background:var(--fill-2);color:var(--ink);box-shadow:none}
+:root .gear-btn{background:var(--fill);box-shadow:none;color:var(--ink-2)}
+:root .gear-btn:hover{background:var(--fill-2)}
+:root .gear-btn.on{background:var(--fill-2);color:var(--ink);box-shadow:none}
+:root .nav .count,:root .side .nav .count{background:#ff3b30;color:#fff;box-shadow:none;font-weight:700}
+/* botões: cápsulas */
+:root .btn{height:38px;padding:0 16px;border-radius:999px;font-size:15px;font-weight:600;letter-spacing:-.01em;border:0;color:var(--ink);
+  background:var(--chrome);backdrop-filter:blur(20px) saturate(190%);-webkit-backdrop-filter:blur(20px) saturate(190%);box-shadow:inset 0 1px 1px var(--rim),inset 0 0 0 .5px var(--rim-2),0 4px 14px -6px rgba(0,0,0,.2);transition:transform .35s var(--spring),background .2s}
+:root .btn:hover{background:var(--platter)}
+:root .btn:active,:root .chip:active,:root button.item:active,:root .day:active{transform:scale(.96)}
+:root .btn.dark{background:var(--accent);color:var(--accent-ink);box-shadow:0 6px 18px -8px rgba(0,0,0,.45)}
+:root .btn.dark:hover{background:var(--accent);opacity:.88}
+:root .btn.ghost{background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+:root .btn.ghost:hover{background:var(--fill)}
+:root .btn.wa,:root a.btn.wa{background:#1f9d55;color:#fff;box-shadow:0 6px 18px -8px rgba(31,157,85,.6)}
+:root .btn.sm{height:32px;font-size:13px;padding:0 12px}
+:root .btn.icon{padding:0;width:38px;flex:none}
+:root .btn.sm.icon{width:32px}
+:root .btn.icon svg{width:18px;height:18px}
+:root .btn.danger{color:var(--bad)}
+/* campos: estilo iOS */
+:root .in{background:var(--fill);border:0;border-radius:11px;height:42px;font-size:15px;box-shadow:none}
+:root .in:focus{background:var(--group);box-shadow:0 0 0 3px var(--fill-2),0 0 0 .5px var(--line)}
+:root .searchbar .in{background:var(--fill);backdrop-filter:none}
+:root .field>span{font-size:13px;font-weight:600;color:var(--ink-3)}
+/* controle segmentado e chips */
+:root .seg{background:var(--fill);border-radius:999px;padding:2px}
+:root .seg button{border-radius:999px;font-size:13px;font-weight:600;height:30px;color:var(--ink)}
+:root .seg button.on{background:var(--group);color:var(--ink);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+:root[data-theme="dark"] .seg button.on{background:#636366}
+:root .chip{background:var(--fill);border:0;color:var(--ink);font-weight:500;font-size:14px}
+:root .chip:hover{background:var(--fill-2)}
+:root .chip.on{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+:root .badge{border-radius:999px;font-size:12px;font-weight:600;padding:3px 9px}
+/* listas agrupadas (como o app Ajustes) */
+:root .list{gap:0;background:var(--group);border-radius:14px;overflow:hidden;box-shadow:0 0 0 .5px var(--line)}
+:root .list .item{border-radius:0;background:transparent;border:0;box-shadow:none;position:relative;padding:11px 14px}
+:root .list .item+.item::before{content:"";position:absolute;top:0;left:66px;right:0;height:.5px;background:var(--line)}
+:root .list .item:hover,:root .list button.item:hover{background:var(--fill)}
+:root .time{background:var(--fill);box-shadow:none;border-radius:8px;font-weight:600}
+:root .tl-i,:root .f-stats div,:root .pcard .meta div,:root .totals,:root .box,:root .ie-row{background:var(--fill);border:0;box-shadow:none}
+:root .f-stats b{font-family:var(--sf);font-weight:700;font-size:19px;letter-spacing:-.02em}
+:root .pcard{border-radius:20px}
+:root .pcard:hover{background:var(--platter);box-shadow:0 0 0 .5px var(--line),0 12px 30px -16px rgba(0,0,0,.22)}
+/* avatares como no app Contatos */
+:root .avatar{background:linear-gradient(180deg,#a5a5aa,#86868b);color:#fff;font-family:var(--sf);font-weight:600;letter-spacing:0;box-shadow:none;border-radius:50%}
+:root[data-theme="dark"] .avatar{background:linear-gradient(180deg,#7c7c80,#5b5b5f);color:#fff}
+/* seleção em bolinhas, como no Lembretes; interruptor do iOS */
+:root .ck{border-radius:50%;width:24px;height:24px;border:1.5px solid var(--ink-4);background:transparent}
+:root .ck:checked{background:var(--accent);border-color:var(--accent)}
+:root .ck:checked::after{border-color:var(--accent-ink)}
+:root .switch{width:51px;height:31px}
+:root .switch i{background:var(--fill-2)}
+:root .switch i::after{width:27px;height:27px;top:2px;left:2px;box-shadow:0 3px 8px rgba(0,0,0,.15),0 3px 1px rgba(0,0,0,.06)}
+:root .switch input:checked+i{background:#34c759}
+:root .switch input:checked+i::after{transform:translateX(20px);background:#fff}
+/* calendário */
+:root .cal-week div{font-size:12px;font-weight:600;color:var(--ink-3)}
+:root .day{border-top:.5px solid var(--line)}
+:root .day .n{font-family:var(--sf);font-size:15px;font-weight:500;width:30px;height:30px}
+:root .day.today .n{background:var(--accent);color:var(--accent-ink);font-weight:700;box-shadow:none}
+:root .day.sel{background:var(--fill);box-shadow:none;border-radius:16px;backdrop-filter:none;-webkit-backdrop-filter:none}
+:root .pill{font-size:11.5px;font-weight:500}
+/* janelas como sheets do iOS */
+:root .overlay{background:rgba(0,0,0,.2);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+:root[data-theme="dark"] .overlay{background:rgba(0,0,0,.5)}
+:root .modal{background:var(--bg);border:0;border-radius:34px;box-shadow:0 30px 90px -20px rgba(0,0,0,.45);animation:sheetIn .5s var(--spring)}
+@keyframes sheetIn{from{opacity:0;transform:translateY(30px) scale(.97)}}
+:root .m-head{border:0;padding:20px 22px 8px}
+:root .m-foot{border:0;background:transparent;padding:12px 22px 20px}
+:root .m-head [data-x]{background:var(--fill);width:32px;height:32px;box-shadow:none;backdrop-filter:none}
+:root .pp-drop,:root .dp,:root .menu{background:var(--chrome);backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border:0;border-radius:18px;box-shadow:inset 0 1px 1px var(--rim),0 0 0 .5px var(--line),var(--lift)}
+:root .menu button{font-size:15px;border-radius:10px}
+:root .pp-sel{background:var(--fill);border:0}
+:root .dp-g button.s,:root .tp-grid button.s{background:var(--accent);color:var(--accent-ink)}
+:root .tp-grid button{background:var(--fill);box-shadow:none}
+:root .toast{background:var(--chrome);color:var(--ink);backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-radius:999px;box-shadow:inset 0 1px 1px var(--rim),var(--lift);font-weight:600}
+:root .banner .ic{border-radius:12px;background:var(--accent);color:var(--accent-ink)}
+:root .msg-prev{border-radius:18px 18px 18px 6px;background:var(--group);box-shadow:0 0 0 .5px var(--line)}
+:root[data-theme="dark"] .msg-prev{background:#2c2c2e;color:var(--ink)}
+:root .auth-card .brand-mark{width:64px;height:64px;border-radius:16px}
+:root .auth-card h1{font-family:var(--sf);font-weight:700;font-size:28px;letter-spacing:-.025em}
+:root .auth-brand{font-family:var(--sf);font-weight:600;font-size:15px;color:var(--ink-3)}
+@media (max-width:860px){
+  :root .topbar h1{font-size:30px}
+  :root .stats .stat .val{font-size:26px}
+  :root .daypanel .bigday b{font-size:64px}
+  :root .modal,:root .modal.lg,:root .modal.sm{border-radius:38px 38px 0 0;animation:sheet .5s var(--spring)}
+  :root .btn.sm{height:38px}
+  :root .btn.sm.icon{width:38px}
+}
 </style>
 </head>
 <body>
