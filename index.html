@@ -933,6 +933,30 @@ html{background:var(--bg)}
   :root .auth-card,:root[data-theme="dark"] .auth-card{background:transparent;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:24px 4px calc(24px + env(safe-area-inset-bottom,0px))}
   body.locked .auth{align-items:center;padding-top:calc(env(safe-area-inset-top,0px) + 20px)}
 }
+.derm-card{display:flex;align-items:center;gap:14px;padding:16px 18px;margin-bottom:18px;border-radius:22px;color:#fff;
+  background:radial-gradient(120% 140% at 0% 0%,rgba(255,255,255,.14),rgba(255,255,255,0) 50%),linear-gradient(135deg,#2c2c30,#141416);box-shadow:0 18px 40px -20px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12)}
+[data-theme="dark"] .derm-card{color:#1d1d1f;background:radial-gradient(120% 140% at 0% 0%,#fff,rgba(255,255,255,0) 55%),linear-gradient(135deg,#f5f5f7,#d8d8dd);box-shadow:0 18px 40px -20px rgba(0,0,0,.8)}
+.derm-ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.12)}
+[data-theme="dark"] .derm-card .derm-ic{background:rgba(0,0,0,.08)}
+.derm-ic svg{width:24px;height:24px}
+.derm-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.derm-tx b{font-size:16px;letter-spacing:-.01em}.derm-tx>span{font-size:13px;opacity:.72}
+.derm-names{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.derm-names i{font-style:normal;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.14)}
+.derm-names i.vencida{background:rgba(255,69,58,.35)}
+[data-theme="dark"] .derm-names i{background:rgba(0,0,0,.08)}[data-theme="dark"] .derm-names i.vencida{background:rgba(255,59,48,.2);color:#b4001a}
+:root .derm-card .btn{background:#fff;color:#1d1d1f;box-shadow:none;flex:none}
+:root[data-theme="dark"] .derm-card .btn{background:#1d1d1f;color:#fff}
+.derm-hero{display:flex;align-items:center;gap:14px;padding:16px 18px;margin-bottom:14px}
+.derm-hero .derm-ic{background:var(--accent);color:var(--accent-ink)}
+.derm-hero>div:last-child{display:flex;flex-direction:column;gap:3px}.derm-hero b{font-size:16px}.derm-hero span{font-size:13px;color:var(--ink-3)}
+:root .avatar.derm-av{background:var(--accent);color:var(--accent-ink)}
+:root .chip.chip-derm:not(.on){box-shadow:inset 0 0 0 1.5px var(--ink);font-weight:600}
+.chip-derm svg{width:15px;height:15px}
+.derm-line{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;border-radius:14px;background:var(--fill);font-size:13px}
+.derm-line>svg{width:18px;height:18px;flex:none}.derm-line span{flex:1;min-width:0}
+.derm-line.vencida{background:var(--bad-bg)}.derm-line.renovar{background:var(--warn-bg)}
+@media (max-width:600px){.derm-card{flex-wrap:wrap}.derm-card .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -993,6 +1017,7 @@ swap:'<path d="M7 16V4M3 8l4-4 4 4M17 8v12M21 16l-4 4-4-4"/>',
 spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>',
 copy:'<rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
 gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+steth:'<path d="M5 3H4v6a5 5 0 0 0 10 0V3h-1"/><path d="M9 14v1a6 6 0 0 0 12 0v-2"/><circle cx="21" cy="11" r="2"/>',
 moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
 sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
@@ -1040,16 +1065,17 @@ const relDays=s=>{const n=diffDays(today(),s);if(n===0)return'hoje';if(n===1)ret
 
 /* ================= dados ================= */
 const KEY='lumiere.data.v1';
-const SEED_PROCS=[['Limpeza de pele profunda',180,60],['Peeling químico',260,45],['Microagulhamento',380,60],['Toxina botulínica',1200,30],['Preenchimento labial',1400,45],['Bioestimulador de colágeno',1800,45],['Skinbooster',950,40],['Laser / Luz pulsada',450,40],['Hidratação facial',200,50]];
+const SEED_PROCS=[['Consulta dermatológica',350,40,'consulta'],['Limpeza de pele profunda',180,60],['Peeling químico',260,45],['Microagulhamento',380,60],['Toxina botulínica',1200,30],['Preenchimento labial',1400,45],['Bioestimulador de colágeno',1800,45],['Skinbooster',950,40],['Laser / Luz pulsada',450,40],['Hidratação facial',200,50]];
 const defaults=()=>({
   patients:[],appointments:[],budgets:[],returns:[],
-  procedures:SEED_PROCS.map(([name,price,duration])=>({id:uid(),name,price,duration})),
+  procedures:SEED_PROCS.map(([name,price,duration,kind])=>({id:uid(),name,price,duration,kind:kind||'procedimento'})),
   settings:{doctor:'',clinic:'',doctorPhone:'',summaryDay:1,lastSummary:'',
     template:'Olá, {nome}! ✨\n\nAqui é da {clinica}. Está chegando o momento do seu retorno de {procedimento}, previsto para {data}.\n\nVamos agendar o melhor dia e horário para você? 💆‍♀️\n\n{doutora}',
-    budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:'}
+    budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:',dermSeeded:true,
+    dermTemplate:'Olá, {nome}! ✨\n\nSua consulta dermatológica completa 6 meses em {data}. Para manter o acompanhamento da sua pele em dia, vamos agendar a renovação?\n\n{doutora}\n{clinica}'}
 });
 let memoryOnly=false;
-const withDefaults=d=>{const def=defaults();return{...def,...d,settings:{...def.settings,...((d&&d.settings)||{})}}};
+const withDefaults=d=>{const def=defaults();const r={...def,...d,settings:{...def.settings,...((d&&d.settings)||{})}};if(d&&!(d.settings&&d.settings.dermSeeded)){if(!r.procedures.some(x=>x.kind==='consulta'))r.procedures.unshift({id:uid(),name:'Consulta dermatológica',price:350,duration:40,kind:'consulta'});r.settings.dermSeeded=true}return r};
 const localKey=()=>KEY+':'+(session?session.user.id:'anon');
 function readLocal(k){try{const raw=localStorage.getItem(k);return raw?withDefaults(JSON.parse(raw)):null}catch(e){memoryOnly=true;return null}}
 let db=defaults(),saveT;
@@ -1181,7 +1207,16 @@ const procNames=items=>(items||[]).map(i=>i.name).filter(Boolean).join(', ');
 const activeReturns=()=>db.returns.filter(r=>r.status!=='concluido'&&P(r.patientId));
 const returnsOfMonth=k=>activeReturns().filter(r=>mKey(r.date)===k).sort((a,b)=>a.date.localeCompare(b.date));
 const lateReturns=()=>activeReturns().filter(r=>r.date<today()).sort((a,b)=>a.date.localeCompare(b.date));
-const pendingCount=()=>{const lim=mKey(addMonths(today(),1));return activeReturns().filter(r=>r.status==='pendente'&&mKey(r.date)<=lim).length};
+const isDermItem=i=>{const pr=i.procId&&db.procedures.find(x=>x.id===i.procId);return pr?pr.kind==='consulta':/consulta dermatol/.test(norm(i.name))};
+const hasDerm=a=>(a.items||[]).some(isDermItem);
+function dermInfo(pid){const A=db.appointments.filter(a=>a.patientId===pid&&a.status!=='cancelada'&&hasDerm(a));const done=A.filter(a=>a.status==='realizada').sort((a,b)=>b.date.localeCompare(a.date));if(!done.length)return null;
+  const last=done[0].date,renew=addMonths(last,6),alert=addDays(renew,-15),t=today(),next=A.filter(a=>a.status==='agendada'&&a.date>last).sort((a,b)=>a.date.localeCompare(b.date))[0];
+  return{last,renew,alert,next,days:diffDays(t,renew),st:next?'agendada':t>renew?'vencida':t>=alert?'renovar':'ok',notified:P(pid)&&P(pid).dermNotified===last}}
+function dermList(){const o={vencida:0,renovar:1,agendada:2};return db.patients.map(p=>({p,d:dermInfo(p.id)})).filter(x=>x.d&&x.d.st!=='ok').sort((a,b)=>o[a.d.st]-o[b.d.st]||a.d.renew.localeCompare(b.d.renew))}
+const dermDue=()=>dermList().filter(x=>x.d.st!=='agendada');
+const dermLabel=d=>d.st==='agendada'?`renovação agendada para ${fmtD(d.next.date)}`:d.days<0?`venceu há ${-d.days} dia${d.days===-1?'':'s'}`:d.days===0?'vence hoje':`vence em ${d.days} dia${d.days===1?'':'s'}`;
+const DST={vencida:['Vencida','bad'],renovar:['Renovar','warn'],agendada:['Agendada','ok'],ok:['Em dia','ok']};
+const pendingCount=()=>dermDue().filter(x=>!x.d.notified).length+(()=>{const lim=mKey(addMonths(today(),1));return activeReturns().filter(r=>r.status==='pendente'&&mKey(r.date)<=lim).length})();
 const ST={agendada:['Agendada','info'],realizada:['Realizada','ok'],cancelada:['Cancelada','bad']};
 const BST={aberto:['Em aberto','warn'],aprovado:['Aprovado','ok'],recusado:['Recusado','bad']};
 const RST={pendente:['Pendente','warn'],avisado:['Avisado','info'],concluido:['Concluído','ok']};
@@ -1274,6 +1309,7 @@ function vAgenda(){
   const newP=db.patients.filter(p=>p.createdAt&&mKey(iso(new Date(p.createdAt)))===mk).length;
   let html=topbar(greet,'',`<button class="btn" data-act="newPatient">${ic('user')}<span class="btn-label">Paciente</span></button><button class="btn" data-act="newBudget">${ic('doc')}<span class="btn-label">Orçamento</span></button><button class="btn dark" data-act="newAppt">${ic('plus')}Nova consulta</button>`,cap(fmtLong(t)));
   html+=`<button class="spot-trigger" data-act="spot" aria-label="Buscar">${ic('search')}<span>Buscar pacientes, consultas, orçamentos…</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform)?'⌘':'Ctrl'} K</kbd></button>`;
+  const dd=dermDue();if(dd.length)html+=`<div class="derm-card"><div class="derm-ic">${ic('steth')}</div><div class="derm-tx"><b>Renovação da consulta dermatológica</b><span>${dd.length} paciente${dd.length>1?'s precisam':' precisa'} renovar · o aviso começa 15 dias antes de completar 6 meses</span><div class="derm-names">${dd.slice(0,3).map(x=>`<i class="${x.d.st}">${esc(first(x.p.name))} · ${dermLabel(x.d)}</i>`).join('')}${dd.length>3?`<i>+${dd.length-3}</i>`:''}</div></div><button class="btn" data-act="goDerm">Ver e avisar</button></div>`;
   if(!db.patients.length)html+=`<div class="banner glass"><div class="ic">${ic('spark')}</div><div style="flex:1"><b>Bem-vinda ao seu sistema</b><div class="small muted">Cadastre seu primeiro paciente (só o nome é obrigatório) ou veja o sistema com dados de exemplo.</div></div><button class="btn" data-act="demo">Ver exemplo</button><button class="btn dark" data-act="newPatient">Cadastrar</button></div>`;
   else if(summaryNeeded())html+=`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1"><b>Retornos de ${mName(nk)}: ${rn.length} paciente${rn.length>1?'s':''}</b><div class="small muted">Sua lista do próximo mês está pronta para organizar a agenda.</div></div><button class="btn" data-act="goRet">Ver lista</button><button class="btn wa" data-act="sendSummary">${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`;
   html+=`<div class="stats glass">
@@ -1491,7 +1527,7 @@ function itemEditor(host,st){
   <div class="totals" data-tot style="margin-top:12px"></div>`;
   let q='';
   const cat=$('[data-cat]',host),rows=$('[data-items]',host),tot=$('[data-tot]',host),dv=$('[data-dv]',host);
-  const drawCat=()=>{const list=db.procedures.filter(p=>!q||norm(p.name).includes(q));cat.innerHTML=list.length?list.map(p=>{const n=st.items.filter(i=>i.procId===p.id).reduce((s,i)=>s+(+i.qty||1),0);return`<button type="button" class="chip ${n?'on':''}" data-p="${p.id}">${n?ic('check'):ic('plus')}${esc(p.name)} <span style="opacity:.6;font-weight:500">${money(p.price)}</span>${n>1?` ×${n}`:''}</button>`}).join(''):'<span class="small muted">Nenhum procedimento — cadastre na aba Procedimentos ou use “Item avulso”.</span>'};
+  const drawCat=()=>{const list=db.procedures.filter(p=>!q||norm(p.name).includes(q)).sort((a,b)=>(b.kind==='consulta')-(a.kind==='consulta'));cat.innerHTML=list.length?list.map(p=>{const n=st.items.filter(i=>i.procId===p.id).reduce((s,i)=>s+(+i.qty||1),0);return`<button type="button" class="chip ${n?'on':''} ${p.kind==='consulta'?'chip-derm':''}" data-p="${p.id}">${n?ic('check'):ic(p.kind==='consulta'?'steth':'plus')}${esc(p.name)} <span style="opacity:.6;font-weight:500">${money(p.price)}</span>${n>1?` ×${n}`:''}</button>`}).join(''):'<span class="small muted">Nenhum procedimento — cadastre na aba Procedimentos ou use “Item avulso”.</span>'};
   const drawTot=()=>{const c=calc(st);tot.innerHTML=`<div class="row small"><span class="muted">Subtotal</span><span>${money(c.sub)}</span></div><div class="row small"><span class="muted">Desconto${st.discountType==='pct'&&+st.discountValue?` (${fmtNum(st.discountValue).replace(',00','')}%)`:''}</span><span>${c.disc?'− '+money(c.disc):'—'}</span></div><div class="row" style="margin-top:4px;border-top:1px solid var(--line);padding-top:8px"><span class="strong">Total</span><span class="big">${money(c.total)}</span></div>`;$$('[data-qd] .chip',host).forEach(b=>b.classList.toggle('on',st.discountType==='pct'&&+b.dataset.v===+st.discountValue))};
   const drawRows=()=>{rows.innerHTML=st.items.length?`<div class="small muted" style="display:grid;grid-template-columns:1fr 64px 110px 32px;gap:8px;padding:0 8px"><span>Procedimento</span><span>Qtd</span><span>Valor (R$)</span><span></span></div>`+st.items.map((it,i)=>`<div class="ie-row" data-r="${i}"><input class="in" data-f="name" value="${esc(it.name)}" placeholder="Descrição"><input class="in" data-f="qty" type="number" min="1" value="${it.qty||1}"><input class="in" data-f="price" inputmode="decimal" value="${fmtNum(it.price)}"><button type="button" class="btn sm icon ghost danger" data-rm="${i}">${ic('x')}</button></div>`).join(''):'';drawCat();drawTot()};
   cat.onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;const p=db.procedures.find(x=>x.id===b.dataset.p);const ex=st.items.find(i=>i.procId===p.id);if(ex)ex.qty=(+ex.qty||1)+1;else st.items.push({procId:p.id,name:p.name,price:+p.price||0,qty:1});drawRows()};
@@ -1653,6 +1689,7 @@ function openFolder(id,tab='hist'){
         $('[data-fb]',el).innerHTML=`<div class="f-head">${av(p.name,'lg')}<div style="flex:1;min-width:0"><h2>${esc(p.name)}</h2><div class="muted small">${[p.phone,a!==''?a+' anos':'',p.skin?'pele '+p.skin.toLowerCase():''].filter(Boolean).map(esc).join(' · ')||'Ficha básica'}</div></div>
           <div class="row">${p.phone?`<a class="btn wa sm" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener">${ic('wa')}<span class="btn-label">WhatsApp</span></a>`:''}<button class="btn sm icon" data-pm>${ic('more')}</button></div></div>
           ${p.allergies?`<div class="badge bad" style="margin-top:12px">⚠ ${esc(p.allergies)}</div>`:''}
+          ${(()=>{const d=dermInfo(id);return d?`<div class="derm-line ${d.st}">${ic('steth')}<span><b>Consulta dermatológica</b> · última em ${fmtD(d.last)} · válida até ${fmtD(d.renew)}${d.st!=='ok'?` · ${dermLabel(d)}`:''}</span>${badge(DST,d.st)}</div>`:''})()}
           <div class="f-stats"><div><small>Investido</small><b>${money(s.total)}</b></div><div><small>Atendimentos</small><b>${s.done.length}</b></div><div><small>Última visita</small><b>${s.last?fmtD(s.last):'—'}</b></div><div><small>Próx. retorno</small><b>${s.nextR?fmtD(s.nextR.date):'—'}</b></div></div>
           <div class="seg" data-tabs style="margin-bottom:14px">${[['hist','Histórico'],['orc','Orçamentos'],['ret','Retornos'],['ficha','Ficha']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
           <div style="animation:viewIn .3s var(--ease)">${body}</div>`;
@@ -1744,19 +1781,34 @@ function vRetornos(){
   const prev=L[0]?fill(db.settings.template,retVars(L[0])):fill(db.settings.template,{nome:'Maria',data:fmtD(addMonths(today(),1)),procedimento:'limpeza de pele',clinica:db.settings.clinic||'nossa clínica',doutora:db.settings.doctor||'',mes:mName(n)});
   return topbar('Retornos','Quem precisa voltar, com a mensagem pronta para enviar.',`<button class="btn" data-act="newReturn">${ic('plus')}<span class="btn-label">Retorno manual</span></button>`)+
   `<div class="row wrap between" style="margin-bottom:14px;gap:10px">
-    <div class="chips"><button class="chip ${S.retMode==='late'?'on':''}" data-act="rmode" data-id="late">Atrasados${late?` · ${late}`:''}</button><button class="chip ${S.retMode==='month'&&S.retMonth===t?'on':''}" data-act="rmonth" data-id="${t}">Este mês</button><button class="chip ${S.retMode==='month'&&S.retMonth===n?'on':''}" data-act="rmonth" data-id="${n}">Próximo mês</button></div>
-    <div class="row glass" style="padding:4px;border-radius:14px;${S.retMode==='late'?'opacity:.4;pointer-events:none':''}"><button class="btn sm icon ghost" data-act="rprev">${ic('chevL')}</button><b style="min-width:130px;text-align:center;text-transform:capitalize">${mLabel(S.retMonth)}</b><button class="btn sm icon ghost" data-act="rnext">${ic('chevR')}</button></div>
+    <div class="chips"><button class="chip chip-derm ${S.retMode==='derm'?'on':''}" data-act="rmode" data-id="derm">${ic('steth')}Consulta dermatológica${dermDue().length?` · ${dermDue().length}`:''}</button><button class="chip ${S.retMode==='late'?'on':''}" data-act="rmode" data-id="late">Atrasados${late?` · ${late}`:''}</button><button class="chip ${S.retMode==='month'&&S.retMonth===t?'on':''}" data-act="rmonth" data-id="${t}">Este mês</button><button class="chip ${S.retMode==='month'&&S.retMonth===n?'on':''}" data-act="rmonth" data-id="${n}">Próximo mês</button></div>
+    <div class="row glass" style="padding:4px;border-radius:14px;${S.retMode!=='month'?'display:none':''}"><button class="btn sm icon ghost" data-act="rprev">${ic('chevL')}</button><b style="min-width:130px;text-align:center;text-transform:capitalize">${mLabel(S.retMonth)}</b><button class="btn sm icon ghost" data-act="rnext">${ic('chevR')}</button></div>
   </div>
+  ${S.retMode==='derm'?dermHTML():''}${S.retMode==='derm'?'':`
   ${S.retMode==='month'?`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1;min-width:0"><b>Resumo de ${mName(S.retMonth)} para a doutora</b><div class="small muted">${L.length} paciente${L.length===1?'':'s'} com retorno no mês${db.settings.lastSummary===S.retMonth?' · já enviado ✓':''}${db.settings.doctorPhone?'':' · cadastre seu WhatsApp em Ajustes'}</div></div><button class="btn sm icon" data-act="copySummary" title="Copiar">${ic('copy')}</button><button class="btn wa sm" data-act="sendSummaryM" ${L.length?'':'disabled'}>${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`:''}
   <div class="glass card">
     <div class="row between wrap" style="margin-bottom:12px"><h3 style="margin:0">${S.retMode==='late'?'Retornos atrasados':`Pacientes de ${mName(S.retMonth)}`}</h3>${L.length?`<label class="row small strong" style="cursor:pointer;color:var(--ink-2)"><input type="checkbox" class="ck" data-chg="ckall" ${sel&&sel===withPhone.length?'checked':''}>Selecionar todos</label>`:''}</div>
     ${L.length?`<div class="list">${L.map(r=>{const p=P(r.patientId),on=S.retSel.has(r.id);return`<div class="item ritem ${on||!p.phone?'':'off'}" data-row="${r.id}"><label><input type="checkbox" class="ck" data-chg="ck" data-id="${r.id}" ${on?'checked':''} ${p.phone?'':'disabled'}></label>${av(p.name)}<div class="grow" data-act="folder" data-id="${p.id}" style="cursor:pointer"><div class="t">${esc(p.name)}</div><div class="s">${fmtD(r.date)} · ${esc(r.note||'Retorno')} · ${p.phone?esc(p.phone):'<span style="color:var(--bad)">sem WhatsApp</span>'}</div></div>${r.status==='avisado'?`<span class="badge info">Avisado ${r.notifiedAt?fmtDM(r.notifiedAt):''}</span>`:badge(RST,r.status)}<button class="btn sm icon ghost" data-act="rmenu" data-id="${r.id}">${ic('more')}</button></div>`}).join('')}</div>`:empty('ret',S.retMode==='late'?'Nenhum retorno atrasado':'Nenhum retorno neste mês','Os retornos aparecem aqui ao salvar consultas com “1, 3 ou 6 meses”.')}
   </div>
     ${L.length?`<div class="rbar glass"><span class="small"><b id="selN">${sel}</b> de ${L.length} <span class="hide-m">selecionado${L.length===1?'':'s'}</span><span class="hide-m">${L.length>withPhone.length?` · ${L.length-withPhone.length} sem WhatsApp`:''}</span></span><button class="btn dark" data-act="dispatch" id="dispBtn" ${sel?'':'disabled'}>${ic('send')}${evoOn()?'Enviar automático':'Disparar mensagens'}</button></div>`:''}
-  <details class="glass card" style="margin-top:16px" ${S.tplOpen?'open':''} id="tplBox"><summary style="cursor:pointer;font-weight:600;list-style:none" class="row between">Mensagem de retorno <span class="small muted">editar modelo ▾</span></summary>
+`}
+  <details class="glass card" style="margin-top:16px;${S.retMode==='derm'?'display:none':''}" ${S.tplOpen?'open':''} id="tplBox"><summary style="cursor:pointer;font-weight:600;list-style:none" class="row between">Mensagem de retorno <span class="small muted">editar modelo ▾</span></summary>
     <div class="grid2" style="margin-top:14px;align-items:start"><div class="field"><span>Modelo</span><textarea class="in" data-inp="tpl" style="min-height:200px">${esc(db.settings.template)}</textarea><div class="chips" style="margin-top:4px">${['nome','data','procedimento','clinica','doutora','mes'].map(v=>`<button class="chip" style="height:28px;font-size:11.5px" data-act="tplVar" data-id="${v}">{${v}}</button>`).join('')}</div></div>
     <div class="field"><span>Prévia${L[0]?` · ${esc(first(P(sample.patientId).name))}`:''}</span><div class="msg-prev" id="tplPrev">${esc(prev)}</div></div></div></details>`;
 }
+function dermHTML(){const L=dermList(),due=L.filter(x=>x.d.st!=='agendada'),wp=due.filter(x=>x.p.phone);
+  return`<div class="derm-hero glass"><div class="derm-ic">${ic('steth')}</div><div><b>Consulta dermatológica: renovação a cada 6 meses</b><span>Quem fez a consulta aparece aqui 15 dias antes de completar 6 meses, para você avisar e agendar a renovação.</span></div></div>
+  <div class="glass card">${L.length?`<div class="list">${L.map(({p,d})=>`<div class="item"><div class="grow" data-act="folder" data-id="${p.id}" style="cursor:pointer"><div class="t">${esc(p.name)}</div><div class="s">Última consulta ${fmtD(d.last)} · ${dermLabel(d)}</div></div>${d.notified&&d.st!=='agendada'?'<span class="badge info">Avisada</span>':''}${badge(DST,d.st)}${d.st!=='agendada'?`${p.phone?`<button class="btn sm icon" data-act="dermSend" data-id="${p.id}" title="Avisar no WhatsApp">${ic('wa')}</button>`:''}<button class="btn sm" data-act="dermBook" data-id="${p.id}">${ic('cal')}<span class="btn-label">Agendar</span></button>`:''}</div>`).join('')}</div>`:empty('steth','Nenhuma renovação no momento','Quando faltar 15 dias para uma consulta dermatológica completar 6 meses, a paciente aparece aqui.')}</div>
+  ${wp.length?`<div class="rbar glass"><span class="small"><b>${wp.length}</b> para avisar</span><button class="btn dark" data-act="dermAll">${ic('send')}Avisar todas pelo WhatsApp</button></div>`:''}
+  <details class="glass card" style="margin-top:16px"><summary style="cursor:pointer;font-weight:600;list-style:none" class="row between">Mensagem de renovação <span class="small muted">editar modelo ▾</span></summary><div class="field" style="margin-top:14px"><textarea class="in" data-inp="dtpl" style="min-height:160px">${esc(db.settings.dermTemplate)}</textarea><div class="small muted">Use {nome}, {data} (quando completa 6 meses), {doutora} e {clinica}.</div></div></details>`}
+const dermPseudo=(p,d)=>({id:'derm-'+p.id,patientId:p.id,date:d.renew,note:'Consulta dermatológica',status:'pendente',_tpl:db.settings.dermTemplate,_onSent:()=>{p.dermNotified=d.last}});
+INP.dtpl=el=>{db.settings.dermTemplate=el.value;save()};
+Object.assign(ACT,{
+  goDerm:()=>{S.retMode='derm';if(S.view==='retornos')render();else go('retornos')},
+  dermSend:async pid=>{const p=P(pid),d=dermInfo(pid),r=dermPseudo(p,d),msg=fill(r._tpl,retVars(r));if(evoOn()){try{await evoSend(p.phone,msg);toast(`Aviso enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,msg),'_blank');r._onSent();changed()},
+  dermAll:()=>{const L=dermDue().filter(x=>x.p.phone).map(x=>dermPseudo(x.p,x.d));if(L.length)openQueue(L)},
+  dermBook:pid=>{const cp=db.procedures.find(x=>x.kind==='consulta');openAppt({patientId:pid,date:today(),items:cp?[{procId:cp.id,name:cp.name,price:cp.price,qty:1}]:[]})}
+});
 AFTER.retornos=()=>{const d=$('#tplBox');if(d)d.ontoggle=()=>S.tplOpen=d.open};
 function updSel(){const L=retList(),wp=L.filter(r=>P(r.patientId).phone).length,n=L.filter(r=>S.retSel.has(r.id)).length;const sn=$('#selN');if(sn)sn.textContent=n;const b=$('#dispBtn');if(b)b.disabled=!n;const all=$('[data-chg="ckall"]');if(all)all.checked=n&&n===wp;$$('[data-row]').forEach(r=>{const has=S.retSel.has(r.dataset.row),dis=$('input',r).disabled;r.classList.toggle('off',!has&&!dis);$('input',r).checked=has})}
 INP.ck=el=>{el.checked?S.retSel.add(el.dataset.id):S.retSel.delete(el.dataset.id);updSel()};
@@ -1792,18 +1844,21 @@ function openQueue(L){
   openModal({title:'Disparo de mensagens',size:'sm',body:'<div data-q></div>',onMount:(el,m)=>{
     const draw=()=>{const box=$('[data-q]',el);
       if(i>=L.length){box.innerHTML=`<div class="queue-card"><div class="avatar lg" style="margin:6px auto 14px;background:var(--accent);color:#fff">${ic('check','style="width:28px;height:28px"')}</div><h3 style="justify-content:center;margin:0 0 6px">Pronto!</h3><div class="muted">${sent} mensage${sent===1?'m enviada':'ns enviadas'} de ${L.length}. As pacientes foram marcadas como “avisadas”.</div><button class="btn dark" style="margin-top:18px;width:100%" data-end>Concluir</button></div>`;$('[data-end]',el).onclick=m.close;return}
-      const r=L[i],p=P(r.patientId),msg=fill(db.settings.template,retVars(r));
+      const r=L[i],p=P(r.patientId),msg=fill(r._tpl||db.settings.template,retVars(r));
       box.innerHTML=`<div class="row between small muted"><span>Paciente ${i+1} de ${L.length}</span><span>${sent} enviada${sent===1?'':'s'}</span></div><div class="progress"><i style="width:${i/L.length*100}%"></i></div>
         <div class="row" style="margin-bottom:12px">${av(p.name)}<div><div class="strong">${esc(p.name)}</div><div class="small muted">${esc(p.phone)} · retorno ${fmtD(r.date)}</div></div></div>
         <div class="msg-prev scroll" style="max-height:220px">${esc(msg)}</div>
         <div class="row" style="margin-top:16px"><button class="btn" data-skip style="flex:1">Pular</button><button class="btn wa" data-go style="flex:2">${ic('wa')}Abrir no WhatsApp</button></div>
         <div class="small muted" style="margin-top:10px;text-align:center">O WhatsApp abre com a mensagem pronta — é só tocar em enviar e voltar aqui.</div>`;
       $('[data-skip]',el).onclick=()=>{i++;draw()};
-      $('[data-go]',el).onclick=()=>{window.open(waLink(p.phone,msg),'_blank');r.status='avisado';r.notifiedAt=today();sent++;i++;save();draw()};
+      $('[data-go]',el).onclick=()=>{window.open(waLink(p.phone,msg),'_blank');r.status='avisado';r.notifiedAt=today();r._onSent&&r._onSent();sent++;i++;save();draw()};
     };draw();
   },onClose:()=>{S.retSel=null;changed()}});
 }
-function summaryText(k){const L=returnsOfMonth(k);return`🗓️ *Retornos de ${cap(mName(k))}/${k.slice(0,4)}*\n${db.settings.clinic?db.settings.clinic+'\n':''}\n${L.map(r=>{const p=P(r.patientId);return`• ${fmtDM(r.date)} — ${p.name}${p.phone?` · ${p.phone}`:''}${r.note?`\n   ${r.note}`:''}`}).join('\n')}\n\nTotal: ${L.length} paciente${L.length===1?'':'s'}. Boa organização! ✨`}
+function summaryText(k){const L=returnsOfMonth(k);const D=db.patients.map(p=>({p,d:dermInfo(p.id)})).filter(x=>x.d&&x.d.st!=='agendada'&&mKey(x.d.renew)<=k).sort((a,b)=>a.d.renew.localeCompare(b.d.renew));
+  const dTxt=D.length?`\n\n🩺 *Renovação da consulta dermatológica*\n${D.map(({p,d})=>`• ${fmtDM(d.renew)} — ${p.name}${p.phone?` · ${p.phone}`:''}`).join('\n')}`:'';
+  return summaryBase(k,L)+dTxt}
+function summaryBase(k,L){return`🗓️ *Retornos de ${cap(mName(k))}/${k.slice(0,4)}*\n${db.settings.clinic?db.settings.clinic+'\n':''}\n${L.map(r=>{const p=P(r.patientId);return`• ${fmtDM(r.date)} — ${p.name}${p.phone?` · ${p.phone}`:''}${r.note?`\n   ${r.note}`:''}`}).join('\n')}\n\nTotal: ${L.length} paciente${L.length===1?'':'s'}. Boa organização! ✨`}
 async function sendSummary(k){if(!db.settings.doctorPhone){toast('Cadastre seu WhatsApp em Ajustes');go('ajustes');return}if(evoOn()){try{await evoSend(db.settings.doctorPhone,summaryText(k));toast('Resumo enviado ao seu WhatsApp')}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(db.settings.doctorPhone,summaryText(k)),'_blank');if(k===mShift(mKey(today()),1)){db.settings.lastSummary=k}changed()}
 function autoSummary(){const s=db.settings;if(!evoOn()||!s.doctorPhone||!summaryNeeded())return;const k=mShift(mKey(today()),1);evoSend(s.doctorPhone,summaryText(k)).then(()=>{s.lastSummary=k;changed();toast(`Resumo de ${mName(k)} enviado ao seu WhatsApp`)}).catch(()=>{})}
 function openQueueAuto(L){
@@ -1818,7 +1873,7 @@ function openQueueAuto(L){
       const g=$('[data-go]',el),e=$('[data-end]',el),s2=$('[data-stop]',el);if(g)g.onclick=run;if(e)e.onclick=m.close;if(s2)s2.onclick=()=>{stop=true;s2.disabled=true;s2.textContent='Parando…'}};
     const run=async()=>{running=true;stop=false;draw();
       for(let i=0;i<L.length;i++){if(stop)break;if(st[i]==='ok')continue;const r=L[i],p=P(r.patientId);st[i]='send';draw();
-        try{await evoSend(p.phone,fill(db.settings.template,retVars(r)));st[i]='ok';r.status='avisado';r.notifiedAt=today();save()}catch(e){st[i]='err';r._err=e.message}
+        try{await evoSend(p.phone,fill(r._tpl||db.settings.template,retVars(r)));st[i]='ok';r.status='avisado';r.notifiedAt=today();r._onSent&&r._onSent();save()}catch(e){st[i]='err';r._err=e.message}
         draw();if(i<L.length-1&&!stop){const d=(+EVOLUTION.intervalo||8)*1000;await wait(d*0.75+Math.random()*d*0.5)}}
       running=false;draw()};
     m.refresh=null;draw();
@@ -1842,14 +1897,19 @@ async function evoSend(phone,text){const number=waNum(phone);if(!number)throw ne
 function vProcedimentos(){
   const use={};db.appointments.forEach(a=>a.status==='realizada'&&a.items.forEach(i=>{if(i.procId){use[i.procId]=use[i.procId]||{n:0,v:0};use[i.procId].n+=+i.qty||1;use[i.procId].v+=(+i.price||0)*(+i.qty||1)}}));
   return topbar('Procedimentos','Serviços e valores usados nas consultas e nos orçamentos.',`<button class="btn dark" data-act="newProc">${ic('plus')}Novo procedimento</button>`)+
-  `<div class="glass card tlist">${db.procedures.length?`<div class="list">${[...db.procedures].sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<button class="item" data-act="editProc" data-id="${p.id}"><div class="avatar">${ic('tag','style="width:17px;height:17px"')}</div><div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${p.duration?p.duration+' min · ':''}${use[p.id]?`realizado ${use[p.id].n}× · ${money(use[p.id].v)}`:'ainda não realizado'}</div></div><div class="price">${money(p.price)}</div></button>`).join('')}</div>`:empty('tag','Catálogo vazio','Cadastre seus procedimentos e valores.')}</div>`;
+  `${(()=>{const D=db.procedures.filter(x=>x.kind==='consulta');return`<div class="derm-hero glass"><div class="derm-ic">${ic('steth')}</div><div><b>Consulta dermatológica</b><span>Quem faz esta consulta recebe aviso de renovação 15 dias antes de completar 6 meses.</span></div></div>
+  <div class="glass card tlist" style="margin-bottom:18px">${D.length?`<div class="list">${D.map(p=>`<button class="item" data-act="editProc" data-id="${p.id}"><div class="avatar derm-av">${ic('steth','style="width:18px;height:18px"')}</div><div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${p.duration?p.duration+' min · ':''}${use[p.id]?`realizada ${use[p.id].n}× · ${money(use[p.id].v)}`:'ainda não realizada'} · renovação em 6 meses</div></div><div class="price">${money(p.price)}</div></button>`).join('')}</div>`:`<div class="empty"><b>Nenhuma consulta cadastrada</b><button class="btn dark sm" data-act="newDerm" style="margin-top:10px">${ic('plus')}Cadastrar consulta dermatológica</button></div>`}</div>
+  <div class="sec-t" style="margin-top:6px">Procedimentos estéticos</div>`})()}
+  <div class="glass card tlist">${db.procedures.length?`<div class="list">${[...db.procedures].filter(x=>x.kind!=='consulta').sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<button class="item" data-act="editProc" data-id="${p.id}"><div class="avatar">${ic('tag','style="width:17px;height:17px"')}</div><div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${p.duration?p.duration+' min · ':''}${use[p.id]?`realizado ${use[p.id].n}× · ${money(use[p.id].v)}`:'ainda não realizado'}</div></div><div class="price">${money(p.price)}</div></button>`).join('')}</div>`:empty('tag','Catálogo vazio','Cadastre seus procedimentos e valores.')}</div>`;
 }
-Object.assign(ACT,{newProc:()=>openProc(),editProc:id=>openProc(id)});
-function openProc(id){const ex=db.procedures.find(p=>p.id===id);
-  openModal({title:ex?'Editar procedimento':'Novo procedimento',size:'sm',body:`<div class="stack"><label class="field"><span>Nome <em>*</em></span><input class="in" data-n value="${esc(ex?.name||'')}" placeholder="Ex.: Limpeza de pele"></label><div class="grid2"><label class="field"><span>Valor (R$)</span><input class="in" data-p inputmode="decimal" value="${ex?fmtNum(ex.price):''}" placeholder="0,00"></label><label class="field"><span>Duração (min)</span><input class="in" data-d type="number" value="${ex?.duration||''}" placeholder="60"></label></div></div>`,
+Object.assign(ACT,{newProc:()=>openProc(),editProc:id=>openProc(id),newDerm:()=>openProc(null,'consulta')});
+function openProc(id,kind0){const ex=db.procedures.find(p=>p.id===id);let kind=ex?.kind||kind0||'procedimento';
+  openModal({title:ex?'Editar procedimento':'Novo procedimento',size:'sm',body:`<div class="stack"><div class="field"><span>Tipo</span><div class="seg" data-kind style="display:flex"><button type="button" data-v="procedimento" style="flex:1">Procedimento estético</button><button type="button" data-v="consulta" style="flex:1">Consulta dermatológica</button></div><div class="small muted" data-kh></div></div><label class="field"><span>Nome <em>*</em></span><input class="in" data-n value="${esc(ex?.name||(kind0==='consulta'?'Consulta dermatológica':''))}" placeholder="Ex.: Limpeza de pele"></label><div class="grid2"><label class="field"><span>Valor (R$)</span><input class="in" data-p inputmode="decimal" value="${ex?fmtNum(ex.price):''}" placeholder="0,00"></label><label class="field"><span>Duração (min)</span><input class="in" data-d type="number" value="${ex?.duration||''}" placeholder="60"></label></div></div>`,
     foot:`${ex?`<button class="btn ghost danger left" data-del>${ic('trash')}Excluir</button>`:''}<button class="btn" data-c>Cancelar</button><button class="btn dark" data-s>${ic('check')}Salvar</button>`,
     onMount:(el,m)=>{setTimeout(()=>$('[data-n]',el).focus(),60);$('[data-c]',el).onclick=m.close;
-      $('[data-s]',el).onclick=()=>{const name=$('[data-n]',el).value.trim();if(!name){toast('Informe o nome');return}const r={name,price:parseMoney($('[data-p]',el).value),duration:+$('[data-d]',el).value||0};if(ex)Object.assign(ex,r);else db.procedures.push({id:uid(),...r});m.close();changed();toast('Procedimento salvo')};
+      const dk=()=>{$$('[data-kind] button',el).forEach(b=>b.classList.toggle('on',b.dataset.v===kind));$('[data-kh]',el).textContent=kind==='consulta'?'Gera aviso de renovação 15 dias antes de completar 6 meses.':''};dk();
+      $('[data-kind]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){kind=b.dataset.v;dk()}};
+      $('[data-s]',el).onclick=()=>{const name=$('[data-n]',el).value.trim();if(!name){toast('Informe o nome');return}const r={name,price:parseMoney($('[data-p]',el).value),duration:+$('[data-d]',el).value||0,kind};if(ex)Object.assign(ex,r);else db.procedures.push({id:uid(),...r});m.close();changed();toast('Procedimento salvo')};
       if(ex)$('[data-del]',el).onclick=async()=>{if(await confirmBox(`Excluir “${esc(ex.name)}” do catálogo? O histórico das consultas é mantido.`)){db.procedures=db.procedures.filter(p=>p!==ex);m.close();changed()}}}})}
 
 /* ================= AJUSTES ================= */
@@ -1888,7 +1948,7 @@ Object.assign(ACT,{
 
 /* ================= dados de exemplo ================= */
 function seedDemo(){
-  const t=today(),pr=db.procedures;if(!pr.length)db.procedures=defaults().procedures;
+  const t=today();if(!db.procedures.length)db.procedures=defaults().procedures;const pr=db.procedures.filter(x=>x.kind!=='consulta');
   const N=['Ana Beatriz Souza','Carla Mendes','Juliana Rocha','Fernanda Lima','Patrícia Alves','Marina Costa','Renata Oliveira','Luciana Martins','Camila Ferreira','Beatriz Nogueira'];
   const back=[6,5,6,5,4,3,2,5,1,6];
   N.forEach((n,i)=>{
@@ -1901,6 +1961,14 @@ function seedDemo(){
   const ps=db.patients.slice(-10);
   db.budgets.push({id:uid(),patientId:ps[2].id,date:addDays(t,-3),validUntil:addDays(t,12),items:[{procId:pr[5].id,name:pr[5].name,price:pr[5].price,qty:2},{procId:pr[6].id,name:pr[6].name,price:pr[6].price,qty:1}],discountType:'pct',discountValue:10,notes:'Pagamento em até 3x sem juros.',status:'aberto',createdAt:Date.now()});
   db.budgets.push({id:uid(),patientId:ps[7].id,date:addDays(t,-12),validUntil:addDays(t,3),items:[{procId:pr[3].id,name:pr[3].name,price:pr[3].price,qty:1}],discountType:'val',discountValue:100,notes:'',status:'aprovado',createdAt:Date.now()});
+  const cp=db.procedures.find(x=>x.kind==='consulta');
+  if(cp){const mk=(pi,date,status,time)=>db.appointments.push({id:uid(),patientId:ps[pi].id,date,time,status,items:[{procId:cp.id,name:cp.name,price:cp.price,qty:1}],discountType:'pct',discountValue:0,notes:status==='realizada'?'Avaliação dermatológica completa. Rotina de cuidados prescrita.':'Renovação da consulta dermatológica.',createdAt:Date.now()});
+    mk(0,addDays(addMonths(t,-6),10),'realizada','09:00');  // vence em ~10 dias
+    mk(5,addDays(addMonths(t,-6),14),'realizada','10:00');  // vence em ~14 dias
+    mk(3,addDays(addMonths(t,-6),-8),'realizada','15:00');  // venceu há ~8 dias
+    mk(1,addDays(addMonths(t,-6),5),'realizada','11:00');mk(1,addDays(t,6),'agendada','16:30'); // renovação já agendada
+    mk(8,addMonths(t,-3),'realizada','14:00');               // em dia
+  }
   if(!db.settings.doctor)db.settings.doctor='Dra. Helena';if(!db.settings.clinic)db.settings.clinic='Helena Estética da Pele';
   S.retSel=null;
 }
