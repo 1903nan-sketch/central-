@@ -436,6 +436,80 @@ body.locked .auth{display:grid;position:fixed;inset:0;z-index:30;place-items:cen
 .sync{position:absolute;top:-2px;left:calc(50% + 10px);width:11px;height:11px;border-radius:50%;border:2px solid #fff;background:var(--ink-4);z-index:1}
 .sync.ok{background:var(--ok)}.sync.saving{background:#6b86b0;animation:pulse 1s ease-in-out infinite}.sync.offline{background:var(--warn)}
 @keyframes pulse{50%{opacity:.35}}
+
+/* ================= MODO ESCURO ================= */
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0e1012;--ink:#eceef1;--ink-2:#b7bec7;--ink-3:#878f9a;--ink-4:#5a616b;
+  --glass:rgba(30,33,38,.55);--glass-2:rgba(44,48,54,.72);--glass-3:rgba(48,52,59,.94);--stroke:rgba(255,255,255,.08);--stroke-2:rgba(255,255,255,.06);--line:rgba(255,255,255,.08);
+  --accent:#e7e9ec;--accent-ink:#141619;--soft:rgba(255,255,255,.08);--soft-2:rgba(255,255,255,.04);
+  --ok:#6fc79e;--ok-bg:rgba(111,199,158,.14);--warn:#e2b45e;--warn-bg:rgba(226,180,94,.14);--bad:#f08d77;--bad-bg:rgba(240,141,119,.14);--info:#a3b9db;--info-bg:rgba(163,185,219,.14);
+  --shadow:0 18px 50px -22px rgba(0,0,0,.75);--shadow-lg:0 30px 80px -20px rgba(0,0,0,.85)}
+[data-theme="dark"] body{background:var(--bg)}
+[data-theme="dark"] .bg{background:radial-gradient(90% 70% at 85% 0%,#22262b 0%,rgba(34,38,43,0) 60%),radial-gradient(70% 60% at 0% 100%,#15181b 0%,rgba(21,24,27,0) 70%),linear-gradient(160deg,#16191c 0%,#101214 55%,#131518 100%)}
+[data-theme="dark"] .bg i:nth-child(1){background:radial-gradient(circle at 35% 35%,#2b2f35,#1b1e22 70%)}
+[data-theme="dark"] .bg i:nth-child(2){background:radial-gradient(circle,#24282e,#16191c)}
+[data-theme="dark"] .bg i:nth-child(3){background:#1a1d21}
+[data-theme="dark"] .bg i:nth-child(4){background:radial-gradient(circle,#2a2933,#1a1c20);opacity:.6}
+[data-theme="dark"] .bg::before{background:repeating-radial-gradient(circle,rgba(255,255,255,0) 0 38px,rgba(255,255,255,.035) 39px 40px)}
+[data-theme="dark"] .bg::after{mix-blend-mode:overlay;opacity:.5}
+[data-theme="dark"] *{scrollbar-color:rgba(255,255,255,.16) transparent}
+[data-theme="dark"] ::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.14)}
+[data-theme="dark"] .glass{background:linear-gradient(155deg,rgba(46,50,57,.62),rgba(24,27,31,.52));box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 20px 50px -24px rgba(0,0,0,.8);border-color:rgba(255,255,255,.07)}
+[data-theme="dark"] .btn{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.08);box-shadow:none;color:var(--ink)}
+[data-theme="dark"] .btn:hover{background:rgba(255,255,255,.13)}
+[data-theme="dark"] .btn.ghost{background:transparent;border-color:transparent}
+[data-theme="dark"] .btn.ghost:hover{background:rgba(255,255,255,.08)}
+[data-theme="dark"] .btn.dark,[data-theme="dark"] .chip.on{background:linear-gradient(180deg,#f5f6f8,#d3d7dd);color:var(--accent-ink);border-color:transparent;box-shadow:inset 0 1px 0 #fff,0 10px 24px -12px rgba(0,0,0,.8)}
+[data-theme="dark"] .btn.dark:hover{background:linear-gradient(180deg,#fff,#dde1e6)}
+[data-theme="dark"] .btn.wa,[data-theme="dark"] a.btn.wa{background:linear-gradient(180deg,#2f7353,#1f5139);color:#fff;border-color:transparent}
+[data-theme="dark"] a.btn{color:var(--ink)}
+[data-theme="dark"] .btn.danger{color:var(--bad)}
+[data-theme="dark"] .in{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1)}
+[data-theme="dark"] .in:focus{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);box-shadow:0 0 0 4px rgba(255,255,255,.05)}
+[data-theme="dark"] .searchbar .in{background:var(--glass-2)}
+[data-theme="dark"] .item,[data-theme="dark"] .tl-i,[data-theme="dark"] .f-stats div,[data-theme="dark"] .pcard .meta div,[data-theme="dark"] .totals,[data-theme="dark"] .box,[data-theme="dark"] .ie-row{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.06)}
+[data-theme="dark"] button.item:hover,[data-theme="dark"] .item.click:hover{background:rgba(255,255,255,.09)}
+[data-theme="dark"] .tl-i::before{background:var(--bg)}
+[data-theme="dark"] .chip{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08)}
+[data-theme="dark"] .chip:hover{background:rgba(255,255,255,.11)}
+[data-theme="dark"] .seg{background:rgba(255,255,255,.06)}
+[data-theme="dark"] .seg button.on{background:rgba(255,255,255,.15);color:var(--ink);box-shadow:none}
+[data-theme="dark"] .side .nav:hover,[data-theme="dark"] .nav:hover{background:rgba(255,255,255,.06)}
+[data-theme="dark"] .side .nav.on,[data-theme="dark"] .tabbar .nav.on{background:linear-gradient(180deg,#f5f6f8,#d3d7dd);color:var(--accent-ink)}
+[data-theme="dark"] .side .nav .count,[data-theme="dark"] .nav .count{background:var(--accent);color:var(--accent-ink)}
+[data-theme="dark"] .day{border-top-color:rgba(255,255,255,.06)}
+[data-theme="dark"] .day:hover{background:rgba(255,255,255,.05)}
+[data-theme="dark"] .day.sel{background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 14px 30px -14px rgba(0,0,0,.7)}
+[data-theme="dark"] .day.today .n,[data-theme="dark"] .dp-g button.s,[data-theme="dark"] .tp-grid button.s,[data-theme="dark"] .banner .ic{background:var(--accent);color:var(--accent-ink)}
+[data-theme="dark"] .tp-grid button{background:rgba(255,255,255,.06);box-shadow:none}
+[data-theme="dark"] .tp-grid button:hover{background:rgba(255,255,255,.12)}
+[data-theme="dark"] .time{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+[data-theme="dark"] .stats .stat+.stat,[data-theme="dark"] .stats .stat:nth-child(n+3){border-color:rgba(255,255,255,.07)}
+[data-theme="dark"] .overlay{background:rgba(6,7,9,.55)}
+[data-theme="dark"] .modal{background:linear-gradient(160deg,rgba(40,44,50,.94),rgba(22,25,29,.92));border-color:rgba(255,255,255,.08)}
+[data-theme="dark"] .m-foot{background:rgba(255,255,255,.03)}
+[data-theme="dark"] .grabber{background:rgba(255,255,255,.2)}
+[data-theme="dark"] .pp-drop,[data-theme="dark"] .dp,[data-theme="dark"] .menu{background:rgba(32,35,40,.97);border-color:rgba(255,255,255,.08)}
+[data-theme="dark"] .pp-sel{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08)}
+[data-theme="dark"] .msg-prev{background:#1f2b25;border-color:transparent;color:#e7ece9}
+[data-theme="dark"] .avatar,[data-theme="dark"] .brand-mark{background:radial-gradient(circle at 30% 25%,#41464e,#22262b 75%);color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 6px 16px -8px rgba(0,0,0,.8)}
+[data-theme="dark"] .side-foot .who{background:rgba(255,255,255,.08);box-shadow:none}
+[data-theme="dark"] .ck{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.25)}
+[data-theme="dark"] .ck:checked{background:var(--accent);border-color:var(--accent)}
+[data-theme="dark"] .ck:checked::after{border-color:var(--accent-ink)}
+[data-theme="dark"] .switch i{background:rgba(255,255,255,.18)}
+[data-theme="dark"] .switch input:checked+i::after{background:var(--accent-ink)}
+[data-theme="dark"] .logo-drop{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.16)}
+[data-theme="dark"] .logo-drop:hover{background:rgba(255,255,255,.08)}
+[data-theme="dark"] .toast{background:rgba(240,242,245,.95);color:#15171a}
+[data-theme="dark"] .sync{border-color:#1c1f23}
+[data-theme="dark"] .auth-links button:hover{background:rgba(255,255,255,.08)}
+[data-theme="dark"] .rbar{background:rgba(34,37,42,.94)}
+[data-theme="dark"] .progress{background:rgba(255,255,255,.08)}
+[data-theme="dark"] [style*="background:var(--accent)"]{color:var(--accent-ink)!important}
+[data-theme="dark"] .pill.c{color:var(--ink)}
+.theme-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink-3);margin:auto auto 12px;flex:none;transition:background .2s,color .2s}
+.theme-btn:hover{background:var(--soft);color:var(--ink)}.theme-btn svg{width:19px;height:19px}
+html{transition:background-color .3s}.theme-btn+.side-foot{margin-top:0}
 </style>
 </head>
 <body>
@@ -454,6 +528,13 @@ body.locked .auth{display:grid;position:fixed;inset:0;z-index:30;place-items:cen
    A doutora não vê isso. Deixe url vazia para usar o modo manual
    (o sistema abre o WhatsApp com a mensagem pronta).
    ===================================================================== */
+/* ---------- tema claro / escuro ---------- */
+const THEME_KEY='lumiere.theme';
+const themePref=()=>{try{return localStorage.getItem(THEME_KEY)||'auto'}catch(e){return'auto'}};
+const darkMQ=matchMedia('(prefers-color-scheme: dark)');
+function applyTheme(){const p=themePref(),t=p==='auto'?(darkMQ.matches?'dark':'light'):p;document.documentElement.dataset.theme=t;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#101214':'#eceef2';return t}
+function setTheme(p){try{localStorage.setItem(THEME_KEY,p)}catch(e){}applyTheme();if(typeof render==='function'&&!document.body.classList.contains('locked'))render()}
+applyTheme();darkMQ.addEventListener&&darkMQ.addEventListener('change',()=>{if(themePref()==='auto'){applyTheme();renderShell&&renderShell()}});
 const EVOLUTION={
   url:'',        // ex.: 'https://evolution-production-xxxx.up.railway.app'
   instancia:'',  // ex.: 'clinica'
@@ -488,6 +569,8 @@ print:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2
 swap:'<path d="M7 16V4M3 8l4-4 4 4M17 8v12M21 16l-4 4-4-4"/>',
 spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>',
 copy:'<rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
 logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
 user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>'
@@ -733,10 +816,10 @@ function pickDate(anchor,val,quick,yearFirst){return new Promise(res=>{
 const NAV=[['agenda','Agenda','cal','Agenda'],['pacientes','Pacientes','users','Pacientes'],['orcamentos','Orçamentos','doc','Orçam.'],['retornos','Retornos','ret','Retornos'],['procedimentos','Procedimentos','tag','Proced.'],['ajustes','Ajustes','cog','Ajustes']];
 function navHTML(mob){const n=pendingCount();return NAV.map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}
 function renderShell(){
-  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<div class="side-foot" title="${esc(db.settings.doctor||'')}"><i id="syncDot" class="sync ${cloud.state}"></i><div class="who" data-nav="ajustes">${esc(initials(db.settings.doctor.replace(/^dra?\.?\s*/i,''))||'—')}</div></div>`;
+  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<button class="theme-btn" data-theme-toggle title="${document.documentElement.dataset.theme==='dark'?'Modo claro':'Modo escuro'}">${ic(document.documentElement.dataset.theme==='dark'?'sun':'moon')}</button><div class="side-foot" title="${esc(db.settings.doctor||'')}"><i id="syncDot" class="sync ${cloud.state}"></i><div class="who" data-nav="ajustes">${esc(initials(db.settings.doctor.replace(/^dra?\.?\s*/i,''))||'—')}</div></div>`;
   $('#tabbar').innerHTML=navHTML(true);
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav)});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav);if(e.target.closest('[data-theme-toggle]'))setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
 function go(v){if(S.view===v&&v!=='agenda')return;S.view=v;S.anim=true;render();$('#view').scrollTop=0}
 const VIEWS={agenda:vAgenda,pacientes:vPacientes,orcamentos:vOrcamentos,retornos:vRetornos,procedimentos:vProcedimentos,ajustes:vAjustes};
 function render(){
@@ -1229,6 +1312,7 @@ function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><spa
     </div></div>
   </div>
   <div class="stack">
+    <div class="glass card"><h3>${ic(document.documentElement.dataset.theme==='dark'?'moon':'sun','style="width:18px;height:18px"')}Aparência</h3><div class="seg" style="display:flex">${[['light','Claro','sun'],['dark','Escuro','moon'],['auto','Automático','spark']].map(([k,l,i])=>`<button class="${themePref()===k?'on':''}" data-act="theme" data-id="${k}" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px">${ic(i,'style="width:15px;height:15px"')}${l}</button>`).join('')}</div><div class="small muted" style="margin-top:10px">“Automático” acompanha o modo do seu celular ou computador.</div></div>
     <div class="glass card"><h3>${ic('user','style="width:18px;height:18px"')}Sua conta</h3><div class="stack small"><div class="row between wrap"><div><div class="muted">Conectada como</div><b style="font-size:14px">${esc(session?session.user.email:'')}</b></div><button class="btn sm" data-act="logout">${ic('logout')}Sair</button></div><div id="syncTxt">${syncLabel()}</div><div class="muted">Seus dados ficam salvos na nuvem e aparecem em qualquer aparelho em que você entrar.</div></div></div>
     <div class="glass card"><h3>${ic('doc','style="width:18px;height:18px"')}Mensagem de orçamento</h3><label class="field"><span>Introdução</span><textarea class="in" data-chg="set" data-k="budgetIntro">${esc(s.budgetIntro)}</textarea></label><div class="small muted" style="margin-top:6px">A lista de procedimentos, desconto e total são adicionados automaticamente. O modelo de retorno é editado na aba Retornos.</div></div>
     <div class="glass card"><h3>${ic('down','style="width:18px;height:18px"')}Backup dos dados</h3><div class="small muted" style="margin-bottom:12px">Além da nuvem, você pode baixar uma cópia de segurança dos seus dados quando quiser.</div>
@@ -1243,6 +1327,7 @@ INP.setb=el=>{db.settings[el.dataset.k]=el.checked;save();render()};
 INP.importData=el=>{const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const d=JSON.parse(r.result);if(!d.patients)throw 0;if(await confirmBox(`Substituir os dados atuais pelo backup (${d.patients.length} pacientes)?`,'Importar')){const def=defaults();db={...def,...d,settings:{...def.settings,...d.settings}};changed();toast('Backup importado')}}catch(e){toast('Arquivo inválido')}};r.readAsText(f);el.value=''};
 Object.assign(ACT,{
   rmLogo:async()=>{if(await confirmBox('Remover a logo da clínica?','Remover')){delete db.settings.logo;save();render();toast('Logo removida')}},
+  theme:k=>setTheme(k),
   logout:async()=>{if(await confirmBox('Sair da sua conta neste aparelho?','Sair'))logout()},
   exportData:()=>{const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`lumiere-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)},
   reset:async()=>{if(await confirmBox('Apagar <b>todos</b> os dados? Recomendo exportar um backup antes.','Apagar tudo')){db=defaults();changed();toast('Dados apagados')}}

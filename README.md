@@ -14,7 +14,18 @@ Sistema web leve (um único `index.html`, sem instalação) com visual em vidro 
 ## Como usar
 Abra o `index.html` no navegador ou publique a pasta em qualquer hospedagem estática (GitHub Pages, Netlify, Vercel). No celular, use “Adicionar à tela inicial” para abrir como aplicativo.
 
-> Os dados ficam salvos no navegador do aparelho. Faça backups em **Ajustes → Exportar backup**.
+## Login e nuvem (Supabase)
+- O sistema pede **e-mail e senha**. Os dados ficam na nuvem (tabela `lumiere_data`) e aparecem em qualquer aparelho.
+- Só entram os e-mails autorizados na tabela `lumiere_allowed`. Para liberar a doutora, rode no **SQL Editor** do Supabase:
+  ```sql
+  insert into public.lumiere_allowed (email) values ('email-da-dra@exemplo.com');
+  ```
+- No primeiro acesso, ela clica em **“Primeiro acesso? Criar senha”** e confirma o e-mail.
+- Para que os links de confirmação e de “Esqueci minha senha” voltem para o sistema, em **Authentication → URL Configuration** coloque o endereço publicado em **Site URL** (e em **Redirect URLs**).
+- Se a pessoa já tinha dados neste aparelho antes do login, eles são enviados para a nuvem no primeiro acesso.
+
+## Aparência
+Claro, Escuro ou Automático (segue o aparelho), em **Ajustes → Aparência** ou pelo botão de sol/lua no menu lateral.
 
 ## WhatsApp automático com Evolution API (Railway)
 A configuração fica **no código**, e a doutora não vê nada técnico. No início do `<script>` do `index.html`, preencha:
