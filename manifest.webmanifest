@@ -1,9 +1,31 @@
 {
-  "name": "Lumière — Gestão de Estética",
+  "name": "Lumière",
   "short_name": "Lumière",
+  "description": "Gestão da clínica de estética: agenda, pacientes, orçamentos e retornos.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#eef0f3",
-  "theme_color": "#eef0f3",
-  "icons": [{ "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+  "orientation": "portrait",
+  "background_color": "#f2f2f7",
+  "theme_color": "#f2f2f7",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }

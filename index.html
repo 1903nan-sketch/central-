@@ -4,9 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Lumière · Estética</title>
-<meta name="theme-color" content="#eef0f3">
+<meta name="theme-color" content="#f2f2f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lumière">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -891,6 +896,16 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
   :root .rbar .small{white-space:nowrap}
   :root .rbar{padding:8px 8px 8px 14px}
 }
+html{background:var(--bg)}
+@media (display-mode:standalone){
+  body::before{content:"";position:fixed;inset:0 0 auto;height:calc(env(safe-area-inset-top,0px) + 6px);z-index:60;pointer-events:none;
+    background:linear-gradient(180deg,rgba(28,28,32,.42),rgba(28,28,32,0))}
+  [data-theme="dark"] body::before{background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0))}
+  :root .main{padding-top:env(safe-area-inset-top,0px)}
+  :root .topbar{padding-top:10px}
+  .app{height:100%}
+}
+@media (display-mode:standalone) and (min-width:861px){:root .main{padding-top:0}}
 </style>
 </head>
 <body>
@@ -913,7 +928,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 const THEME_KEY='lumiere.theme';
 const themePref=()=>{try{return localStorage.getItem(THEME_KEY)||'auto'}catch(e){return'auto'}};
 const darkMQ=matchMedia('(prefers-color-scheme: dark)');
-function applyTheme(){const p=themePref(),t=p==='auto'?(darkMQ.matches?'dark':'light'):p;document.documentElement.dataset.theme=t;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#101214':'#eceef2';return t}
+function applyTheme(){const p=themePref(),t=p==='auto'?(darkMQ.matches?'dark':'light'):p;document.documentElement.dataset.theme=t;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#000000':'#f2f2f7';return t}
 function setTheme(p){try{localStorage.setItem(THEME_KEY,p)}catch(e){}applyTheme();if(typeof render==='function'&&!document.body.classList.contains('locked'))render()}
 applyTheme();darkMQ.addEventListener&&darkMQ.addEventListener('change',()=>{if(themePref()==='auto'){applyTheme();renderShell&&renderShell()}});
 const EVOLUTION={

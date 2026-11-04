@@ -1,5 +1,5 @@
-const CACHE = 'lumiere-v1';
-const FILES = ['./', './index.html', './assets/icon.svg', './manifest.webmanifest'];
+const CACHE = 'lumiere-v2';
+const FILES = ['./', './index.html', './assets/icon.svg', './assets/apple-touch-icon.png', './assets/icon-192.png', './assets/icon-512.png', './manifest.webmanifest'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== CACHE).map(x => caches.delete(x))))); self.clients.claim(); });
 self.addEventListener('fetch', e => {
