@@ -966,6 +966,23 @@ html{background:var(--bg)}
 .chip-add-in input{border:0;outline:0;background:transparent;font:inherit;font-size:14px;color:var(--ink);width:120px}
 .chip-add-in button{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink)}
 .chip-add-in button svg{width:14px;height:14px}
+.fsec{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;letter-spacing:-.01em;margin:8px 2px -4px}
+.fsec svg{width:17px;height:17px;opacity:.65}
+.pform .box{padding:16px}
+.sw-list{display:flex;flex-direction:column;padding:4px 16px!important}
+.sw-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;cursor:pointer}
+.sw-row+.sw-row{border-top:.5px solid var(--line)}
+.sw-row span:first-child{display:flex;flex-direction:column}.sw-row b{font-size:15px;font-weight:500}.sw-row small{font-size:12.5px;color:var(--ink-3)}
+.att-drop{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:12px;padding:20px 14px;border-radius:16px;border:1.5px dashed var(--ink-4);text-align:center;cursor:pointer;transition:background .2s,border-color .2s}
+.att-drop:hover,.att-drop.over{background:var(--fill);border-color:var(--ink-2)}.att-drop.busy{opacity:.6;pointer-events:none}
+.att-drop svg{width:22px;height:22px;opacity:.6}.att-drop b{font-size:15px}.att-drop small{font-size:12.5px;color:var(--ink-3)}
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:12px}
+.att-it{display:flex;align-items:center;gap:10px;padding:8px;border-radius:14px;background:var(--fill);min-width:0}
+.att-th{width:52px;height:52px;border-radius:10px;overflow:hidden;flex:none;display:grid;place-items:center;background:var(--cell);font-size:11px;font-weight:800;color:var(--ink-2)}
+.att-th img{width:100%;height:100%;object-fit:cover}
+.att-tx{flex:1;min-width:0;display:flex;flex-direction:column}.att-tx b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.att-tx small{font-size:12px;color:var(--ink-3)}
+.att-view{display:grid;place-items:center;background:var(--fill);border-radius:16px;overflow:hidden}.att-view img{max-width:100%;max-height:70vh;object-fit:contain}
+.kv-sec{font-size:13px;font-weight:700;color:var(--ink-3);margin:18px 0 8px}.kv-sec:first-child{margin-top:0}
 </style>
 </head>
 <body>
@@ -1070,6 +1087,8 @@ const maskCPF=v=>{const d=digits(v).slice(0,11);return d.length>9?`${d.slice(0,3
 const cpfOk=v=>{const d=digits(v);if(d.length!==11||/^(\d)\1+$/.test(d))return false;const dv=n=>{let t=0;for(let i=0;i<n;i++)t+=+d[i]*(n+1-i);const r=t*10%11;return r===10?0:r};return dv(9)===+d[9]&&dv(10)===+d[10]};
 const fullAddr=p=>{const a=(p.address||'').split(', ').filter(Boolean);if(p.addrNum)a.splice(a.length?1:0,0,p.addrNum);return a.join(', ')};
 const maskCEP=v=>{const d=digits(v).slice(0,8);return d.length>5?`${d.slice(0,5)}-${d.slice(5)}`:d};
+const PHOTO=[['I','Tipo I: pele muito clara, sempre queima, nunca bronzeia'],['II','Tipo II: pele clara, queima fácil, bronzeia pouco'],['III','Tipo III: pele morena clara, queima às vezes, bronzeia gradualmente'],['IV','Tipo IV: pele morena, raramente queima, bronzeia fácil'],['V','Tipo V: pele morena escura, muito raramente queima'],['VI','Tipo VI: pele negra, nunca queima']];
+const GENDER={F:'Feminino',M:'Masculino',O:'Outro'};
 const SKINS=['Normal','Seca','Oleosa','Mista','Sensível','Acneica'];
 const brToIso=v=>{const m=String(v||'').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);if(!m)return'';const d=new Date(+m[3],+m[2]-1,+m[1]);return d.getDate()===+m[1]&&d.getMonth()===+m[2]-1&&+m[3]>1900&&d<=new Date()?iso(d):''};
 const fill=(t,v)=>String(t||'').replace(/\{(\w+)\}/g,(m,k)=>v[k]!=null?v[k]:m);
@@ -1084,7 +1103,7 @@ const defaults=()=>({
   procedures:SEED_PROCS.map(([name,price,duration,kind])=>({id:uid(),name,price,duration,kind:kind||'procedimento'})),
   settings:{doctor:'',clinic:'',doctorPhone:'',summaryDay:1,lastSummary:'',
     template:'Olá, {nome}! ✨\n\nAqui é da {clinica}. Está chegando o momento do seu retorno de {procedimento}, previsto para {data}.\n\nVamos agendar o melhor dia e horário para você? 💆‍♀️\n\n{doutora}',
-    budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:',dermSeeded:true,sources:['Google','Instagram','Indicação'],
+    budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:',dermSeeded:true,sources:['Google','Instagram','Indicação'],conditions:['Diabetes','Hipertensão','Herpes recorrente','Tendência a queloide','Gestante ou lactante','Doença autoimune','Marcapasso'],
     dermTemplate:'Olá, {nome}! ✨\n\nSua consulta dermatológica completa 6 meses em {data}. Para manter o acompanhamento da sua pele em dia, vamos agendar a renovação?\n\n{doutora}\n{clinica}'}
 });
 let memoryOnly=false;
@@ -1504,6 +1523,66 @@ document.addEventListener('gesturestart',e=>e.preventDefault());
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&!document.body.classList.contains('locked')){e.preventDefault();openSpotlight()}});
 ACT.spot=()=>openSpotlight();
 
+/* ================= ESCOLHA EM BOTÕES COM "+" (reutilizável) ================= */
+function chipPicker(box,getList,setList,hidden,multi,onChange){
+  const sel=()=>multi?hidden.value.split(/,\s*/).filter(Boolean):(hidden.value?[hidden.value]:[]);
+  const draw=adding=>{const L=getList(),S=sel(),extra=S.filter(x=>!L.some(y=>norm(y)===norm(x)));
+    box.innerHTML=[...L,...extra].map(o=>`<button type="button" class="chip ${S.some(x=>norm(x)===norm(o))?'on':''}" data-o="${esc(o)}">${esc(o)}</button>`).join('')+(setList?(adding?`<span class="chip chip-add-in"><input placeholder="Nova opção" maxlength="30"><button type="button" data-ok aria-label="Adicionar">${ic('check')}</button></span>`:`<button type="button" class="chip chip-add" data-add aria-label="Criar nova opção">${ic('plus')}</button>`):'');
+    if(adding){const inp=$('input',box),ok=()=>{const v=inp.value.trim();if(v){const L2=getList().slice();let name=L2.find(x=>norm(x)===norm(v));if(!name){L2.push(v);setList(L2);name=v}
+        if(multi){const S2=sel();if(!S2.some(x=>norm(x)===norm(name)))S2.push(name);hidden.value=S2.join(', ')}else hidden.value=name;onChange&&onChange()}draw(false)};
+      inp.focus();inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();ok()}else if(e.key==='Escape'){e.stopPropagation();draw(false)}};$('[data-ok]',box).onclick=ok}};
+  box.onclick=e=>{if(e.target.closest('[data-add]'))return draw(true);const b=e.target.closest('[data-o]');if(!b)return;const v=b.dataset.o;
+    if(multi){let S2=sel();S2=S2.some(x=>norm(x)===norm(v))?S2.filter(x=>norm(x)!==norm(v)):[...S2,v];hidden.value=S2.join(', ')}else hidden.value=hidden.value===v?'':v;
+    onChange&&onChange();draw(false)};
+  draw(false);
+}
+
+/* ================= ANEXOS (Supabase Storage, pasta privada da conta) ================= */
+const BUCKET='lumiere-files',ATT_TYPES=['Documento','Termo assinado','Foto antes','Foto depois','Exame','Outro'];
+const useCloudFiles=()=>!!(session&&session.access_token&&!window.LUMIERE_DEMO);
+async function storageUpload(path,blob,type){const t=await accessToken();let r;try{r=await fetch(`${SB.url}/storage/v1/object/${BUCKET}/${path}`,{method:'POST',headers:{apikey:SB.key,Authorization:'Bearer '+t,'Content-Type':type,'x-upsert':'true'},body:blob})}catch(e){throw new Error('sem conexão')}if(!r.ok){let j={};try{j=await r.json()}catch(e){}throw new Error(j.message||('erro '+r.status))}}
+async function storageGet(path){const t=await accessToken();const r=await fetch(`${SB.url}/storage/v1/object/authenticated/${BUCKET}/${path}`,{headers:{apikey:SB.key,Authorization:'Bearer '+t}});if(!r.ok)throw new Error('não foi possível abrir');return r.blob()}
+function storageDel(paths){if(!paths.length||!useCloudFiles())return;accessToken().then(t=>fetch(`${SB.url}/storage/v1/object/${BUCKET}`,{method:'DELETE',headers:{apikey:SB.key,Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({prefixes:paths})})).catch(()=>{})}
+const loadImg=src=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=src});
+const toBlob=(c,t,q)=>new Promise(r=>c.toBlob(r,t,q));
+async function prepFile(f){
+  if(/^image\/(jpeg|png|webp|heic|heif)/.test(f.type)||(/^image\//.test(f.type)&&!/gif|svg/.test(f.type))){
+    const url=URL.createObjectURL(f);try{const im=await loadImg(url);const sc=(m)=>Math.min(1,m/Math.max(im.width,im.height));
+      const c=document.createElement('canvas'),k=sc(1800);c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);const blob=await toBlob(c,'image/jpeg',.86);
+      const t=document.createElement('canvas'),k2=sc(260);t.width=Math.round(im.width*k2);t.height=Math.round(im.height*k2);t.getContext('2d').drawImage(im,0,0,t.width,t.height);
+      return{blob,type:'image/jpeg',thumb:t.toDataURL('image/jpeg',.72),ext:'jpg'}}finally{URL.revokeObjectURL(url)}}
+  if(f.size>15*1024*1024)throw new Error(`${f.name} passa de 15 MB`);
+  return{blob:f,type:f.type||'application/octet-stream',ext:(f.name.split('.').pop()||'bin').toLowerCase().slice(0,5)};
+}
+const blobToData=b=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(b)});
+async function addFiles(files,pid,label){const out=[];for(const f of files){const x=await prepFile(f);const a={id:uid(),name:f.name.replace(/\.[^.]+$/,'')||'Arquivo',label,type:x.type,size:x.blob.size,date:today(),thumb:x.thumb||''};
+    if(useCloudFiles()){a.path=`${session.user.id}/${pid}/${a.id}.${x.ext}`;await storageUpload(a.path,x.blob,x.type)}
+    else{if(x.blob.size>2.5*1024*1024)throw new Error('Na demonstração o limite é 2,5 MB por arquivo');a.data=await blobToData(x.blob)}
+    out.push(a)}return out}
+async function attBlobUrl(a){if(a.data)return a.data;return URL.createObjectURL(await storageGet(a.path))}
+async function openAttachment(a){
+  let url;try{toast('Abrindo…');url=await attBlobUrl(a)}catch(e){toast('Não foi possível abrir: '+e.message);return}
+  if(/^image\//.test(a.type)){openModal({title:esc(a.name),size:'lg',body:`<div class="att-view"><img src="${url}" alt="${esc(a.name)}"></div><div class="small muted" style="margin-top:10px">${esc(a.label)} · ${fmtD(a.date)} · ${fmtSize(a.size)}</div>`,foot:`<a class="btn" href="${url}" download="${esc(a.name)}.jpg" target="_blank" rel="noopener">${ic('down')}Baixar</a>`,onClose:()=>{if(!a.data)setTimeout(()=>URL.revokeObjectURL(url),1000)}})}
+  else{const w=window.open(url,'_blank');if(!w){const l=document.createElement('a');l.href=url;l.target='_blank';l.download=a.name;l.click()}}
+}
+const fmtSize=n=>n>1048576?`${(n/1048576).toFixed(1).replace('.',',')} MB`:`${Math.max(1,Math.round(n/1024))} KB`;
+const attIcon=a=>/^image\//.test(a.type)?'':/pdf/.test(a.type)?'PDF':(a.name.split('.').pop()||'ARQ').slice(0,4).toUpperCase();
+function attachBox(host,pid,getList,onAdd,onRemove){
+  let label=ATT_TYPES[0],busy=false;
+  const draw=()=>{const L=getList();
+    host.innerHTML=`<div class="field"><span>Tipo do próximo anexo</span><div class="chips" data-at>${ATT_TYPES.map(t=>`<button type="button" class="chip ${t===label?'on':''}" data-v="${t}">${t}</button>`).join('')}</div></div>
+      <label class="att-drop ${busy?'busy':''}"><input type="file" multiple accept="image/*,application/pdf,.doc,.docx" hidden>${ic(busy?'clock':'up')}<b>${busy?'Enviando…':'Adicionar arquivos'}</b><small>Fotos, PDF ou Word · arraste aqui ou toque para escolher</small></label>
+      ${L.length?`<div class="att-grid">${L.map((a,i)=>`<div class="att-it" data-i="${i}"><button type="button" class="att-th" data-open="${i}">${a.thumb?`<img src="${a.thumb}" alt="">`:`<span>${attIcon(a)}</span>`}</button><div class="att-tx"><b title="${esc(a.name)}">${esc(a.name)}</b><small>${esc(a.label)} · ${fmtD(a.date)}</small></div><button type="button" class="btn sm icon ghost danger" data-rm="${i}" aria-label="Remover">${ic('trash')}</button></div>`).join('')}</div>`:''}`;
+    $('[data-at]',host).onclick=e=>{const b=e.target.closest('[data-v]');if(b){label=b.dataset.v;draw()}};
+    const inp=$('input[type=file]',host);inp.onchange=()=>go2([...inp.files]);
+    const drop=$('.att-drop',host);drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};drop.ondragleave=()=>drop.classList.remove('over');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');go2([...e.dataTransfer.files])};
+    host.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openAttachment(getList()[+b.dataset.open]));
+    host.querySelectorAll('[data-rm]').forEach(b=>b.onclick=async()=>{const a=getList()[+b.dataset.rm];if(await confirmBox(`Remover “${esc(a.name)}”?`,'Remover')){onRemove(a);draw()}});
+  };
+  const go2=async files=>{if(!files.length||busy)return;busy=true;draw();try{const out=await addFiles(files,pid,label);out.forEach(onAdd);toast(out.length>1?`${out.length} arquivos anexados`:'Arquivo anexado')}catch(e){toast('Falha ao anexar: '+e.message)}busy=false;draw()};
+  draw();
+}
+
 /* ================= seletor de paciente ================= */
 function patientPicker(host,st){
   let typed='',hl=0,opts=[];
@@ -1616,51 +1695,93 @@ function openAppt(o={}){
 
 /* ================= PACIENTE ================= */
 function openPatient(id,cb){
-  const ex=id?P(id):null,p=ex?{...ex}:{name:''};
+  const ex=id?P(id):null,p=ex?clone(ex):{name:''};
+  if(!p.id)p.id=uid();
+  const atts=clone(p.attachments||[]),added=[];let saved=false;
   const f=(k,l,a='')=>`<label class="field"><span>${l}</span><input class="in" data-k="${k}" value="${esc(p[k]||'')}" ${a}></label>`;
-  openModal({title:ex?'Editar paciente':'Novo paciente',
-    body:`<div class="stack">
-      <label class="field"><span>Nome completo <em>*</em></span><input class="in" data-k="name" value="${esc(p.name)}" placeholder="Ex.: Maria Fernanda Souza" autofocus></label>
-      <div class="grid2">${f('phone','WhatsApp','inputmode="tel" placeholder="(11) 99999-9999"')}<label class="field"><span>Data de nascimento</span><div class="inwrap"><input class="in" data-k="birth" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" value="${p.birth?fmtD(p.birth):''}"><button type="button" class="in-ic" data-bcal aria-label="Abrir calendário">${ic('cal')}</button></div></label></div>
-      <div class="grid2">${f('cpf','CPF','inputmode="numeric" placeholder="000.000.000-00" maxlength="14"')}${f('email','E-mail','type="email" placeholder="opcional"')}</div>
-      <div class="grid-cep"><label class="field"><span>CEP</span><input class="in" data-k="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" value="${esc(p.cep||'')}"></label><label class="field"><span>Endereço <small class="muted" data-cepmsg style="font-weight:500"></small></span><input class="in" data-k="address" value="${esc(p.address||'')}" placeholder="Rua, bairro, cidade"></label><label class="field"><span>Nº</span><input class="in" data-k="addrNum" value="${esc(p.addrNum||'')}" placeholder="123" maxlength="12"></label></div>
-      <div class="grid2"><label class="field"><span>Primeiro contato</span><div class="inwrap"><input class="in" data-k="firstContact" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" value="${fmtD(p.firstContact||(ex?(ex.createdAt?iso(new Date(ex.createdAt)):''):today()))==='—'?'':fmtD(p.firstContact||(ex?(ex.createdAt?iso(new Date(ex.createdAt)):''):today()))}"><button type="button" class="in-ic" data-fcal aria-label="Abrir calendário">${ic('cal')}</button></div></label>${f('allergies','Alergias / contraindicações','placeholder="opcional"')}</div>
-      <div class="field"><span>Como conheceu a clínica</span><div class="chips" data-src></div><input type="hidden" data-k="source" value="${esc(p.source||'')}"></div>
-      <div class="field"><span>Tipo de pele <small class="muted" style="font-weight:500">· pode marcar mais de um</small></span><div class="chips" data-skin>${SKINS.map(k=>`<button type="button" class="chip ${(p.skin||'').split(/,\s*/).includes(k)?'on':''}" data-v="${k}">${k}</button>`).join('')}</div><input type="hidden" data-k="skin" value="${esc(p.skin||'')}"></div>
+  const dateF=(k,l,v,btn)=>`<label class="field"><span>${l}</span><div class="inwrap"><input class="in" data-k="${k}" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" value="${v}"><button type="button" class="in-ic" ${btn} aria-label="Abrir calendário">${ic('cal')}</button></div></label>`;
+  const sw=(k,l,sub)=>`<label class="sw-row"><span><b>${l}</b>${sub?`<small>${sub}</small>`:''}</span><span class="switch"><input type="checkbox" data-kb="${k}" ${p[k]?'checked':''}><i></i></span></label>`;
+  const fcVal=fmtD(p.firstContact||(ex?(ex.createdAt?iso(new Date(ex.createdAt)):''):today()));
+  openModal({title:ex?'Editar paciente':'Novo paciente',size:'lg',
+    body:`<div class="stack pform">
+      <div class="fsec">${ic('user')}Dados pessoais</div>
+      <div class="box stack">
+        <label class="field"><span>Nome completo <em>*</em></span><input class="in" data-k="name" value="${esc(p.name)}" placeholder="Ex.: Maria Fernanda Souza" autofocus></label>
+        <div class="grid2">${f('socialName','Como prefere ser chamada','placeholder="Ex.: Mari"')}<div class="field"><span>Sexo</span><div class="seg" data-gender style="display:flex">${[['F','Feminino'],['M','Masculino'],['O','Outro']].map(([v,l])=>`<button type="button" data-v="${v}" style="flex:1">${l}</button>`).join('')}</div><input type="hidden" data-k="gender" value="${esc(p.gender||'')}"></div></div>
+        <div class="grid3">${dateF('birth','Data de nascimento',p.birth?fmtD(p.birth):'','data-bcal')}${f('cpf','CPF','inputmode="numeric" placeholder="000.000.000-00" maxlength="14"')}${f('rg','RG','placeholder="opcional"')}</div>
+        ${f('profession','Profissão','placeholder="opcional"')}
+      </div>
+      <div class="fsec">${ic('phone')}Contato e endereço</div>
+      <div class="box stack">
+        <div class="grid3">${f('phone','WhatsApp','inputmode="tel" placeholder="(11) 99999-9999"')}${f('email','E-mail','type="email" placeholder="opcional"')}${f('instagram','Instagram','placeholder="@usuario" autocapitalize="off"')}</div>
+        <div class="grid2">${f('emergencyName','Contato de emergência','placeholder="Nome e parentesco"')}${f('emergencyPhone','Telefone de emergência','inputmode="tel" placeholder="(11) 99999-9999"')}</div>
+        <div class="grid-cep"><label class="field"><span>CEP</span><input class="in" data-k="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" value="${esc(p.cep||'')}"></label><label class="field"><span>Endereço <small class="muted" data-cepmsg style="font-weight:500"></small></span><input class="in" data-k="address" value="${esc(p.address||'')}" placeholder="Rua, bairro, cidade"></label><label class="field"><span>Nº</span><input class="in" data-k="addrNum" value="${esc(p.addrNum||'')}" placeholder="123" maxlength="12"></label></div>
+      </div>
+      <div class="fsec">${ic('spark')}Como chegou</div>
+      <div class="box stack">
+        <div class="grid2">${dateF('firstContact','Primeiro contato',fcVal==='—'?'':fcVal,'data-fcal')}<label class="field" data-refwrap><span>Quem indicou</span><input class="in" data-k="referredBy" value="${esc(p.referredBy||'')}" placeholder="Nome de quem indicou"></label></div>
+        <div class="field"><span>Como conheceu a clínica</span><div class="chips" data-src></div><input type="hidden" data-k="source" value="${esc(p.source||'')}"></div>
+      </div>
+      <div class="fsec">${ic('steth')}Saúde e pele</div>
+      <div class="box stack">
+        <div class="field"><span>Tipo de pele <small class="muted" style="font-weight:500">· pode marcar mais de um</small></span><div class="chips" data-multi="skin"></div><input type="hidden" data-k="skin" value="${esc(p.skin||'')}"></div>
+        <div class="field"><span>Fototipo <small class="muted" style="font-weight:500">· escala de Fitzpatrick</small></span><div class="chips" data-photo>${PHOTO.map(([v,d])=>`<button type="button" class="chip" data-v="${v}" title="${d}">${v}</button>`).join('')}</div><div class="small muted" data-photohint></div><input type="hidden" data-k="phototype" value="${esc(p.phototype||'')}"></div>
+        <div class="field"><span>Condições de saúde <small class="muted" style="font-weight:500">· marque o que se aplica</small></span><div class="chips" data-multi="conditions"></div><input type="hidden" data-k="conditions" value="${esc(p.conditions||'')}"></div>
+        <div class="grid2">${f('allergies','Alergias / contraindicações','placeholder="opcional"')}${f('meds','Medicamentos em uso','placeholder="Ex.: anticoncepcional, isotretinoína"')}</div>
+      </div>
+      <div class="fsec">${ic('folder')}Documentos e anexos</div>
+      <div class="box" data-att></div>
+      <div class="fsec">${ic('check')}Consentimentos</div>
+      <div class="box sw-list">${sw('imageConsent','Autoriza uso de imagem','Fotos de antes e depois para registro clínico')}${sw('lgpdConsent','Aceitou o termo de privacidade (LGPD)','Consentimento para guardar os dados pessoais')}</div>
       <label class="field"><span>Observações</span><textarea class="in" data-k="notes" placeholder="Histórico, preferências, observações...">${esc(p.notes||'')}</textarea></label>
-      <div class="small muted">Apenas o nome é obrigatório — complete o resto quando quiser.</div>
+      <div class="small muted">Apenas o nome é obrigatório. Complete o resto quando quiser.</div>
     </div>`,
     foot:`<button class="btn" data-cancel>Cancelar</button><button class="btn dark" data-save>${ic('check')}${ex?'Salvar':'Cadastrar'}</button>`,
+    onClose:()=>{if(!saved&&added.length)storageDel(added.filter(a=>a.path).map(a=>a.path))},
     onMount:(el,m)=>{
-      const ph=$('[data-k="phone"]',el);ph.oninput=()=>{ph.value=maskPhone(ph.value)};
-      const bi=$('[data-k="birth"]',el);bi.oninput=()=>{const d=digits(bi.value).slice(0,8);bi.value=d.length>4?`${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4)}`:d.length>2?`${d.slice(0,2)}/${d.slice(2)}`:d};
-      $('[data-bcal]',el).onclick=async e=>{const cur=brToIso(bi.value)||'1990-01-01';const v=await pickDate(e.currentTarget,cur,null,true);if(v)bi.value=fmtD(v)};
-      const cpf=$('[data-k="cpf"]',el);cpf.oninput=()=>{cpf.value=maskCPF(cpf.value)};
+      const K=k=>$(`[data-k="${k}"]`,el);
+      [K('phone'),K('emergencyPhone')].forEach(i=>i.oninput=()=>{i.value=maskPhone(i.value)});
       const dmask=i=>{i.oninput=()=>{const d=digits(i.value).slice(0,8);i.value=d.length>4?`${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4)}`:d.length>2?`${d.slice(0,2)}/${d.slice(2)}`:d}};
-      const fc=$('[data-k="firstContact"]',el);dmask(fc);
+      const bi=K('birth'),fc=K('firstContact');dmask(bi);dmask(fc);
+      $('[data-bcal]',el).onclick=async e=>{const v=await pickDate(e.currentTarget,brToIso(bi.value)||'1990-01-01',null,true);if(v)bi.value=fmtD(v)};
       $('[data-fcal]',el).onclick=async e=>{const v=await pickDate(e.currentTarget,brToIso(fc.value)||today());if(v)fc.value=fmtD(v)};
-      const cep=$('[data-k="cep"]',el),adr=$('[data-k="address"]',el),cm=$('[data-cepmsg]',el);
+      const cpf=K('cpf');cpf.oninput=()=>{cpf.value=maskCPF(cpf.value)};
+      const ig=K('instagram');ig.onblur=()=>{const v=ig.value.trim().replace(/^https?:\/\/(www\.)?instagram\.com\//,'').replace(/[/?].*$/,'').replace(/^@?/,'');ig.value=v?'@'+v:''};
+      const cep=K('cep'),adr=K('address'),cm=$('[data-cepmsg]',el);
       cep.oninput=async()=>{cep.value=maskCEP(cep.value);const d=digits(cep.value);if(d.length!==8)return;cm.textContent='· buscando…';
         try{const r=await fetch(`https://viacep.com.br/ws/${d}/json/`);const j=await r.json();if(j.erro)throw 0;
-          adr.value=[j.logradouro,j.bairro,j.localidade&&`${j.localidade}/${j.uf}`].filter(Boolean).join(', ');cm.textContent='· preenchido pelo CEP';$('[data-k="addrNum"]',el).focus()}
+          adr.value=[j.logradouro,j.bairro,j.localidade&&`${j.localidade}/${j.uf}`].filter(Boolean).join(', ');cm.textContent='· preenchido pelo CEP';K('addrNum').focus()}
         catch(e){cm.textContent='· não encontrei o CEP, digite o endereço'}};
-      const srcIn=$('[data-k="source"]',el),srcBox=$('[data-src]',el);
-      const drawSrc=(adding)=>{const L=db.settings.sources||[];srcBox.innerHTML=L.map(o=>`<button type="button" class="chip ${srcIn.value===o?'on':''}" data-o="${esc(o)}">${esc(o)}</button>`).join('')+(adding?`<span class="chip chip-add-in"><input placeholder="Nova opção" maxlength="30"><button type="button" data-ok aria-label="Adicionar">${ic('check')}</button></span>`:`<button type="button" class="chip chip-add" data-add aria-label="Criar nova opção">${ic('plus')}</button>`);
-        if(adding){const inp=$('input',srcBox),ok=()=>{const v=inp.value.trim();if(v){if(!db.settings.sources.some(x=>norm(x)===norm(v)))db.settings.sources.push(v);srcIn.value=db.settings.sources.find(x=>norm(x)===norm(v));save()}drawSrc(false)};
-          inp.focus();inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();ok()}else if(e.key==='Escape'){e.stopPropagation();drawSrc(false)}};$('[data-ok]',srcBox).onclick=ok}};
-      srcBox.onclick=e=>{if(e.target.closest('[data-add]'))return drawSrc(true);const b=e.target.closest('[data-o]');if(b){srcIn.value=srcIn.value===b.dataset.o?'':b.dataset.o;drawSrc(false)}};
-      if(!db.settings.sources)db.settings.sources=defaults().settings.sources;drawSrc(false);
-      const sk=$('[data-k="skin"]',el);$('[data-skin]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;b.classList.toggle('on');sk.value=$$('[data-skin] .on',el).map(x=>x.dataset.v).join(', ')};
-      setTimeout(()=>$('[data-k="name"]',el).focus(),60);
-      $('[data-k="name"]',el).onkeydown=e=>{if(e.key==='Enter')$('[data-save]',el).click()};
+      // sexo
+      const gIn=K('gender'),dg=()=>$$('[data-gender] button',el).forEach(b=>b.classList.toggle('on',b.dataset.v===gIn.value));dg();
+      $('[data-gender]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){gIn.value=gIn.value===b.dataset.v?'':b.dataset.v;dg()}};
+      // como conheceu (+ quem indicou)
+      const srcIn=K('source'),refW=$('[data-refwrap]',el),showRef=()=>{refW.style.visibility=/indica/i.test(norm(srcIn.value))||K('referredBy').value?'visible':'hidden'};
+      if(!db.settings.sources)db.settings.sources=defaults().settings.sources;
+      chipPicker($('[data-src]',el),()=>db.settings.sources,v=>{db.settings.sources=v;save()},srcIn,false,showRef);showRef();
+      // múltiplas escolhas com +
+      if(!db.settings.conditions)db.settings.conditions=defaults().settings.conditions;
+      chipPicker($('[data-multi="skin"]',el),()=>SKINS,null,K('skin'),true);
+      chipPicker($('[data-multi="conditions"]',el),()=>db.settings.conditions,v=>{db.settings.conditions=v;save()},K('conditions'),true);
+      // fototipo
+      const ph=K('phototype'),dp=()=>{$$('[data-photo] .chip',el).forEach(b=>b.classList.toggle('on',b.dataset.v===ph.value));const x=PHOTO.find(z=>z[0]===ph.value);$('[data-photohint]',el).textContent=x?x[1]:''};dp();
+      $('[data-photo]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){ph.value=ph.value===b.dataset.v?'':b.dataset.v;dp()}};
+      // anexos
+      attachBox($('[data-att]',el),p.id,()=>atts,a=>{atts.push(a);added.push(a)},a=>{const i=atts.indexOf(a);if(i>-1)atts.splice(i,1);const j=added.indexOf(a);if(j>-1){added.splice(j,1);if(a.path)storageDel([a.path])}else (p._removed=p._removed||[]).push(a)});
+      setTimeout(()=>K('name').focus(),60);
+      K('name').onkeydown=e=>{if(e.key==='Enter')$('[data-save]',el).click()};
       $('[data-cancel]',el).onclick=m.close;
       $('[data-save]',el).onclick=()=>{
         $$('[data-k]',el).forEach(i=>p[i.dataset.k]=i.value.trim());
+        $$('[data-kb]',el).forEach(i=>p[i.dataset.kb]=i.checked);
+        if(!p.name){toast('O nome é obrigatório');K('name').focus();return}
         if(p.birth){const b=brToIso(p.birth);if(!b){toast('Data de nascimento inválida (use dd/mm/aaaa)');bi.focus();return}p.birth=b}
         if(p.firstContact){const b=brToIso(p.firstContact);if(!b){toast('Data do primeiro contato inválida (use dd/mm/aaaa)');fc.focus();return}p.firstContact=b}
         if(p.cpf&&!cpfOk(p.cpf)){toast('CPF inválido. Confira os números.');cpf.focus();return}
-        if(!p.name){toast('O nome é obrigatório');$('[data-k="name"]',el).focus();return}
-        if(ex)Object.assign(ex,p);else{p.id=uid();p.createdAt=Date.now();db.patients.push(p)}
+        if(!/indica/i.test(norm(p.source)))p.referredBy=p.referredBy||'';
+        const rem=p._removed||[];delete p._removed;if(rem.length)storageDel(rem.filter(a=>a.path).map(a=>a.path));
+        p.attachments=atts;saved=true;
+        if(ex)Object.assign(ex,p);else{p.createdAt=Date.now();db.patients.push(p)}
         m.close();changed();toast(ex?'Dados atualizados':'Paciente cadastrado');
         if(cb)cb(p.id);else if(!ex)openFolder(p.id);
       };
@@ -1668,7 +1789,7 @@ function openPatient(id,cb){
 }
 async function deletePatient(id){
   const p=P(id);if(!await confirmBox(`Excluir <b>${esc(p.name)}</b> e toda a pasta (consultas, orçamentos e retornos)? Essa ação não pode ser desfeita.`))return false;
-  db.patients=db.patients.filter(x=>x.id!==id);['appointments','budgets','returns'].forEach(k=>db[k]=db[k].filter(x=>x.patientId!==id));
+  storageDel((p.attachments||[]).filter(a=>a.path).map(a=>a.path));db.patients=db.patients.filter(x=>x.id!==id);['appointments','budgets','returns'].forEach(k=>db[k]=db[k].filter(x=>x.patientId!==id));
   changed();toast('Paciente excluído');return true;
 }
 function patientStats(id){
@@ -1718,14 +1839,22 @@ function openFolder(id,tab='hist'){
             ${x.notes?`<div class="small" style="margin-top:8px;color:var(--ink-2);white-space:pre-wrap">${esc(x.notes)}</div>`:''}</div>`}).join('')}</div>`:empty('clock','Sem atendimentos','Registre a primeira consulta desta paciente.');
         if(cur==='orc')body=B.length?`<div class="list">${B.map(b=>`<button class="item" data-eb="${b.id}">${ic('doc','style="width:20px;height:20px;opacity:.6"')}<div class="grow"><div class="t">${esc(procNames(b.items)||'Orçamento')}</div><div class="s">${fmtD(b.date)} · ${b.items.length} item(ns)</div></div><div style="text-align:right"><div class="price small">${money(calc(b).total)}</div>${badge(BST,b.status)}</div></button>`).join('')}</div>`:empty('doc','Sem orçamentos','Crie um orçamento para informar os valores.');
         if(cur==='ret')body=R.length?`<div class="list">${R.map(r=>`<div class="item"><span class="time">${fmtDM(r.date)}</span><div class="grow"><div class="t">${esc(r.note||'Retorno')}</div><div class="s">${fmtD(r.date)} · ${relDays(r.date)}</div></div>${badge(RST,r.status)}<button class="btn sm icon ghost" data-rm="${r.id}">${ic('more')}</button></div>`).join('')}</div>`:empty('ret','Sem retornos','Os retornos são criados ao salvar uma consulta.');
-        if(cur==='ficha')body=`<dl class="kv"><dt>Nome</dt><dd>${esc(p.name)}</dd><dt>WhatsApp</dt><dd>${esc(p.phone||'—')}</dd><dt>CPF</dt><dd>${esc(p.cpf||'—')}</dd><dt>Endereço</dt><dd>${esc([fullAddr(p),p.cep&&`CEP ${p.cep}`].filter(Boolean).join(' · ')||'—')}</dd><dt>Primeiro contato</dt><dd>${p.firstContact?fmtD(p.firstContact):'—'}</dd><dt>Como conheceu</dt><dd>${esc(p.source||'—')}</dd><dt>Nascimento</dt><dd>${p.birth?`${fmtD(p.birth)} (${a} anos)`:'—'}</dd><dt>E-mail</dt><dd>${esc(p.email||'—')}</dd><dt>Tipo de pele</dt><dd>${esc(p.skin||'—')}</dd><dt>Alergias</dt><dd>${esc(p.allergies||'—')}</dd><dt>Observações</dt><dd>${esc(p.notes||'—')}</dd><dt>Cliente desde</dt><dd>${p.createdAt?new Date(p.createdAt).toLocaleDateString('pt-BR'):'—'}</dd></dl>`;
-        $('[data-fb]',el).innerHTML=`<div class="f-head">${av(p.name,'lg')}<div style="flex:1;min-width:0"><h2>${esc(p.name)}</h2><div class="muted small">${[p.phone,a!==''?a+' anos':'',p.skin?'pele '+p.skin.toLowerCase():''].filter(Boolean).map(esc).join(' · ')||'Ficha básica'}</div></div>
+        if(cur==='docs')body='<div data-docs></div>';
+        if(cur==='ficha'){const row=(l,v)=>`<dt>${l}</dt><dd>${v?esc(v):'—'}</dd>`,yn=b=>b?'Sim':'Não';
+          body=`<div class="kv-sec">Dados pessoais</div><dl class="kv">${row('Nome',p.name)}${row('Prefere ser chamada',p.socialName)}${row('Sexo',GENDER[p.gender])}${row('Nascimento',p.birth?`${fmtD(p.birth)} (${a} anos)`:'')}${row('CPF',p.cpf)}${row('RG',p.rg)}${row('Profissão',p.profession)}</dl>
+          <div class="kv-sec">Contato</div><dl class="kv">${row('WhatsApp',p.phone)}${row('E-mail',p.email)}${row('Instagram',p.instagram)}${row('Emergência',[p.emergencyName,p.emergencyPhone].filter(Boolean).join(' · '))}${row('Endereço',[fullAddr(p),p.cep&&`CEP ${p.cep}`].filter(Boolean).join(' · '))}</dl>
+          <div class="kv-sec">Como chegou</div><dl class="kv">${row('Primeiro contato',p.firstContact?fmtD(p.firstContact):'')}${row('Como conheceu',p.source)}${p.referredBy?row('Quem indicou',p.referredBy):''}${row('Cliente desde',p.createdAt?new Date(p.createdAt).toLocaleDateString('pt-BR'):'')}</dl>
+          <div class="kv-sec">Saúde e pele</div><dl class="kv">${row('Tipo de pele',p.skin)}${row('Fototipo',p.phototype?(PHOTO.find(x=>x[0]===p.phototype)||[])[1]:'')}${row('Condições',p.conditions)}${row('Alergias',p.allergies)}${row('Medicamentos',p.meds)}</dl>
+          <div class="kv-sec">Consentimentos</div><dl class="kv">${row('Uso de imagem',yn(p.imageConsent))}${row('Termo LGPD',yn(p.lgpdConsent))}</dl>
+          <div class="kv-sec">Observações</div><dl class="kv"><dt>Notas</dt><dd>${esc(p.notes||'—')}</dd></dl>`}
+        $('[data-fb]',el).innerHTML=`<div class="f-head">${av(p.name,'lg')}<div style="flex:1;min-width:0"><h2>${esc(p.name)}</h2><div class="muted small">${[p.socialName&&`“${p.socialName}”`,p.phone,a!==''?a+' anos':'',GENDER[p.gender],p.phototype&&`fototipo ${p.phototype}`].filter(Boolean).map(esc).join(' · ')||'Ficha básica'}</div></div>
           <div class="row">${p.phone?`<a class="btn wa sm" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener">${ic('wa')}<span class="btn-label">WhatsApp</span></a>`:''}<button class="btn sm icon" data-pm>${ic('more')}</button></div></div>
-          ${p.allergies?`<div class="badge bad" style="margin-top:12px">⚠ ${esc(p.allergies)}</div>`:''}
+          ${p.allergies||p.conditions||p.meds?`<div class="row wrap" style="gap:6px;margin-top:12px">${p.allergies?`<span class="badge bad">⚠ Alergia: ${esc(p.allergies)}</span>`:''}${(p.conditions||'').split(/,\s*/).filter(Boolean).map(c=>`<span class="badge warn">${esc(c)}</span>`).join('')}${p.meds?`<span class="badge info">Usa: ${esc(p.meds)}</span>`:''}</div>`:''}
           ${(()=>{const d=dermInfo(id);return d?`<div class="derm-line ${d.st}">${ic('steth')}<span><b>Consulta dermatológica</b> · última em ${fmtD(d.last)} · válida até ${fmtD(d.renew)}${d.st!=='ok'?` · ${dermLabel(d)}`:''}</span>${badge(DST,d.st)}</div>`:''})()}
           <div class="f-stats"><div><small>Investido</small><b>${money(s.total)}</b></div><div><small>Atendimentos</small><b>${s.done.length}</b></div><div><small>Última visita</small><b>${s.last?fmtD(s.last):'—'}</b></div><div><small>Próx. retorno</small><b>${s.nextR?fmtD(s.nextR.date):'—'}</b></div></div>
-          <div class="seg" data-tabs style="margin-bottom:14px">${[['hist','Histórico'],['orc','Orçamentos'],['ret','Retornos'],['ficha','Ficha']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
+          <div class="seg" data-tabs style="margin-bottom:14px">${[['hist','Histórico'],['orc','Orçamentos'],['ret','Retornos'],['docs',`Documentos${(p.attachments||[]).length?' · '+p.attachments.length:''}`],['ficha','Ficha']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
           <div style="animation:viewIn .3s var(--ease)">${body}</div>`;
+        if(cur==='docs'){const pp=P(id);pp.attachments=pp.attachments||[];attachBox($('[data-docs]',el),id,()=>pp.attachments,a=>{pp.attachments.push(a);save();schedulePush()},a=>{pp.attachments.splice(pp.attachments.indexOf(a),1);if(a.path)storageDel([a.path]);save()})}
       };
       el.addEventListener('click',e=>{
         const t=e.target.closest('[data-t]');if(t){cur=t.dataset.t;draw();return}
@@ -1752,7 +1881,7 @@ INP.bq=el=>{S.bq=el.value;const pos=el.selectionStart;render();const n=$('[data-
 Object.assign(ACT,{bf:k=>{S.bf=k;render()},editBudget:id=>openBudget({id}),sendBudget:id=>sendBudget(id),
   budgetMenu:(id,a)=>{const b=db.budgets.find(x=>x.id===id);openMenu(a,[{label:'Converter em consulta',icon:'cal',fn:()=>budgetToAppt(b)},{label:'Enviar no WhatsApp',icon:'wa',fn:()=>sendBudget(id)},{label:'Imprimir / PDF',icon:'print',fn:()=>printBudget(b)},{label:'Abrir pasta do paciente',icon:'folder',fn:()=>openFolder(b.patientId,'orc')},{label:'Marcar como recusado',icon:'x',fn:()=>{b.status='recusado';changed()}},{label:'Excluir',icon:'trash',danger:true,fn:async()=>{if(await confirmBox('Excluir este orçamento?')){db.budgets=db.budgets.filter(x=>x!==b);changed()}}}])}});
 function budgetText(b){const p=P(b.patientId),c=calc(b),s=db.settings;
-  return`${fill(s.budgetIntro,{nome:first(p.name)})}\n\n${b.items.map(i=>`• ${i.name}${(+i.qty||1)>1?` (×${i.qty})`:''} — ${money(i.price*(i.qty||1))}`).join('\n')}\n\n${c.disc?`Subtotal: ${money(c.sub)}\nDesconto: − ${money(c.disc)}\n`:''}*Total: ${money(c.total)}*${b.validUntil?`\n\nVálido até ${fmtD(b.validUntil)}.`:''}${b.notes?`\n\n${b.notes}`:''}${s.clinic||s.doctor?`\n\n${[s.doctor,s.clinic].filter(Boolean).join(' · ')}`:''}`}
+  return`${fill(s.budgetIntro,{nome:p.socialName||first(p.name)})}\n\n${b.items.map(i=>`• ${i.name}${(+i.qty||1)>1?` (×${i.qty})`:''} — ${money(i.price*(i.qty||1))}`).join('\n')}\n\n${c.disc?`Subtotal: ${money(c.sub)}\nDesconto: − ${money(c.disc)}\n`:''}*Total: ${money(c.total)}*${b.validUntil?`\n\nVálido até ${fmtD(b.validUntil)}.`:''}${b.notes?`\n\n${b.notes}`:''}${s.clinic||s.doctor?`\n\n${[s.doctor,s.clinic].filter(Boolean).join(' · ')}`:''}`}
 async function sendBudget(id){const b=db.budgets.find(x=>x.id===id),p=P(b.patientId);if(!p.phone){toast('Paciente sem WhatsApp cadastrado');return}if(evoOn()){toast('Enviando orçamento…');try{await evoSend(p.phone,budgetText(b));toast(`Orçamento enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,budgetText(b)),'_blank');b.sentAt=today();save()}
 function budgetToAppt(b){openAppt({patientId:b.patientId,items:clone(b.items),discountType:b.discountType,discountValue:b.discountValue,budgetId:b.id,date:today(),notes:b.notes})}
 function printBudget(b){const p=P(b.patientId),c=calc(b),s=db.settings,w=window.open('','_blank');if(!w){toast('Permita pop-ups para imprimir');return}
@@ -1806,7 +1935,7 @@ function openBudget(o={}){
 /* ================= RETORNOS ================= */
 function retList(){return S.retMode==='late'?lateReturns():returnsOfMonth(S.retMonth)}
 function ensureSel(L){const k=S.retMode+'|'+S.retMonth;if(S.retSelKey!==k||!S.retSel){S.retSelKey=k;S.retSel=new Set(L.filter(r=>P(r.patientId).phone).map(r=>r.id))}}
-function retVars(r){const p=P(r.patientId),s=db.settings;return{nome:first(p.name),nome_completo:p.name,data:fmtD(r.date),mes:mName(mKey(r.date)),procedimento:r.note||'seu procedimento',clinica:s.clinic||'nossa clínica',doutora:s.doctor||''}}
+function retVars(r){const p=P(r.patientId),s=db.settings;return{nome:p.socialName||first(p.name),nome_completo:p.name,data:fmtD(r.date),mes:mName(mKey(r.date)),procedimento:r.note||'seu procedimento',clinica:s.clinic||'nossa clínica',doutora:s.doctor||''}}
 function vRetornos(){
   const L=retList();ensureSel(L);const t=mKey(today()),n=mShift(t,1),late=lateReturns().length;
   const withPhone=L.filter(r=>P(r.patientId).phone),sel=L.filter(r=>S.retSel.has(r.id)).length;
@@ -1988,7 +2117,9 @@ function seedDemo(){
   N.forEach((n,i)=>{
     const p={id:uid(),name:n,phone:i===6?'':maskPhone(`119${String(87654321-i*1234567).slice(0,8)}`),skin:['Mista','Seca','Oleosa','Sensível','Normal'][i%5],createdAt:Date.now()-back[i]*30*864e5,
       firstContact:addDays(addMonths(t,-back[i]),-7),source:['Instagram','Indicação','Google'][i%3],cpf:i%2?'':demoCPF(i),
-      cep:i===0?'01310-100':'',address:i===0?'Avenida Paulista, Bela Vista, São Paulo/SP':'',addrNum:i===0?'1000':''};db.patients.push(p);
+      cep:i===0?'01310-100':'',address:i===0?'Avenida Paulista, Bela Vista, São Paulo/SP':'',addrNum:i===0?'1000':'',gender:i===9?'M':'F',phototype:['II','III','IV','III','II'][i%5],
+      profession:['Advogada','Arquiteta','Professora','Empresária','Enfermeira'][i%5],instagram:i%2?'':'@'+norm(n.split(' ')[0]),imageConsent:i%3!==2,lgpdConsent:true,
+      conditions:i===2?'Tendência a queloide':i===4?'Hipertensão':'',meds:i===2?'Anticoncepcional':'',socialName:i===0?'Bia':'',referredBy:i%3===1?'Carla Mendes':''};if(i===9)p.name='Bruno Nogueira';db.patients.push(p);
     const d=addDays(addMonths(t,-back[i]),(i*3)%9-3),it=[pr[i%pr.length]].concat(i%4===0?[pr[(i+3)%pr.length]]:[]).map(x=>({procId:x.id,name:x.name,price:x.price,qty:1}));
     const a={id:uid(),patientId:p.id,date:d,time:`${pad(9+i%8)}:${i%2?'30':'00'}`,status:'realizada',items:it,discountType:'pct',discountValue:i%3===0?10:0,notes:i%3===1?'Pele respondeu bem. Indicado protetor solar FPS 50.':'',createdAt:Date.now()};db.appointments.push(a);
     const rm=back[i]>=4?6:3;db.returns.push({id:uid(),patientId:p.id,date:addMonths(d,rm),note:procNames(it),status:'pendente',apptId:a.id,createdAt:Date.now()});
