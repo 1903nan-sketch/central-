@@ -857,6 +857,40 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .ds-hint{font-size:12px;color:var(--ink-3);text-align:center;margin-top:14px}
 @media (min-width:861px){.ds-hint{display:none}}
 @media (max-width:860px){:root .cal-head{flex-wrap:wrap;gap:10px}:root .cal-head h2{font-size:22px}:root .card{padding:16px}.agenda-grid,.agenda-grid>*{min-width:0}.cal-week div{font-size:11px}}
+/* ===== encaixe automático em qualquer celular ===== */
+@media (max-width:860px){
+  :root .seg{display:flex;flex-wrap:wrap;width:100%;border-radius:18px;row-gap:2px}
+  :root .seg button{flex:1 1 auto;padding:0 10px;min-width:0}
+  :root .seg button.on{border-radius:16px}
+  .hide-sm{display:none!important}
+  :root .item .grow,:root .item .t,:root .item .s{min-width:0}
+  :root .item>div:not(.grow){flex:none}
+  :root .topbar .actions{flex-wrap:wrap}
+  :root .stats .stat{min-width:0;padding:14px}
+  :root .grid2>*,:root .grid3>*,:root .stack>*{min-width:0}
+}
+@media (max-width:400px){
+  :root .ritem .avatar,:root .tlist .item .avatar{display:none}
+  :root .list .item+.item::before{left:14px}
+  :root .item .badge{font-size:11px;padding:2px 7px}
+  :root .stats .stat .val{font-size:22px}
+  :root .stats .stat .lbl{font-size:11.5px}
+  :root .topbar h1{font-size:27px}
+  :root .daypanel .bigday b{font-size:54px}
+  :root .ds-title b{font-size:44px}
+  :root .ds-nav .btn{width:32px;height:32px}
+  :root .m-head,:root .m-body,:root .m-foot{padding-left:16px;padding-right:16px}
+  :root .spot-trigger span{font-size:14px}
+}
+@media (max-width:400px){
+  :root .tlist .item,:root .ritem{flex-wrap:wrap;row-gap:6px}
+  :root .tlist .item .grow{flex:1 1 100%}
+  :root .tlist .item [data-act="budgetMenu"],:root .ritem [data-act="rmenu"]{margin-left:auto}
+  :root .ritem .grow{flex:1 1 calc(100% - 44px)}
+  :root .ritem .badge{margin-left:34px}
+  :root .rbar .small{white-space:nowrap}
+  :root .rbar{padding:8px 8px 8px 14px}
+}
 </style>
 </head>
 <body>
@@ -1569,7 +1603,7 @@ function vOrcamentos(){
   return topbar('Orçamentos','Monte os valores, aplique desconto e envie pelo WhatsApp.',`<button class="btn dark" data-act="newBudget">${ic('plus')}Novo orçamento</button>`)+
   `<div class="stats glass" style="grid-template-columns:repeat(3,1fr)"><div class="stat"><span class="lbl">Em aberto</span><span class="val">${open.length}</span><span class="sub">${money(open.reduce((s,b)=>s+calc(b).total,0))}</span></div><div class="stat"><span class="lbl">Aprovados</span><span class="val">${conv.length}</span><span class="sub">${money(conv.reduce((s,b)=>s+calc(b).total,0))}</span></div><div class="stat"><span class="lbl">Conversão</span><span class="val">${db.budgets.length?Math.round(conv.length/db.budgets.length*100):0}%</span><span class="sub">orçamentos aprovados</span></div></div>
   <div class="row wrap" style="margin-bottom:14px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar paciente..." data-inp="bq" value="${esc(S.bq)}"></div><div class="seg">${[['todos','Todos'],['aberto','Em aberto'],['aprovado','Aprovados'],['recusado','Recusados']].map(([k,l])=>`<button class="${S.bf===k?'on':''}" data-act="bf" data-id="${k}">${l}</button>`).join('')}</div></div>
-  <div class="glass card tlist">${L.length?`<div class="list">${L.map(b=>{const p=P(b.patientId),c=calc(b);const exp=b.validUntil&&b.validUntil<today()&&b.status==='aberto';return`<div class="item click" data-act="editBudget" data-id="${b.id}">${av(p?.name)}<div class="grow"><div class="t">${esc(p?.name||'—')}</div><div class="s">${fmtD(b.date)} · ${esc(procNames(b.items)||'sem itens')}</div></div><div style="text-align:right"><div class="price">${c.disc?`<span class="strike">${money(c.sub)}</span> `:''}${money(c.total)}</div>${exp?'<span class="badge">Vencido</span>':badge(BST,b.status)}</div>${p?.phone?`<button class="btn sm icon" data-act="sendBudget" data-id="${b.id}" title="Enviar no WhatsApp">${ic('wa')}</button>`:''}<button class="btn sm icon ghost" data-act="budgetMenu" data-id="${b.id}">${ic('more')}</button></div>`}).join('')}</div>`:empty('doc','Nenhum orçamento','Crie orçamentos para saber valores antes de agendar.',`<button class="btn dark" data-act="newBudget">${ic('plus')}Criar orçamento</button>`)}</div>`;
+  <div class="glass card tlist">${L.length?`<div class="list">${L.map(b=>{const p=P(b.patientId),c=calc(b);const exp=b.validUntil&&b.validUntil<today()&&b.status==='aberto';return`<div class="item click" data-act="editBudget" data-id="${b.id}">${av(p?.name)}<div class="grow"><div class="t">${esc(p?.name||'—')}</div><div class="s">${fmtD(b.date)} · ${esc(procNames(b.items)||'sem itens')}</div></div><div style="text-align:right"><div class="price">${c.disc?`<span class="strike">${money(c.sub)}</span> `:''}${money(c.total)}</div>${exp?'<span class="badge">Vencido</span>':badge(BST,b.status)}</div>${p?.phone?`<button class="btn sm icon hide-sm" data-act="sendBudget" data-id="${b.id}" title="Enviar no WhatsApp">${ic('wa')}</button>`:''}<button class="btn sm icon ghost" data-act="budgetMenu" data-id="${b.id}">${ic('more')}</button></div>`}).join('')}</div>`:empty('doc','Nenhum orçamento','Crie orçamentos para saber valores antes de agendar.',`<button class="btn dark" data-act="newBudget">${ic('plus')}Criar orçamento</button>`)}</div>`;
 }
 INP.bq=el=>{S.bq=el.value;const pos=el.selectionStart;render();const n=$('[data-inp="bq"]');n.focus();n.setSelectionRange(pos,pos)};
 Object.assign(ACT,{bf:k=>{S.bf=k;render()},editBudget:id=>openBudget({id}),sendBudget:id=>sendBudget(id),
