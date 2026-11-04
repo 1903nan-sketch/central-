@@ -544,6 +544,47 @@ button:focus-visible,a:focus-visible,.pcard:focus-visible,.day:focus-visible,sum
 .in:focus-visible{outline:none}
 .price,.time,.stat .val,.totals,.f-stats b,.day .n,.pill,.dp-g button,.tp-grid button,.ie-row .in,.badge{font-variant-numeric:tabular-nums}
 @media (max-width:860px){.btn.sm{height:40px;padding:0 14px}.btn.sm.icon{width:40px}.chip{height:38px}}
+
+/* ================= BOLDER (impeccable) — vidro de verdade, luz e ondas ================= */
+/* fundo: esculturas de luz em grafite e branco para o vidro ter o que desfocar */
+.bg{background:linear-gradient(160deg,#e8eaed 0%,#dcdfe4 55%,#e4e6e9 100%)}
+.bg i{filter:blur(64px);opacity:1}
+.bg i:nth-child(1){width:52vw;height:52vw;left:-12vw;top:-18vw;background:radial-gradient(circle at 40% 40%,#ffffff 0%,#f7f8fa 45%,rgba(247,248,250,0) 72%)}
+.bg i:nth-child(2){width:46vw;height:46vw;right:-10vw;top:14vh;background:radial-gradient(circle at 45% 45%,#9ea6b1 0%,#b4bbc4 40%,rgba(180,187,196,0) 72%)}
+.bg i:nth-child(3){width:40vw;height:40vw;left:24vw;bottom:-20vw;background:radial-gradient(circle,#bfc5cd 0%,rgba(191,197,205,0) 70%)}
+.bg i:nth-child(4){width:30vw;height:30vw;left:46vw;top:-6vw;background:radial-gradient(circle,#ffffff 0%,rgba(255,255,255,0) 70%);opacity:.9}
+.bg::before{width:1400px;height:1400px;right:-520px;top:-560px;background:repeating-radial-gradient(circle,rgba(40,45,55,0) 0 44px,rgba(40,45,55,.085) 45px 46px);mask:radial-gradient(circle,#000 22%,transparent 68%);-webkit-mask:radial-gradient(circle,#000 22%,transparent 68%)}
+/* vidro: translúcido, com reflexo diagonal e borda iluminada */
+.glass{background:linear-gradient(115deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 42%),linear-gradient(150deg,rgba(255,255,255,.55),rgba(255,255,255,.2));
+  backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.18),0 28px 60px -32px rgba(25,32,48,.42),0 2px 10px -6px rgba(25,32,48,.12)}
+.item,.tl-i,.f-stats div,.pcard .meta div,.totals,.box,.ie-row{background:rgba(255,255,255,.42);border-color:rgba(255,255,255,.7)}
+button.item:hover,.item.click:hover{background:rgba(255,255,255,.78)}
+.day:hover{background:rgba(255,255,255,.35)}
+.day.sel{background:linear-gradient(115deg,rgba(255,255,255,.9),rgba(255,255,255,.45));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 #fff,0 18px 34px -16px rgba(25,32,48,.4)}
+/* números: o traço tipográfico do app em força total */
+.stats .stat .val{font-size:46px;font-weight:200;letter-spacing:-1.5px}
+.daypanel .bigday b{font-size:118px;font-weight:200;letter-spacing:-5px;line-height:.78}
+.daypanel .bigday{margin:4px 0 22px;gap:16px}
+.topbar h1{font-size:48px;font-weight:300;letter-spacing:-1px}
+.cal-head h2{font-size:34px;font-weight:300}
+.day .n{font-size:17px;font-weight:300}
+.day.today .n{font-weight:500}
+/* menu lateral: item ativo como uma pérola de vidro */
+.side .nav.on{background:linear-gradient(160deg,#3c4049,#1d2025);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 14px 28px -12px rgba(15,18,24,.7)}
+/* modo escuro: luz grafite sobre preto para o vidro aparecer */
+[data-theme="dark"] .bg{background:linear-gradient(160deg,#121417 0%,#0c0d10 55%,#111316 100%)}
+[data-theme="dark"] .bg i:nth-child(1){background:radial-gradient(circle at 40% 40%,#3b4048 0%,#2a2e34 45%,rgba(42,46,52,0) 72%)}
+[data-theme="dark"] .bg i:nth-child(2){background:radial-gradient(circle at 45% 45%,#565d68 0%,#3a3f47 40%,rgba(58,63,71,0) 72%);opacity:.75}
+[data-theme="dark"] .bg i:nth-child(3){background:radial-gradient(circle,#2f343b 0%,rgba(47,52,59,0) 70%)}
+[data-theme="dark"] .bg i:nth-child(4){background:radial-gradient(circle,#4a505a 0%,rgba(74,80,90,0) 70%);opacity:.6}
+[data-theme="dark"] .bg::before{background:repeating-radial-gradient(circle,rgba(255,255,255,0) 0 44px,rgba(255,255,255,.055) 45px 46px)}
+[data-theme="dark"] .glass{background:linear-gradient(115deg,rgba(255,255,255,.09) 0%,rgba(255,255,255,0) 42%),linear-gradient(150deg,rgba(60,65,74,.5),rgba(22,25,29,.42));border-color:rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 28px 60px -30px rgba(0,0,0,.85)}
+[data-theme="dark"] .item,[data-theme="dark"] .tl-i,[data-theme="dark"] .f-stats div,[data-theme="dark"] .pcard .meta div,[data-theme="dark"] .totals,[data-theme="dark"] .box,[data-theme="dark"] .ie-row{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.07)}
+[data-theme="dark"] .day.sel{background:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 18px 34px -16px rgba(0,0,0,.8)}
+[data-theme="dark"] .side .nav.on{background:linear-gradient(160deg,#fbfbfc,#cfd3d9);box-shadow:inset 0 1px 0 #fff,0 14px 28px -12px rgba(0,0,0,.8)}
+@media (max-width:860px){.topbar h1{font-size:36px}.stats .stat .val{font-size:32px}.daypanel .bigday b{font-size:88px}.bg i:nth-child(2){width:80vw;height:80vw;right:-30vw;top:30vh}}
 </style>
 </head>
 <body>
