@@ -510,6 +510,14 @@ body.locked .auth{display:grid;position:fixed;inset:0;z-index:30;place-items:cen
 .theme-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink-3);margin:auto auto 12px;flex:none;transition:background .2s,color .2s}
 .theme-btn:hover{background:var(--soft);color:var(--ink)}.theme-btn svg{width:19px;height:19px}
 html{transition:background-color .3s}.theme-btn+.side-foot{margin-top:0}
+.gear-btn{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin:0 auto;color:var(--ink-2);background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px rgba(30,35,45,.07);transition:background .2s,color .2s,transform .3s var(--ease)}
+.gear-btn svg{width:21px;height:21px;transition:transform .5s var(--ease)}
+.gear-btn:hover{background:#fff;color:var(--ink)}.gear-btn:hover svg{transform:rotate(60deg)}
+.gear-btn.on{background:var(--accent);color:#fff;box-shadow:0 10px 24px -10px rgba(20,22,28,.6)}
+[data-theme="dark"] .gear-btn{background:rgba(255,255,255,.07);box-shadow:none}
+[data-theme="dark"] .gear-btn:hover{background:rgba(255,255,255,.13)}
+[data-theme="dark"] .gear-btn.on{background:linear-gradient(180deg,#f5f6f8,#d3d7dd);color:var(--accent-ink)}
+.side-foot .sync{top:0;left:calc(50% + 12px)}
 </style>
 </head>
 <body>
@@ -569,6 +577,7 @@ print:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2
 swap:'<path d="M7 16V4M3 8l4-4 4 4M17 8v12M21 16l-4 4-4-4"/>',
 spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>',
 copy:'<rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
 moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
 sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
@@ -810,9 +819,9 @@ function pickDate(anchor,val,quick,yearFirst){return new Promise(res=>{
 
 /* ================= shell / navegação ================= */
 const NAV=[['agenda','Agenda','cal','Agenda'],['pacientes','Pacientes','users','Pacientes'],['orcamentos','Orçamentos','doc','Orçam.'],['retornos','Retornos','ret','Retornos'],['procedimentos','Procedimentos','tag','Proced.'],['ajustes','Ajustes','cog','Ajustes']];
-function navHTML(mob){const n=pendingCount();return NAV.map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}
+function navHTML(mob){const n=pendingCount();return NAV.filter(([k])=>mob||k!=='ajustes').map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}
 function renderShell(){
-  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<button class="theme-btn" data-theme-toggle title="${document.documentElement.dataset.theme==='dark'?'Modo claro':'Modo escuro'}">${ic(document.documentElement.dataset.theme==='dark'?'sun':'moon')}</button><div class="side-foot" title="${esc(db.settings.doctor||'')}"><i id="syncDot" class="sync ${cloud.state}"></i><div class="who" data-nav="ajustes">${esc(initials(db.settings.doctor.replace(/^dra?\.?\s*/i,''))||'—')}</div></div>`;
+  $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc((db.settings.clinic||'Lumière').trim().charAt(0).toUpperCase())}</div><div><b>Lumière</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<button class="theme-btn" data-theme-toggle title="${document.documentElement.dataset.theme==='dark'?'Modo claro':'Modo escuro'}">${ic(document.documentElement.dataset.theme==='dark'?'sun':'moon')}</button><div class="side-foot"><i id="syncDot" class="sync ${cloud.state}"></i><button class="gear-btn ${S.view==='ajustes'?'on':''}" data-nav="ajustes" title="Ajustes" aria-label="Ajustes">${ic('gear')}</button></div>`;
   $('#tabbar').innerHTML=navHTML(true);
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav);if(e.target.closest('[data-theme-toggle]'))setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
