@@ -17,12 +17,20 @@ Abra o `index.html` no navegador ou publique a pasta em qualquer hospedagem est�
 > Os dados ficam salvos no navegador do aparelho. Faça backups em **Ajustes → Exportar backup**.
 
 ## WhatsApp automático com Evolution API (Railway)
-1. No painel do Railway, abra o serviço da Evolution → **Variables** e confira:
-   - `CORS_ORIGIN` = `*` (ou o endereço onde o Lumière está publicado);
-   - `AUTHENTICATION_API_KEY` = sua chave global (usada só para criar a instância).
-2. Em **Settings → Networking**, gere o domínio público (ex.: `https://evolution-xxxx.up.railway.app`).
-3. Crie uma instância pelo Manager da Evolution (`https://SEU-DOMINIO/manager`) e copie o **token da instância**.
-4. No Lumière, vá em **Ajustes → WhatsApp automático** e preencha a URL, o nome da instância e o token. Depois clique em **Conectar (QR Code)** e escaneie com o WhatsApp da clínica.
-5. Clique em **Testar conexão** e em **Enviar teste para mim**.
+A configuração fica **no código**, e a doutora não vê nada técnico. No início do `<script>` do `index.html`, preencha:
 
-Com isso, o disparo de retornos, os orçamentos e o resumo mensal passam a ser enviados direto, com um intervalo entre as mensagens para proteger o número.
+```js
+const EVOLUTION={
+  url:'https://evolution-production-xxxx.up.railway.app',
+  instancia:'clinica',
+  token:'TOKEN-DA-INSTANCIA',
+  intervalo:8
+};
+```
+
+- No Railway, a variável `CORS_ORIGIN` da Evolution precisa ser `*`.
+- Conecte o WhatsApp da clínica pelo QR Code no Manager da Evolution (`https://SEU-DOMINIO/manager`).
+- Com a `url` vazia, o sistema usa o modo manual: abre o WhatsApp com a mensagem pronta.
+- Com a Evolution preenchida, retornos, orçamentos e o resumo mensal da doutora são enviados automaticamente.
+
+> ⚠️ O token fica visível no código da página. Use sempre o **token da instância** (nunca a chave global) e não divulgue o link do sistema.
