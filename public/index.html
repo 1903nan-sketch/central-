@@ -254,7 +254,7 @@ button.item:hover,.item.click:hover{background:rgba(255,255,255,.92);box-shadow:
 .overlay.closing{animation:fadeOut .2s var(--ease) forwards}
 @keyframes fade{from{opacity:0}} @keyframes fadeOut{to{opacity:0}}
 .modal{width:min(620px,100%);max-height:min(88dvh,900px);display:flex;flex-direction:column;background:rgba(255,255,255,.78);backdrop-filter:saturate(170%) blur(30px);-webkit-backdrop-filter:saturate(170%) blur(30px);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:var(--shadow-lg);animation:pop .35s var(--ease);overflow:hidden}
-.modal.lg{width:min(880px,100%)}
+.modal.lg{width:min(880px,100%)}.modal.xl{width:min(1180px,100%)}
 .modal.sm{width:min(420px,100%)}
 .closing .modal{animation:popOut .2s var(--ease) forwards}
 @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}}
@@ -1049,7 +1049,41 @@ html{background:var(--bg)}
 .cstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.cstats div{display:flex;flex-direction:column}.cstats b{font-size:20px;letter-spacing:-.02em}.cstats small{font-size:11.5px;color:var(--ink-3)}
 .cp-t{margin:0;font-size:22px;letter-spacing:-.02em}
 .rep{padding:12px 14px;border-radius:16px;background:var(--cell,#fff);box-shadow:0 0 0 .5px var(--line)}
-.pv-n{font-size:17px}.pv-tools{gap:8px;margin-top:14px}.pv-q{flex:1 1 220px;position:relative;display:flex;align-items:center}.pv-q svg{position:absolute;left:12px;width:16px;height:16px;opacity:.5;pointer-events:none}.pv-q .in{padding-left:36px;width:100%}
+.pv-n{font-size:17px}.f-kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:6px}.f-kv small{display:block;font-size:11.5px;color:var(--ink-3)}.f-kv b{font-size:14px;font-weight:600}
+.lgpd{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:12px;color:var(--ink-3)}.lgpd svg{width:13px;height:13px}.lgpd.ok{color:#15803d}
+.fav{width:30px;height:30px;border-radius:15px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-4)}.fav svg{width:19px;height:19px}.fav.on{color:#f59e0b}.fav.on svg{fill:#f59e0b}
+.pr-tools{display:flex;gap:18px;flex-wrap:wrap;padding:12px 14px;border-radius:18px;background:var(--glass-2);border:.5px solid var(--line);margin-bottom:16px}
+.pr-tools small{display:block;font-size:11.5px;color:var(--ink-3);margin-bottom:5px}.tgroup{display:flex;gap:6px;flex-wrap:wrap}.tgroup .btn{height:36px;padding:0 11px;font-size:13px}.tgroup .btn svg{width:16px;height:16px}
+.pr-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.pr-h{display:flex;align-items:center;gap:10px;margin:2px 0 10px}.pr-h h3{margin:0;font-size:16px;font-weight:600}
+.pr-box{background:var(--glass-2);border:.5px solid var(--line);border-radius:16px;padding:12px;margin-bottom:16px}
+.pr-box .item.sel{background:var(--cellfill)}
+.radio{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;cursor:pointer}.radio input{accent-color:#007aff;width:16px;height:16px}
+.ptag{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 6px 0 11px;border-radius:14px;background:rgba(0,122,255,.1);color:#0a58ca;font-size:12.5px;font-weight:600}.ptag button{width:18px;height:18px;border-radius:9px;font-size:10px;color:inherit;opacity:.6}.ptag button:hover{opacity:1;background:rgba(0,0,0,.06)}
+:root[data-theme="dark"] .ptag{background:rgba(10,132,255,.2);color:#7cb8ff}
+.ev-day{display:flex;align-items:baseline;gap:12px;padding:10px 4px 8px;border-bottom:3px solid var(--line);margin:6px 0 12px}.ev-day b{font-size:20px;font-weight:700}.ev-day span{font-size:13px;color:var(--ink-2)}
+.ev-card{background:var(--glass-3);border:.5px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px}
+.ev-card.pinned{border-color:rgba(245,158,11,.5);box-shadow:inset 3px 0 0 #f59e0b}
+.ev-card header{display:flex;align-items:center;gap:10px}.ev-card header b{display:block;font-size:14.5px}.ev-card header small{color:var(--ink-3);font-size:12px}
+.ev-card header .btn.on{color:#f59e0b}
+.ev-type{display:flex;align-items:center;gap:7px;margin:12px 0 6px;font-weight:600;font-size:14.5px}.ev-type svg{width:17px;height:17px}.ev-type .badge{margin-left:4px}
+.ev-text{white-space:pre-wrap;font-size:14px;line-height:1.55;color:var(--ink-2);overflow-wrap:anywhere}
+@media (max-width:900px){.pr-grid{grid-template-columns:1fr}.pr-tools{gap:10px;padding:10px 12px}.tgroup .btn{height:34px;padding:0 10px;font-size:12.5px}}
+.pl{padding:6px 0;overflow:hidden}
+.pl-h,.pl-r{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,.9fr) 124px;gap:14px;align-items:center;padding:0 18px}
+.pl-h{height:42px;font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);border-bottom:.5px solid var(--line)}
+.pl-r{min-height:66px;padding-top:9px;padding-bottom:9px;border-bottom:.5px solid var(--line);cursor:pointer;transition:background .15s}.pl-r:last-child{border-bottom:0}.pl-r:hover{background:var(--cellfill)}
+.pl-p{display:flex;align-items:center;gap:12px;min-width:0}.pl-p .grow{min-width:0}
+.pl-n{font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px}.pl-fav svg{width:13px;height:13px;fill:#f59e0b;color:#f59e0b}
+.pl-s{font-size:12.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-c{font-size:13.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pl-c small{display:block;font-size:12px;color:var(--ink-3)}
+.pl-a{display:flex;gap:6px;justify-content:flex-end}
+.pl-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}.ptag.sm{height:20px;padding:0 8px;font-size:11px}
+.pl .match{margin-top:4px}
+.pl-a .fav{color:var(--ink-4)}.pl-a .fav.on{color:#f59e0b}.pl-a .fav.on svg{fill:#f59e0b}.fchip.fav-f.on{color:#b45309}.fchip.fav-f.on svg{fill:#f59e0b;color:#f59e0b}
+@media (max-width:900px){.pl-h{display:none}.pl-r{grid-template-columns:1fr auto;gap:4px 10px;padding:12px 14px}.pl-p{grid-column:1/2}.pl-a{grid-column:2;grid-row:1}
+  .pl-c{grid-column:1/-1;padding-left:52px;font-size:12.5px;color:var(--ink-2)}.pl-c:before{content:attr(data-l)': ';color:var(--ink-3)}.pl-c small{display:inline;margin-left:6px}.pl-c:has(.muted:only-child){display:none}}
+.pv-tools{gap:8px;margin-top:14px}.pv-q{flex:1 1 220px;position:relative;display:flex;align-items:center}.pv-q svg{position:absolute;left:12px;width:16px;height:16px;opacity:.5;pointer-events:none}.pv-q .in{padding-left:36px;width:100%}
 .pv-list{max-height:280px;margin-top:12px;display:flex;flex-direction:column;border-top:.5px solid var(--line)}
 .pv-it{display:flex;align-items:center;gap:12px;padding:9px 2px;border-bottom:.5px solid var(--line);cursor:pointer}.pv-it .grow{display:flex;flex-direction:column;min-width:0}.pv-it small{color:var(--ink-3);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .proc-link{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left}.proc-link span:first-child{display:flex;align-items:center;gap:8px}.proc-link svg{width:18px;height:18px}
@@ -1075,7 +1109,7 @@ function applyTheme(){const p=themePref(),t=p==='auto'?(darkMQ.matches?'dark':'l
 function setTheme(p){try{localStorage.setItem(THEME_KEY,p)}catch(e){}applyTheme();if(typeof render==='function'&&!document.body.classList.contains('locked'))render()}
 applyTheme();darkMQ.addEventListener&&darkMQ.addEventListener('change',()=>{if(themePref()==='auto'){applyTheme();renderShell&&renderShell()}});
 /* ================= ícones ================= */
-const I={
+const I={pin:'<path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"/><path d="M12 14v6"/>',star:'<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8L3.5 9.7l5.9-.9z"/>',shield:'<path d="M12 3 5 6v5c0 4.4 3 8.3 7 9.5 4-1.2 7-5.1 7-9.5V6z"/>',
 cal:'<rect x="3" y="4.5" width="18" height="17" rx="4"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/>',
 users:'<circle cx="9" cy="8" r="3.6"/><path d="M2.5 20.5c0-3.7 2.9-6.5 6.5-6.5s6.5 2.8 6.5 6.5"/><path d="M16 4.6a3.6 3.6 0 0 1 0 6.8M21.5 20.5c0-2.8-1.6-5-4-6"/>',
 doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
@@ -1148,7 +1182,7 @@ const waNum=s=>{let d=digits(s);if(!d)return'';if(d.length<=11)d='55'+d;return d
 const waLink=(phone,text)=>`https://wa.me/${waNum(phone)}?text=${encodeURIComponent(text)}`;
 const maskCPF=v=>{const d=digits(v).slice(0,11);return d.length>9?`${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`:d.length>6?`${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6)}`:d.length>3?`${d.slice(0,3)}.${d.slice(3)}`:d};
 const cpfOk=v=>{const d=digits(v);if(d.length!==11||/^(\d)\1+$/.test(d))return false;const dv=n=>{let t=0;for(let i=0;i<n;i++)t+=+d[i]*(n+1-i);const r=t*10%11;return r===10?0:r};return dv(9)===+d[9]&&dv(10)===+d[10]};
-const fullAddr=p=>{const a=(p.address||'').split(', ').filter(Boolean);if(p.addrNum)a.splice(a.length?1:0,0,p.addrNum);return a.join(', ')};
+const fullAddr=p=>{const a=(p.address||'').split(', ').filter(Boolean);const n=[p.addrNum,p.addrCompl].filter(Boolean).join(' ');if(n)a.splice(a.length?1:0,0,n);return a.join(', ')};
 const maskCEP=v=>{const d=digits(v).slice(0,8);return d.length>5?`${d.slice(0,5)}-${d.slice(5)}`:d};
 const PHOTO=[['I','Tipo I: pele muito clara, sempre queima, nunca bronzeia'],['II','Tipo II: pele clara, queima fácil, bronzeia pouco'],['III','Tipo III: pele morena clara, queima às vezes, bronzeia gradualmente'],['IV','Tipo IV: pele morena, raramente queima, bronzeia fácil'],['V','Tipo V: pele morena escura, muito raramente queima'],['VI','Tipo VI: pele negra, nunca queima']];
 const GENDER={F:'Feminino',M:'Masculino',O:'Outro'};
@@ -1170,7 +1204,7 @@ const defaults=()=>({
     dermTemplate:'Olá, {nome}! ✨\n\nSua consulta dermatológica completa 6 meses em {data}. Para manter o acompanhamento da sua pele em dia, vamos agendar a renovação?\n\n{doutora}\n{clinica}'}
 });
 let memoryOnly=false;
-const withDefaults=d=>{const def=defaults();const r={...def,...d,settings:{...def.settings,...((d&&d.settings)||{})}};(r.procedures||[]).forEach(x=>{if(!x.cat)x.cat=x.kind==='consulta'?'clinica':'estetica'});if(!r.messages)r.messages=[];if(d&&!(d.settings&&d.settings.dermSeeded)){if(!r.procedures.some(x=>x.kind==='consulta'))r.procedures.unshift({id:uid(),name:'Consulta dermatológica',price:350,duration:40,kind:'consulta'});r.settings.dermSeeded=true}return r};
+const withDefaults=d=>{const def=defaults();const r={...def,...d,settings:{...def.settings,...((d&&d.settings)||{})}};if(!r.evolutions)r.evolutions=[];if(!r.settings.tags)r.settings.tags=['Alergia','Paciente VIP','Gestante','Pele sensível'];(r.procedures||[]).forEach(x=>{if(!x.cat)x.cat=x.kind==='consulta'?'clinica':'estetica'});if(!r.messages)r.messages=[];if(d&&!(d.settings&&d.settings.dermSeeded)){if(!r.procedures.some(x=>x.kind==='consulta'))r.procedures.unshift({id:uid(),name:'Consulta dermatológica',price:350,duration:40,kind:'consulta'});r.settings.dermSeeded=true}return r};
 const localKey=()=>KEY+':'+(session?session.user.id:'anon');
 function readLocal(k){try{const raw=localStorage.getItem(k);return raw?withDefaults(JSON.parse(raw)):null}catch(e){memoryOnly=true;return null}}
 let db=defaults(),saveT;
@@ -1533,6 +1567,10 @@ function dayHTML(){
   </div>`;
 }
 Object.assign(ACT,{
+  pFav:id=>{const p=P(id);p.fav=!p.fav;changed()},
+  pFavF:()=>{S.pfav=!S.pfav;S.plimit=0;render()},
+  pMore:()=>{S.plimit=(S.plimit||80)+80;$('#plist').innerHTML=pListHTML()},
+  pNewAppt:id=>openAppt({patientId:id,date:today()}),
   day:id=>{openDaySheet(id);return;S.selDay=id;if(mKey(id)!==S.calMonth){S.calSlide=id>S.calMonth?'next':'prev';S.calMonth=mKey(id)}else S.calSlide='';$('#calCard').innerHTML=calHTML();$('#dayPanel').innerHTML=dayHTML();S.calSlide=''},
   calPrev:()=>{S.calMonth=mShift(S.calMonth,-1);S.calSlide='prev';$('#calCard').innerHTML=calHTML();S.calSlide=''},
   calNext:()=>{S.calMonth=mShift(S.calMonth,1);S.calSlide='next';$('#calCard').innerHTML=calHTML();S.calSlide=''},
@@ -1748,7 +1786,7 @@ function campaignTargets(f){const R=realized(),t=today(),out={list:[],noPhone:0,
   for(const p of db.patients){
     const pr=R.filter(r=>r.patientId===p.id);let mp=pr;
     if(f.proc||f.cat||f.pFrom||f.pTo){mp=pr.filter(r=>(!f.proc||r.procId===f.proc)&&(!f.cat||r.cat===f.cat)&&(!f.pFrom||r.date>=f.pFrom)&&(!f.pTo||r.date<=f.pTo));if(!mp.length)continue}
-    if(f.lastMode){const last=(pr[0]||{}).date||'';
+    if(f.lastMode){const l0=(pr[0]||{}).date||'',lv=p.lastVisit||'',last=l0>lv?l0:lv;
       if(f.lastMode==='mais'&&last&&last>addMonths(t,-(+f.lastMonths||6)))continue;
       if(f.lastMode==='periodo'&&(!last||(f.lastFrom&&last<f.lastFrom)||(f.lastTo&&last>f.lastTo)))continue}
     if(f.bday){if(!p.birth)continue;const m=+p.birth.slice(5,7),tm=+t.slice(5,7);if(f.bday==='este'&&m!==tm)continue;if(f.bday==='proximo'&&m!==tm%12+1)continue}
@@ -2070,6 +2108,7 @@ function openPatient(id,cb){
         <div class="grid3">${f('phone','WhatsApp','inputmode="tel" placeholder="(11) 99999-9999"')}${f('email','E-mail','type="email" placeholder="opcional"')}${f('instagram','Instagram','placeholder="@usuario" autocapitalize="off"')}</div>
         <div class="grid2">${f('emergencyName','Contato de emergência','placeholder="Nome e parentesco"')}${f('emergencyPhone','Telefone de emergência','inputmode="tel" placeholder="(11) 99999-9999"')}</div>
         <div class="grid-cep"><label class="field"><span>CEP</span><input class="in" data-k="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" value="${esc(p.cep||'')}"></label><label class="field"><span>Endereço <small class="muted" data-cepmsg style="font-weight:500"></small></span><input class="in" data-k="address" value="${esc(p.address||'')}" placeholder="Rua, bairro, cidade"></label><label class="field"><span>Nº</span><input class="in" data-k="addrNum" value="${esc(p.addrNum||'')}" placeholder="123" maxlength="12"></label></div>
+        <div class="grid3">${f('addrCompl','Complemento','placeholder="Apto, bloco, casa…"')}${f('phone2','Telefone fixo','inputmode="tel" placeholder="(11) 3333-3333"')}${f('insurance','Convênio / carteirinha','placeholder="opcional"')}</div>
       </div>
       <div class="fsec">${ic('spark')}Como chegou</div>
       <div class="box stack">
@@ -2146,7 +2185,7 @@ function openPatient(id,cb){
 }
 async function deletePatient(id){
   const p=P(id);if(!await confirmBox(`Excluir <b>${esc(p.name)}</b> e toda a pasta (consultas, orçamentos e retornos)? Essa ação não pode ser desfeita.`))return false;
-  storageDel((p.attachments||[]).filter(a=>a.path).map(a=>a.path));db.patients=db.patients.filter(x=>x.id!==id);['appointments','budgets','returns'].forEach(k=>db[k]=db[k].filter(x=>x.patientId!==id));
+  storageDel((p.attachments||[]).filter(a=>a.path).map(a=>a.path));db.patients=db.patients.filter(x=>x.id!==id);['appointments','budgets','returns','evolutions','messages'].forEach(k=>db[k]=(db[k]||[]).filter(x=>x.patientId!==id));
   changed();toast('Paciente excluído');return true;
 }
 function patientStats(id){
@@ -2154,21 +2193,29 @@ function patientStats(id){
   const done=A.filter(a=>a.status==='realizada');
   const nextR=activeReturns().filter(r=>r.patientId===id).sort((a,b)=>a.date.localeCompare(b.date))[0];
   const nextA=A.filter(a=>a.status==='agendada'&&a.date>=today()).sort((a,b)=>a.date.localeCompare(b.date))[0];
-  return{A,done,total:done.reduce((s,a)=>s+calc(a).total,0),last:done[0]?.date||'',nextR,nextA};
+  const lv=(P(id)||{}).lastVisit||'';const l0=done[0]?.date||'';
+  return{A,done,total:done.reduce((s,a)=>s+calc(a).total,0),last:l0>lv?l0:lv,nextR,nextA};
 }
-function crmFilterActive(){const f=S.cf;return !!(f.proc||f.cat||f.from||f.to||f.bst)}
+function pMatches(p,q,qd){
+  if(norm([p.name,p.socialName,p.email,p.address,p.addrCompl,p.insurance,p.rg,p.instagram,(p.tags||[]).join(' ')].filter(Boolean).join(' | ')).includes(q))return true;
+  if(qd&&qd.length>=3&&[p.phone,p.phone2,p.cpf,p.cep,p.rg].some(v=>digits(v).includes(qd)))return true;
+  return false}
+const pCity=p=>{const a=(p.address||'').split(', ').filter(Boolean);return a.length>1?a[a.length-1]:''};
+function ageYM(b){if(!b)return'';const d=parse(b),n=new Date();let m=(n.getFullYear()-d.getFullYear())*12+n.getMonth()-d.getMonth();if(n.getDate()<d.getDate())m--;if(m<0)return'';const y=Math.floor(m/12),r=m%12;return y?`${y}a${r?r+'m':''}`:`${r}m`}
+function crmFilterActive(){const f=S.cf;return !!(S.pfav||f.proc||f.cat||f.from||f.to||f.bst)}
 function crmFiltered(){const f=S.cf,q=norm(S.pq),qd=digits(S.pq);
   const byProc=!!(f.proc||f.cat||f.from||f.to);
-  const okP=p=>(!q||norm(p.name).includes(q)||(qd&&(digits(p.phone).includes(qd)||digits(p.cpf).includes(qd))))&&(!f.bst||db.budgets.some(b=>b.patientId===p.id&&b.status===f.bst));
+  const okP=p=>(!S.pfav||p.fav)&&(!q||pMatches(p,q,qd))&&(!f.bst||db.budgets.some(b=>b.patientId===p.id&&b.status===f.bst));
   const R=realized().filter(r=>(!f.proc||r.procId===f.proc)&&(!f.cat||r.cat===f.cat)&&(!f.from||r.date>=f.from)&&(!f.to||r.date<=f.to)&&okP(P(r.patientId)));
   const byP={};R.forEach(r=>(byP[r.patientId]=byP[r.patientId]||[]).push(r));
   const pats=db.patients.filter(p=>okP(p)&&(!byProc||byP[p.id]));
   return{R,byP,pats,byProc}}
 function vPacientes(){const f=S.cf,pr=f.proc&&procById(f.proc);
   return topbar('Pacientes',db.patients.length?`${db.patients.length} ${db.patients.length===1?'cadastro':'cadastros'}. Filtre por procedimento, categoria, período ou orçamento.`:'Cadastre com apenas o nome.',`<button class="btn dark" data-act="newPatient">${ic('plus')}Novo paciente</button>`)+
-  `<div class="row wrap" style="margin-bottom:12px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar por nome, telefone ou CPF..." data-inp="pq" value="${esc(S.pq)}"></div>
+  `<div class="row wrap" style="margin-bottom:12px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar por nome, CPF, telefone, e-mail, cidade, bairro, etiqueta…" data-inp="pq" value="${esc(S.pq)}"></div>
   <div class="seg">${[['cards','Pacientes'],['tabela','Procedimentos realizados']].map(([k,l])=>`<button class="${S.pmode===k?'on':''}" data-act="pmode" data-id="${k}">${l}</button>`).join('')}</div></div>
   <div class="crm-f glass">
+    <button class="fchip fav-f ${S.pfav?'on':''}" data-act="pFavF">${ic('star')}Favoritas${db.patients.some(p=>p.fav)?` · ${db.patients.filter(p=>p.fav).length}`:''}</button>
     <button class="fchip ${f.proc?'on':''}" data-act="cfProc">${ic('tag')}${pr?esc(pr.name):'Procedimento'}<span class="dd">▾</span></button>
     <div class="seg">${[['','Todas'],...CATS.map(([k])=>[k,catShort(k)])].map(([k,l])=>`<button class="${f.cat===k?'on':''}" data-act="cfCat" data-id="${k}">${l}</button>`).join('')}</div>
     <button class="fchip ${f.from?'on':''}" data-act="cfDate" data-id="from">${ic('cal')}De ${f.from?fmtD(f.from):'…'}</button>
@@ -2176,7 +2223,7 @@ function vPacientes(){const f=S.cf,pr=f.proc&&procById(f.proc);
     <button class="fchip ${f.bst?'on':''}" data-act="cfBst">${ic('doc')}${f.bst?'Orçamento '+BST[f.bst][0].toLowerCase():'Status do orçamento'}<span class="dd">▾</span></button>
     ${crmFilterActive()?`<button class="fchip clear" data-act="cfClear">${ic('x')}Limpar filtros</button>`:''}
   </div>
-  ${S.pmode==='cards'?`<div class="row wrap" style="margin:0 0 14px;gap:10px"><span class="small muted">Ordenar:</span><div class="seg">${[['recent','Recentes'],['az','A–Z'],['ret','Próx. retorno'],['value','Maior valor']].map(([k,l])=>`<button class="${S.psort===k?'on':''}" data-act="psort" data-id="${k}">${l}</button>`).join('')}</div></div>`:''}
+  ${S.pmode==='cards'?`<div class="row wrap" style="margin:0 0 14px;gap:10px"><span class="small muted">Ordenar:</span><div class="seg">${[['az','A–Z'],['recent','Último atendimento'],['ret','Próx. retorno'],['value','Maior valor']].map(([k,l])=>`<button class="${S.psort===k?'on':''}" data-act="psort" data-id="${k}">${l}</button>`).join('')}</div></div>`:''}
   <div id="plist">${S.pmode==='tabela'?realizedHTML():pListHTML()}</div>`;
 }
 function realizedHTML(){const {R}=crmFiltered();const tot=R.reduce((s,r)=>s+r.value,0);
@@ -2192,23 +2239,77 @@ function pListHTML(){
   const srt={recent:(a,b)=>(b.s.last||'').localeCompare(a.s.last||'')||(b.p.createdAt||0)-(a.p.createdAt||0),az:(a,b)=>a.p.name.localeCompare(b.p.name),ret:(a,b)=>(a.s.nextR?.date||'9').localeCompare(b.s.nextR?.date||'9'),value:(a,b)=>b.s.total-a.s.total};
   L.sort(srt[S.psort]);
   if(!L.length)return crmFilterActive()?`<div class="glass">${empty('search','Ninguém com esses filtros','Mude ou limpe os filtros.',`<button class="btn" data-act="cfClear">Limpar filtros</button>`)}</div>`:`<div class="glass">${empty('search','Nada encontrado',`Nenhum paciente para “${esc(S.pq)}”.`,`<button class="btn dark" data-act="quickCreate">${ic('plus')}Cadastrar “${esc(S.pq)}”</button>`)}</div>`;
-  return`${crmFilterActive()?`<div class="small muted" style="margin:0 4px 10px"><b style="color:var(--ink)">${L.length}</b> paciente${L.length===1?'':'s'} com esses filtros</div>`:''}<div class="pgrid">${L.map(({p,s})=>{const mt=byP[p.id];return`<div class="pcard glass" data-act="folder" data-id="${p.id}">
-    <div class="row">${av(p.name)}<div class="grow" style="min-width:0;flex:1"><div class="strong" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div><div class="small muted">${esc(p.phone||'sem WhatsApp')}${isOut(p.id)?' · fora das campanhas':''}</div></div>${p.phone?`<a class="btn sm icon" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp">${ic('wa')}</a>`:''}</div>
-    ${byProc&&mt?`<div class="match">${ic('check')}<span>${esc(mt[0].name)} em ${fmtD(mt[0].date)}${mt.length>1?` · +${mt.length-1}`:''}</span></div>`:''}
-    <div class="meta"><div><small>Última visita</small>${s.last?fmtD(s.last):'—'}</div><div><small>Retorno</small>${s.nextR?fmtD(s.nextR.date):'—'}</div><div><small>Atendimentos</small>${s.done.length}</div><div><small>Investido</small>${money(s.total)}</div></div>
-  </div>`}).join('')}</div>`;
+  const lim=S.plimit||80,shown=L.slice(0,lim);
+  const row=({p,s:st})=>{const mt=byP[p.id],ag=ageYM(p.birth),lvT=p.lastVisitAt&&st.last===p.lastVisit?p.lastVisitAt.slice(11,16):'';
+    const nx=st.nextA?{d:st.nextA.date,t:st.nextA.time,l:'consulta'}:st.nextR?{d:st.nextR.date,t:'',l:'retorno'}:null;
+    return`<div class="pl-r" data-act="folder" data-id="${p.id}" role="button" tabindex="0">
+      <div class="pl-p">${av(p.name)}<div class="grow"><div class="pl-n">${esc(p.name)}${p.fav?`<span class="pl-fav">${ic('star')}</span>`:''}</div><div class="pl-s">${[p.insurance?'Convênio':'Particular',ag,p.cpf].filter(Boolean).map(esc).join(' · ')}${isOut(p.id)?' · <span class="muted">fora das campanhas</span>':''}</div>
+        ${byProc&&mt?`<div class="match">${ic('check')}<span>${esc(mt[0].name)} em ${fmtD(mt[0].date)}${mt.length>1?` · +${mt.length-1}`:''}</span></div>`:''}${(p.tags||[]).length?`<div class="pl-tags">${p.tags.slice(0,3).map(t=>`<span class="ptag sm">${esc(t)}</span>`).join('')}</div>`:''}</div></div>
+      <div class="pl-c" data-l="Telefone">${p.phone?esc(p.phone):'<span class="muted">—</span>'}</div>
+      <div class="pl-c" data-l="Cidade">${pCity(p)?esc(pCity(p)):'<span class="muted">—</span>'}</div>
+      <div class="pl-c" data-l="Último atendimento">${st.last?`${fmtD(st.last)}${lvT?' '+lvT:''}<small>${agoTxt(st.last+'T12:00')}</small>`:'<span class="muted">—</span><small>paciente novo</small>'}</div>
+      <div class="pl-c" data-l="Próximo">${nx?`${fmtD(nx.d)}${nx.t?' '+nx.t:''}<small>${nx.l}</small>`:'<span class="muted">—</span>'}</div>
+      <div class="pl-a"><button class="btn sm icon fav ${p.fav?'on':''}" data-act="pFav" data-id="${p.id}" title="${p.fav?'Tirar das favoritas':'Marcar como favorita'}">${ic('star')}</button>${p.phone?`<a class="btn sm icon" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp">${ic('wa')}</a>`:''}<button class="btn sm icon" data-act="pNewAppt" data-id="${p.id}" title="Agendar">${ic('cal')}</button></div></div>`};
+  return`<div class="small muted" style="margin:0 4px 10px"><b style="color:var(--ink)">${L.length}</b> paciente${L.length===1?'':'s'}${crmFilterActive()||S.pq?' encontrados':''}</div>
+  <div class="glass card pl"><div class="pl-h"><span>Paciente</span><span>Telefone</span><span>Cidade</span><span>Último atendimento</span><span>Próximo</span><span></span></div>${shown.map(row).join('')}</div>
+  ${L.length>lim?`<div style="text-align:center;margin-top:14px"><button class="btn" data-act="pMore">Mostrar mais ${Math.min(80,L.length-lim)} de ${L.length-lim}</button></div>`:''}`;
 }
-INP.pq=el=>{S.pq=el.value;$('#plist').innerHTML=S.pmode==='tabela'?realizedHTML():pListHTML()};
+INP.pq=el=>{S.pq=el.value;S.plimit=0;$('#plist').innerHTML=S.pmode==='tabela'?realizedHTML():pListHTML()};
 Object.assign(ACT,{
   pmode:k=>{S.pmode=k;render()},
   cfCat:k=>{S.cf.cat=k;if(k&&S.cf.proc&&procById(S.cf.proc)?.cat!==k)S.cf.proc='';render()},
   cfProc:(_,a)=>{const L=db.procedures.filter(x=>!S.cf.cat||x.cat===S.cf.cat).sort((x,y)=>x.name.localeCompare(y.name));openMenu(a,[{label:'Qualquer procedimento',icon:'tag',fn:()=>{S.cf.proc='';render()}},...L.map(x=>({label:esc(x.name),icon:x.cat==='cirurgia'?'scalpel':x.kind==='consulta'?'steth':'tag',fn:()=>{S.cf.proc=x.id;render()}}))])},
   cfDate:async(k,a)=>{const v=await pickDate(a,S.cf[k]||today(),[['Limpar','']]);if(v===null)return;S.cf[k]=v;render()},
   cfBst:(_,a)=>openMenu(a,[{label:'Qualquer status',icon:'doc',fn:()=>{S.cf.bst='';render()}},...Object.entries(BST).map(([k,[l]])=>({label:'Orçamento '+l.toLowerCase(),icon:'doc',fn:()=>{S.cf.bst=k;render()}}))]),
-  cfClear:()=>{S.cf={proc:'',cat:'',from:'',to:'',bst:''};render()}
+  cfClear:()=>{S.pfav=false;S.cf={proc:'',cat:'',from:'',to:'',bst:''};render()}
 });
 ACT.psort=k=>{S.psort=k;render()};
 ACT.quickCreate=()=>{const p={id:uid(),name:S.pq.trim(),createdAt:Date.now()};db.patients.push(p);S.pq='';changed();toast('Paciente cadastrado');openFolder(p.id)};
+
+/* ================= PRONTUÁRIO: evoluções e etiquetas ================= */
+const ptags=()=>db.settings.tags||(db.settings.tags=['Alergia','Paciente VIP','Gestante','Pele sensível']);
+const EVT=[['evolucao','Evolução','edit'],['anamnese','Anamnese','doc'],['observacao','Observações','edit'],['prescricao','Prescrição','doc'],['procedimento','Procedimento','tag']];
+const evtName=k=>(EVT.find(x=>x[0]===k)||['','Registro'])[1],evtIc=k=>(EVT.find(x=>x[0]===k)||['','','edit'])[2];
+const evosOf=pid=>(db.evolutions||[]).filter(e=>e.patientId===pid).sort((a,b)=>(b.pinned-a.pinned)||String(b.at).localeCompare(String(a.at)));
+const MON3=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+function agoTxt(at){const d=(Date.now()-new Date(at))/864e5;if(d<1)return'hoje';if(d<2)return'ontem';if(d<30)return`há ${Math.floor(d)} dias`;if(d<365){const m=Math.floor(d/30.4);return`há ${m} ${m>1?'meses':'mês'}`}const y=Math.floor(d/365.25);return`há ${y} ano${y>1?'s':''}`}
+function prontHTML(pid,st){
+  const all=evosOf(pid),p=P(pid);
+  const L=all.filter(e=>!st.ft||(st.group==='tipo'?e.type===st.ft:String(e.at).slice(0,7)===st.ft));
+  const doctor=db.settings.doctor||brandName();
+  let lastDay='',lastY='';
+  const cards=L.map(e=>{const d=new Date(e.at),day=String(e.at).slice(0,10),y=day.slice(0,4);let hd='';
+    if(!e.pinned&&day!==lastDay){hd=`<div class="ev-day">${y!==lastY?`<b>${y}</b>`:''}<span>${String(d.getDate()).padStart(2,'0')} ${MON3[d.getMonth()]}</span></div>`;lastDay=day;lastY=y}
+    return hd+`<article class="ev-card ${e.pinned?'pinned':''}"><header>${av(e.author||doctor)}<div class="grow"><b>${esc(e.author||doctor)}</b><small>Registrou em ${String(d.getDate()).padStart(2,'0')} ${MON3[d.getMonth()]} ${d.getFullYear()} às ${d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</small></div><span class="small muted">${agoTxt(e.at)}</span><button class="btn sm icon ghost ${e.pinned?'on':''}" data-evpin="${e.id}" aria-label="${e.pinned?'Desafixar':'Fixar no topo'}" title="${e.pinned?'Desafixar':'Fixar no topo'}">${ic('pin')}</button><button class="btn sm icon ghost" data-evm="${e.id}" aria-label="Opções">${ic('more')}</button></header>
+      <div class="ev-type">${ic(evtIc(e.type))}${evtName(e.type)}${e.imported?'<span class="badge">Importado</span>':''}</div><div class="ev-text">${esc(e.text)}</div></article>`}).join('');
+  const groups=st.group==='tipo'?EVT.map(([k,l,i])=>[k,l,i,all.filter(e=>e.type===k).length]).filter(x=>x[3])
+    :[...new Set(all.map(e=>String(e.at).slice(0,7)))].sort().reverse().map(k=>[k,`${cap(MONTHS[+k.slice(5,7)-1])} de ${k.slice(0,4)}`,'cal',all.filter(e=>String(e.at).slice(0,7)===k).length]);
+  const tags=p.tags||[];
+  return`<div class="pr-tools"><div><small>Atendimento</small><div class="tgroup"><button class="btn" data-evnew="evolucao" title="Nova evolução">${ic('edit')}<span>Evolução</span></button><button class="btn" data-evnew="anamnese" title="Anamnese">${ic('doc')}<span>Anamnese</span></button><button class="btn" data-evnew="prescricao" title="Prescrição">${ic('doc')}<span>Prescrição</span></button><button class="btn" data-evnew="observacao" title="Observação">${ic('edit')}<span>Observação</span></button></div></div>
+      <div><small>Agenda</small><div class="tgroup"><button class="btn" data-na2 title="Nova consulta">${ic('cal')}<span>Consulta</span></button><button class="btn" data-nb2 title="Orçamento">${ic('doc')}<span>Orçamento</span></button></div></div>
+      <div><small>Imagens e documentos</small><div class="tgroup"><button class="btn" data-t="docs" title="Documentos">${ic('folder')}<span>Anexos${(p.attachments||[]).length?' · '+p.attachments.length:''}</span></button></div></div></div>
+    <div class="pr-grid"><section class="pr-main"><div class="pr-h"><h3>Evoluções</h3>${st.ft?`<button class="chip on" data-evclr>${esc(st.group==='tipo'?evtName(st.ft):groups.find(g=>g[0]===st.ft)?.[1]||'')} ✕</button>`:''}</div>
+      ${cards||empty('edit','Nenhuma evolução registrada','Registre a primeira evolução, anamnese ou observação desta paciente.')}</section>
+    <aside class="pr-side"><div class="pr-h"><h3>Etiquetas do paciente</h3></div><div class="pr-box"><div class="row wrap" style="gap:6px">${tags.length?tags.map(t=>`<span class="ptag">${esc(t)}<button data-tagrm="${esc(t)}" aria-label="Remover">✕</button></span>`).join(''):'<span class="muted">Paciente não possui etiqueta</span>'}<button class="btn sm icon" data-tagadd aria-label="Adicionar etiqueta">${ic('plus')}</button></div></div>
+      <div class="pr-h"><h3>Histórico de evoluções</h3></div><div class="pr-box"><div class="row" style="gap:14px;margin-bottom:8px"><span class="small muted">Agrupar por:</span><label class="radio"><input type="radio" name="evg" data-evg="tipo" ${st.group==='tipo'?'checked':''}>Tipo</label><label class="radio"><input type="radio" name="evg" data-evg="data" ${st.group==='data'?'checked':''}>Data</label></div>
+      ${groups.length?`<div class="list">${groups.map(([k,l,i,n])=>`<button class="item ${st.ft===k?'sel':''}" data-evf="${k}">${ic(i,'style="width:18px;height:18px;opacity:.7"')}<div class="grow"><div class="t">${esc(l)} <span class="muted">(${n})</span></div></div><span class="muted">›</span></button>`).join('')}</div>`:'<div class="small muted">Sem registros ainda.</div>'}</div></aside></div>`;
+}
+function openEvo(pid,o={},cb){const ex=o.id?db.evolutions.find(e=>e.id===o.id):null;const st={type:ex?.type||o.type||'evolucao'};
+  const d0=ex?new Date(ex.at):new Date();
+  openModal({title:ex?'Editar registro':'Novo registro no prontuário',size:'md',
+    body:`<div class="stack"><div class="chips" data-evt>${EVT.map(([k,l])=>`<button type="button" class="chip" data-v="${k}">${l}</button>`).join('')}</div>
+      <div class="grid2"><label class="field"><span>Data</span><input class="in" data-evd inputmode="numeric" maxlength="10" value="${fmtD(iso(d0))}"></label><label class="field"><span>Hora</span><input class="in" data-evh inputmode="numeric" maxlength="5" value="${d0.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}"></label></div>
+      <textarea class="in" data-evtx style="min-height:220px" placeholder="Queixa, exame, conduta, produtos usados, orientações…">${esc(ex?.text||'')}</textarea></div>`,
+    foot:`<button class="btn" data-x>Cancelar</button><button class="btn dark" data-ok>${ic('check')}Salvar</button>`,
+    onMount:(el,m)=>{const dt=()=>$$('[data-evt] button',el).forEach(b=>b.classList.toggle('on',b.dataset.v===st.type));dt();
+      $('[data-evt]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){st.type=b.dataset.v;dt()}};
+      $('[data-x]',el).onclick=m.close;setTimeout(()=>$('[data-evtx]',el).focus(),60);
+      $('[data-ok]',el).onclick=()=>{const tx=$('[data-evtx]',el).value.trim();if(!tx){toast('Escreva o registro');return}
+        const dI=brToIso($('[data-evd]',el).value);const hm=$('[data-evh]',el).value.trim();if(!dI){toast('Data inválida (dd/mm/aaaa)');return}if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(hm)){toast('Hora inválida (hh:mm)');return}
+        const at=new Date(dI+'T'+hm+':00').toISOString();
+        if(ex)Object.assign(ex,{type:st.type,text:tx,at,editedAt:new Date().toISOString()});
+        else db.evolutions.push({id:uid(),patientId:pid,type:st.type,text:tx,at,author:db.settings.doctor||'',pinned:false,createdAt:new Date().toISOString()});
+        m.close();changed();toast('Registro salvo');cb&&cb()}}})}
 
 /* ================= PASTA DO PACIENTE ================= */
 const tlAppt=x=>{const c=calc(x);return`<div class="tl-i click item" style="display:block" data-ea="${x.id}"><div class="row between wrap"><div class="row"><b>${fmtD(x.date)}</b>${x.time?`<span class="muted small">${x.time}</span>`:''}${badge(ST,x.status)}</div><div class="price">${c.disc?`<span class="strike">${money(c.sub)}</span> `:''}${money(c.total)}</div></div>
@@ -2219,20 +2320,21 @@ function timelineHTML(pid,f){
   const ev=[];
   db.appointments.filter(a=>a.patientId===pid).forEach(a=>ev.push({t:'consulta',at:a.date+'T'+(a.time||'00:00'),html:tlAppt(a)}));
   db.budgets.filter(b=>b.patientId===pid).forEach(b=>{const c=calc(b);ev.push({t:'orcamento',at:b.date+'T00:01',html:`<div class="tl-i click item tl-b" style="display:block" data-eb="${b.id}"><div class="row between wrap"><div class="row"><span class="tl-k">${ic('doc')}Orçamento</span><b>${fmtD(b.date)}</b>${badge(BST,b.status)}</div><div class="price">${money(c.total)}</div></div><div class="procs">${b.items.map(i=>`<span class="badge">${esc(i.name)}</span>`).join('')}</div></div>`})});
+  (db.evolutions||[]).filter(e=>e.patientId===pid).forEach(e=>ev.push({t:'prontuario',at:e.at,html:`<div class="tl-i"><div class="row between wrap"><span class="tl-k">${ic(evtIc(e.type))}${evtName(e.type)}</span><span class="small muted">${new Date(e.at).toLocaleDateString('pt-BR')}</span></div><div class="ev-text" style="margin-top:6px;max-height:7.5em;overflow:hidden">${esc(e.text)}</div></div>`}));
   (db.messages||[]).filter(m=>m.patientId===pid).forEach(m=>ev.push({t:'mensagem',at:m.at,html:msgHTML(m.dir,MSGK[m.kind]||'Mensagem',m.at,m.text)}));
   CRM.sends.filter(x=>x.patient_id===pid&&x.sent_at).forEach(x=>{const c=CRM.campaigns.find(k=>k.id===x.campaign_id);ev.push({t:'mensagem',at:x.sent_at,html:msgHTML('out','Campanha'+(c?' · '+c.name:''),x.sent_at,x.message)})});
   CRM.replies.filter(x=>x.patient_id===pid).forEach(x=>{const c=CRM.campaigns.find(k=>k.id===x.campaign_id);ev.push({t:'mensagem',at:x.received_at,html:msgHTML('in','Respondeu'+(c?' · '+c.name:''),x.received_at,x.text,x.classification)})});
   ev.sort((a,b)=>String(b.at).localeCompare(String(a.at)));
   const L=f==='tudo'?ev:ev.filter(e=>e.t===f);
   const cnt=k=>ev.filter(e=>e.t===k).length;
-  return`<div class="chips" style="margin-bottom:14px">${[['tudo','Tudo',ev.length],['consulta','Consultas',cnt('consulta')],['orcamento','Orçamentos',cnt('orcamento')],['mensagem','Mensagens',cnt('mensagem')]].map(([k,l,n])=>`<button class="chip ${f===k?'on':''}" data-tlf="${k}">${l} · ${n}</button>`).join('')}</div>
+  return`<div class="chips" style="margin-bottom:14px">${[['tudo','Tudo',ev.length],['prontuario','Prontuário',cnt('prontuario')],['consulta','Consultas',cnt('consulta')],['orcamento','Orçamentos',cnt('orcamento')],['mensagem','Mensagens',cnt('mensagem')]].map(([k,l,n])=>`<button class="chip ${f===k?'on':''}" data-tlf="${k}">${l} · ${n}</button>`).join('')}</div>
     ${L.length?`<div class="tl">${L.map(e=>e.html).join('')}</div>`:empty('clock','Nada por aqui ainda','Consultas, orçamentos e mensagens aparecem nesta linha do tempo.')}`;
 }
 function msgHTML(dir,title,at,text,cls){const d=new Date(at);const when=isNaN(d)?'':d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   return`<div class="tl-i tl-m m-${dir}"><div class="row between wrap"><span class="tl-k">${ic(dir==='in'?'inbox':'wa')}${esc(title)}</span><span class="small muted">${when}</span></div><div class="bubble b-${dir}">${esc(text)}</div>${cls?`<div style="margin-top:6px">${badge(RCL,cls)}</div>`:''}</div>`}
-function openFolder(id,tab='hist'){
-  let cur=tab,tlf='tudo';
-  const m=openModal({title:'Pasta do paciente',size:'lg',body:'<div data-fb></div>',
+function openFolder(id,tab='pront'){
+  let cur=tab,tlf='tudo';const pst={group:'tipo',ft:''};
+  const m=openModal({title:'Prontuário do paciente',size:'xl',body:'<div data-fb></div>',
     foot:`<button class="btn" data-nb>${ic('doc')}Orçamento</button><button class="btn dark" data-na>${ic('plus')}Nova consulta</button>`,
     onMount:(el,mm)=>{
       $('[data-nb]',el).onclick=()=>openBudget({patientId:id});
@@ -2241,29 +2343,45 @@ function openFolder(id,tab='hist'){
       const draw=()=>{const p=P(id),s=patientStats(id),B=db.budgets.filter(b=>b.patientId===id).sort((a,b)=>b.date.localeCompare(a.date)),R=db.returns.filter(r=>r.patientId===id).sort((a,b)=>b.date.localeCompare(a.date));
         const a=age(p.birth);
         let body='';
+        if(cur==='pront')body=prontHTML(id,pst);
         if(cur==='hist')body=timelineHTML(id,tlf);
         if(cur==='orc')body=B.length?`<div class="list">${B.map(b=>`<button class="item" data-eb="${b.id}">${ic('doc','style="width:20px;height:20px;opacity:.6"')}<div class="grow"><div class="t">${esc(procNames(b.items)||'Orçamento')}</div><div class="s">${fmtD(b.date)} · ${b.items.length} item(ns)</div></div><div style="text-align:right"><div class="price small">${money(calc(b).total)}</div>${badge(BST,b.status)}</div></button>`).join('')}</div>`:empty('doc','Sem orçamentos','Crie um orçamento para informar os valores.');
         if(cur==='ret')body=R.length?`<div class="list">${R.map(r=>`<div class="item"><span class="time">${fmtDM(r.date)}</span><div class="grow"><div class="t">${esc(r.note||'Retorno')}</div><div class="s">${fmtD(r.date)} · ${relDays(r.date)}</div></div>${badge(RST,r.status)}<button class="btn sm icon ghost" data-rm="${r.id}">${ic('more')}</button></div>`).join('')}</div>`:empty('ret','Sem retornos','Os retornos são criados ao salvar uma consulta.');
         if(cur==='docs')body='<div data-docs></div>';
         if(cur==='ficha'){const row=(l,v)=>`<dt>${l}</dt><dd>${v?esc(v):'—'}</dd>`,yn=b=>b?'Sim':'Não';
           body=`<div class="kv-sec">Dados pessoais</div><dl class="kv">${row('Nome',p.name)}${row('Prefere ser chamada',p.socialName)}${row('Sexo',GENDER[p.gender])}${row('Nascimento',p.birth?`${fmtD(p.birth)} (${a} anos)`:'')}${row('CPF',p.cpf)}${row('RG',p.rg)}${row('Profissão',p.profession)}</dl>
-          <div class="kv-sec">Contato</div><dl class="kv">${row('WhatsApp',p.phone)}${row('E-mail',p.email)}${row('Instagram',p.instagram)}${row('Emergência',[p.emergencyName,p.emergencyPhone].filter(Boolean).join(' · '))}${row('Endereço',[fullAddr(p),p.cep&&`CEP ${p.cep}`].filter(Boolean).join(' · '))}</dl>
-          <div class="kv-sec">Como chegou</div><dl class="kv">${row('Primeiro contato',p.firstContact?fmtD(p.firstContact):'')}${row('Como conheceu',p.source)}${p.referredBy?row('Quem indicou',p.referredBy):''}${row('Cliente desde',p.createdAt?new Date(p.createdAt).toLocaleDateString('pt-BR'):'')}</dl>
+          <div class="kv-sec">Contato</div><dl class="kv">${row('WhatsApp',p.phone)}${p.phone2?row('Telefone fixo',p.phone2):''}${row('E-mail',p.email)}${row('Instagram',p.instagram)}${row('Emergência',[p.emergencyName,p.emergencyPhone].filter(Boolean).join(' · '))}${row('Endereço',[fullAddr(p),p.cep&&`CEP ${p.cep}`].filter(Boolean).join(' · '))}</dl>
+          <div class="kv-sec">Como chegou</div><dl class="kv">${row('Primeiro contato',p.firstContact?fmtD(p.firstContact):'')}${row('Como conheceu',p.source)}${p.referredBy?row('Quem indicou',p.referredBy):''}${row('Cliente desde',p.createdAt?new Date(p.createdAt).toLocaleDateString('pt-BR'):'')}${p.lastVisit?row('Último atendimento',fmtD(p.lastVisit)):''}${p.insurance?row('Convênio',p.insurance):''}</dl>
           <div class="kv-sec">Saúde e pele</div><dl class="kv">${row('Tipo de pele',p.skin)}${row('Fototipo',p.phototype?(PHOTO.find(x=>x[0]===p.phototype)||[])[1]:'')}${row('Condições',p.conditions)}${row('Alergias',p.allergies)}${row('Medicamentos',p.meds)}</dl>
           <div class="kv-sec">Consentimentos</div><dl class="kv">${row('Uso de imagem',yn(p.imageConsent))}${row('Termo LGPD',yn(p.lgpdConsent))}<dt>Recebe campanhas</dt><dd>${isOut(id)?`Não <button class="btn sm" data-optin style="margin-left:8px">Voltar para campanhas</button>`:`Sim <button class="btn sm ghost danger" data-optout style="margin-left:8px">Tirar da lista</button>`}</dd></dl>
           <div class="kv-sec">Observações</div><dl class="kv"><dt>Notas</dt><dd>${esc(p.notes||'—')}</dd></dl>`}
-        $('[data-fb]',el).innerHTML=`<div class="f-head">${av(p.name,'lg')}<div style="flex:1;min-width:0"><h2>${esc(p.name)}</h2><div class="muted small">${[p.socialName&&`“${p.socialName}”`,p.phone,a!==''?a+' anos':'',GENDER[p.gender],p.phototype&&`fototipo ${p.phototype}`].filter(Boolean).map(esc).join(' · ')||'Ficha básica'}</div></div>
+        $('[data-fb]',el).innerHTML=`<div class="f-head">${av(p.name,'lg')}<div style="flex:1;min-width:0"><div class="row" style="gap:8px"><h2>${esc(p.name)}</h2><button class="fav ${p.fav?'on':''}" data-fav aria-label="Favorita">${ic('star')}</button></div>
+            <div class="f-kv"><div><small>Idade</small><b>${a!==''?a+' anos':'—'}</b></div><div><small>Data de nascimento</small><b>${p.birth?fmtD(p.birth):'—'}</b></div><div><small>WhatsApp</small><b>${esc(p.phone||'—')}</b></div>${p.socialName?`<div><small>Prefere ser chamada</small><b>${esc(p.socialName)}</b></div>`:''}</div>
+            <div class="lgpd ${p.lgpdConsent?'ok':''}">${ic('shield')}Termo LGPD ${p.lgpdConsent?'assinado':'não assinado'}</div></div>
           <div class="row">${p.phone?`<a class="btn wa sm" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener">${ic('wa')}<span class="btn-label">WhatsApp</span></a>`:''}<button class="btn sm icon" data-pm>${ic('more')}</button></div></div>
           ${isOut(id)?`<div class="optout-line">${ic('megaphone')}<span><b>Fora das campanhas</b> desde ${fmtD(String(optOutOf(id).created_at||'').slice(0,10))}${optOutOf(id).source==='automatico'?' · pediu para sair pelo WhatsApp':optOutOf(id).source==='revisao'?' · retirada na revisão':''}</span><button class="btn sm" data-optin>Voltar para campanhas</button></div>`:''}
           ${p.allergies||p.conditions||p.meds?`<div class="row wrap" style="gap:6px;margin-top:12px">${p.allergies?`<span class="badge bad">⚠ Alergia: ${esc(p.allergies)}</span>`:''}${(p.conditions||'').split(/,\s*/).filter(Boolean).map(c=>`<span class="badge warn">${esc(c)}</span>`).join('')}${p.meds?`<span class="badge info">Usa: ${esc(p.meds)}</span>`:''}</div>`:''}
           ${(()=>{const d=dermInfo(id);return d?`<div class="derm-line ${d.st}">${ic('steth')}<span><b>Consulta dermatológica</b> · última em ${fmtD(d.last)} · válida até ${fmtD(d.renew)}${d.st!=='ok'?` · ${dermLabel(d)}`:''}</span>${badge(DST,d.st)}</div>`:''})()}
           <div class="f-stats"><div><small>Investido</small><b>${money(s.total)}</b></div><div><small>Atendimentos</small><b>${s.done.length}</b></div><div><small>Última visita</small><b>${s.last?fmtD(s.last):'—'}</b></div><div><small>Próx. retorno</small><b>${s.nextR?fmtD(s.nextR.date):'—'}</b></div></div>
-          <div class="seg" data-tabs style="margin-bottom:14px">${[['hist','Linha do tempo'],['orc','Orçamentos'],['ret','Retornos'],['docs',`Documentos${(p.attachments||[]).length?' · '+p.attachments.length:''}`],['ficha','Ficha']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
+          <div class="seg" data-tabs style="margin-bottom:14px">${[['pront','Prontuário'],['hist','Linha do tempo'],['orc','Orçamentos'],['ret','Retornos'],['docs',`Documentos${(p.attachments||[]).length?' · '+p.attachments.length:''}`],['ficha','Cadastro']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
           <div style="animation:viewIn .3s var(--ease)">${body}</div>`;
         if(cur==='docs'){const pp=P(id);pp.attachments=pp.attachments||[];attachBox($('[data-docs]',el),id,()=>pp.attachments,a=>{pp.attachments.push(a);save();schedulePush()},a=>{pp.attachments.splice(pp.attachments.indexOf(a),1);if(a.path)storageDel([a.path]);save()})}
       };
+      el.addEventListener('change',e=>{const g=e.target.closest('[data-evg]');if(g){pst.group=g.dataset.evg;pst.ft='';draw()}});
       el.addEventListener('click',e=>{
         const t=e.target.closest('[data-t]');if(t){cur=t.dataset.t;draw();return}
+        const pp=P(id);
+        if(e.target.closest('[data-fav]')){pp.fav=!pp.fav;changed();return}
+        const en=e.target.closest('[data-evnew]');if(en)return openEvo(id,{type:en.dataset.evnew});
+        if(e.target.closest('[data-na2]'))return openAppt({patientId:id,date:today()});
+        if(e.target.closest('[data-nb2]'))return openBudget({patientId:id});
+        const ef=e.target.closest('[data-evf]');if(ef){pst.ft=pst.ft===ef.dataset.evf?'':ef.dataset.evf;draw();return}
+        if(e.target.closest('[data-evclr]')){pst.ft='';draw();return}
+        const ep=e.target.closest('[data-evpin]');if(ep){const ev=db.evolutions.find(x=>x.id===ep.dataset.evpin);ev.pinned=!ev.pinned;changed();return}
+        const evm=e.target.closest('[data-evm]');if(evm){const ev=db.evolutions.find(x=>x.id===evm.dataset.evm);openMenu(evm,[{label:'Editar',icon:'edit',fn:()=>openEvo(id,{id:ev.id})},{label:'Copiar texto',icon:'doc',fn:()=>{navigator.clipboard?.writeText(ev.text);toast('Texto copiado')}},{label:'Excluir',icon:'trash',danger:true,fn:async()=>{if(await confirmBox('Excluir este registro do prontuário?','Excluir')){db.evolutions=db.evolutions.filter(x=>x!==ev);changed()}}}]);return}
+        const tr=e.target.closest('[data-tagrm]');if(tr){pp.tags=(pp.tags||[]).filter(x=>x!==tr.dataset.tagrm);changed();return}
+        const ta=e.target.closest('[data-tagadd]');if(ta){const has=pp.tags||[];const opts=ptags().filter(x=>!has.includes(x));
+          openMenu(ta,[...opts.map(x=>({label:esc(x),icon:'tag',fn:()=>{pp.tags=[...has,x];changed()}})),{label:'Nova etiqueta…',icon:'plus',fn:async()=>{const v=(prompt('Nome da etiqueta')||'').trim();if(!v)return;if(!ptags().includes(v))ptags().push(v);pp.tags=[...has,v];changed()}}]);return}
         const tf=e.target.closest('[data-tlf]');if(tf){tlf=tf.dataset.tlf;draw();return}
         if(e.target.closest('[data-optin]')){crmOptIn(id).then(()=>{toast('Voltou para as campanhas');changed()});return}
         if(e.target.closest('[data-optout]')){crmOptOut(id,'manual','Retirada pela equipe').then(()=>{toast('Não recebe mais campanhas');changed()});return}
