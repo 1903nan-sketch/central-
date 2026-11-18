@@ -82,3 +82,10 @@ const EVOLUTION={
 Segredos em **Supabase → Edge Functions → Secrets**: `EVOLUTION_URL`, `EVOLUTION_API_KEY`, `EVOLUTION_INSTANCE` e `ANTHROPIC_API_KEY`.
 Sem esses segredos, as campanhas funcionam no modo manual (abre o WhatsApp uma a uma).
 Para subir a Evolution numa VPS, veja [`infra/evolution`](infra/evolution/README.md).
+
+### Publicar no Cloudflare (alternativa sem assets)
+Se o envio de assets falhar, publique com os arquivos embutidos no script:
+```bash
+node scripts/build-inline-worker.mjs && npx wrangler deploy -c wrangler.inline.jsonc
+```
+Endereço atual: https://clinica-estetica.1903nan.workers.dev

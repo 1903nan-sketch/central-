@@ -1,0 +1,2 @@
+// Alternativa ao wrangler.jsonc: arquivos embutidos no script (gerado por scripts/build-inline-worker.mjs)
+{"name":"clinica-estetica","main":".build/worker.js","compatibility_date":"2026-11-18","workers_dev":true}
