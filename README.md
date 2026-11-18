@@ -64,3 +64,21 @@ const EVOLUTION={
 - Com a Evolution preenchida, retornos, orçamentos e o resumo mensal da doutora são enviados automaticamente.
 
 > ⚠️ O token fica visível no código da página. Use sempre o **token da instância** (nunca a chave global) e não divulgue o link do sistema.
+
+## CRM e campanhas (WhatsApp)
+
+- **Linha do tempo** em cada paciente: consultas, procedimentos, orçamentos e mensagens (enviadas e respondidas).
+- **Catálogo por categoria**: Clínica (avaliação), Cirurgia e Estética. Em *Pacientes*, filtros por nome, procedimento, categoria, período e status do orçamento, e a tabela de procedimentos realizados.
+- **Campanhas**: filtros combináveis (procedimento, data, aniversário, bairro/cidade/CEP, orçamento aberto, idade, sexo), variáveis `{nome}`, `{procedimento}` e `{data}`, prévia, envio em lotes pequenos com intervalos aleatórios e painel com envios, respostas e taxa de resposta.
+- **LGPD**: toda mensagem leva o rodapé “Se não quiser mais receber mensagens, é só avisar.”. O Claude classifica as respostas: *quer sair* tira a paciente da lista na hora; *dúvida* vai para “Mensagens para revisar”. A volta para as campanhas é sempre manual.
+
+### Backend (Supabase)
+| Peça | Função |
+|---|---|
+| `lumiere-wa` | Status, QR Code, envio e cadastro do webhook da Evolution |
+| `lumiere-campaign-worker` | Fila de envio (pg_cron, a cada minuto, só em horário comercial) |
+| `lumiere-wa-webhook` | Recebe as respostas, liga à campanha e classifica com o Claude |
+
+Segredos em **Supabase → Edge Functions → Secrets**: `EVOLUTION_URL`, `EVOLUTION_API_KEY`, `EVOLUTION_INSTANCE` e `ANTHROPIC_API_KEY`.
+Sem esses segredos, as campanhas funcionam no modo manual (abre o WhatsApp uma a uma).
+Para subir a Evolution numa VPS, veja [`infra/evolution`](infra/evolution/README.md).

@@ -983,6 +983,36 @@ html{background:var(--bg)}
 .att-tx{flex:1;min-width:0;display:flex;flex-direction:column}.att-tx b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.att-tx small{font-size:12px;color:var(--ink-3)}
 .att-view{display:grid;place-items:center;background:var(--fill);border-radius:16px;overflow:hidden}.att-view img{max-width:100%;max-height:70vh;object-fit:contain}
 .kv-sec{font-size:13px;font-weight:700;color:var(--ink-3);margin:18px 0 8px}.kv-sec:first-child{margin-top:0}
+/* ===== CRM e campanhas ===== */
+.crm-f{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;margin-bottom:14px;border-radius:20px}
+.fchip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:999px;background:var(--fill);color:var(--ink);font-size:14px;font-weight:500;white-space:nowrap}
+.fchip svg{width:15px;height:15px;opacity:.65}.fchip .dd{opacity:.5;font-size:11px}
+.fchip.on{background:var(--accent);color:var(--accent-ink)}.fchip.on svg{opacity:1}
+.fchip.clear{background:transparent;color:var(--bad)}
+.match{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:6px 10px;border-radius:10px;background:var(--ok-bg);color:var(--ok)}.match svg{width:14px;height:14px;flex:none}
+.rtable{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;background:var(--cell,#fff);box-shadow:0 0 0 .5px var(--line)}
+.rt-h,.rt-r{display:grid;grid-template-columns:1.4fr 1.4fr .9fr .8fr .8fr;gap:10px;align-items:center;padding:10px 14px;text-align:left;font-size:14px}
+.rtable.st .rt-h,.rtable.st .rt-r{grid-template-columns:1.4fr 1fr 1fr 1.2fr}
+.rt-h{font-size:12px;font-weight:600;color:var(--ink-3);background:var(--fill)}
+.rt-r+.rt-r{border-top:.5px solid var(--line)}button.rt-r:hover{background:var(--fill)}
+.rt-r span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rt-r .r,.rt-h .r{text-align:right}
+.badge.cat-cirurgia,.avatar.cat-cirurgia{background:rgba(175,82,222,.14);color:#8e44ad}.badge.cat-clinica,.avatar.cat-clinica{background:var(--info-bg);color:var(--info)}.badge.cat-estetica,.avatar.cat-estetica{background:var(--ok-bg);color:var(--ok)}
+[data-theme="dark"] .badge.cat-cirurgia,[data-theme="dark"] .avatar.cat-cirurgia{color:#d39bf0}
+.cat-head{display:flex;justify-content:space-between;align-items:baseline}
+.tl-k{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink-3)}.tl-k svg{width:14px;height:14px}
+.bubble{margin-top:8px;padding:10px 12px;border-radius:16px 16px 16px 4px;background:var(--fill);white-space:pre-wrap;font-size:14px;line-height:1.4}
+.bubble.b-out{background:rgba(52,199,89,.14);border-radius:16px 16px 4px 16px}
+.optout-line{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;border-radius:14px;background:var(--warn-bg);font-size:13px}.optout-line>svg{width:18px;height:18px;flex:none}.optout-line span{flex:1;min-width:0}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.ccard{display:flex;flex-direction:column;gap:10px;padding:18px;text-align:left;border-radius:22px;min-width:0}
+.cname{font-size:17px;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.cstats div{display:flex;flex-direction:column}.cstats b{font-size:20px;letter-spacing:-.02em}.cstats small{font-size:11.5px;color:var(--ink-3)}
+.cp-t{margin:0;font-size:22px;letter-spacing:-.02em}
+.rep{padding:12px 14px;border-radius:16px;background:var(--cell,#fff);box-shadow:0 0 0 .5px var(--line)}
+.pv-n{font-size:17px}.pv-list{max-height:280px;margin-top:12px;display:flex;flex-direction:column;border-top:.5px solid var(--line)}
+.pv-it{display:flex;align-items:center;gap:12px;padding:9px 2px;border-bottom:.5px solid var(--line);cursor:pointer}.pv-it .grow{display:flex;flex-direction:column;min-width:0}.pv-it small{color:var(--ink-3);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proc-link{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left}.proc-link span:first-child{display:flex;align-items:center;gap:8px}.proc-link svg{width:18px;height:18px}
+@media (max-width:860px){.rt-h{display:none}.rt-r,.rtable.st .rt-r{grid-template-columns:1fr auto;row-gap:2px}.rt-r span:nth-child(n+3){font-size:12.5px;color:var(--ink-3)}.f-stats{grid-template-columns:repeat(2,1fr)!important}.cstats b{font-size:17px}}
 </style>
 </head>
 <body>
@@ -996,11 +1026,6 @@ html{background:var(--bg)}
 <div class="toasts" id="toasts"></div>
 <script>
 "use strict";
-/* =====================================================================
-   CONFIGURAÇÃO DO WHATSAPP AUTOMÁTICO (Evolution API) — preencha aqui.
-   A doutora não vê isso. Deixe url vazia para usar o modo manual
-   (o sistema abre o WhatsApp com a mensagem pronta).
-   ===================================================================== */
 /* ---------- tema claro / escuro ---------- */
 const THEME_KEY='lumiere.theme';
 const themePref=()=>{try{return localStorage.getItem(THEME_KEY)||'auto'}catch(e){return'auto'}};
@@ -1008,12 +1033,6 @@ const darkMQ=matchMedia('(prefers-color-scheme: dark)');
 function applyTheme(){const p=themePref(),t=p==='auto'?(darkMQ.matches?'dark':'light'):p;document.documentElement.dataset.theme=t;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#000000':'#f2f2f7';return t}
 function setTheme(p){try{localStorage.setItem(THEME_KEY,p)}catch(e){}applyTheme();if(typeof render==='function'&&!document.body.classList.contains('locked'))render()}
 applyTheme();darkMQ.addEventListener&&darkMQ.addEventListener('change',()=>{if(themePref()==='auto'){applyTheme();renderShell&&renderShell()}});
-const EVOLUTION={
-  url:'',        // ex.: 'https://evolution-production-xxxx.up.railway.app'
-  instancia:'',  // ex.: 'clinica'
-  token:'',      // token DA INSTÂNCIA (não use a chave global)
-  intervalo:8    // segundos entre uma mensagem e outra
-};
 /* ================= ícones ================= */
 const I={
 cal:'<rect x="3" y="4.5" width="18" height="17" rx="4"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/>',
@@ -1044,6 +1063,9 @@ spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8
 copy:'<rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
 gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
 steth:'<path d="M5 3H4v6a5 5 0 0 0 10 0V3h-1"/><path d="M9 14v1a6 6 0 0 0 12 0v-2"/><circle cx="21" cy="11" r="2"/>',
+scalpel:'<path d="M3 21l7.5-7.5M14 4l6 6-8.5 8.5a2 2 0 0 1-2.8 0L7.5 17.3a2 2 0 0 1 0-2.8z"/>',
+megaphone:'<path d="M3 10v4a1 1 0 0 0 1 1h3l6 4.5V4.5L7 9H4a1 1 0 0 0-1 1z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19.5 5.5a9 9 0 0 1 0 13"/>',
+inbox:'<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13L21 13v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6z"/>',
 moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
 sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
@@ -1100,14 +1122,14 @@ const KEY='lumiere.data.v1';
 const SEED_PROCS=[['Consulta dermatológica',350,40,'consulta'],['Limpeza de pele profunda',180,60],['Peeling químico',260,45],['Microagulhamento',380,60],['Toxina botulínica',1200,30],['Preenchimento labial',1400,45],['Bioestimulador de colágeno',1800,45],['Skinbooster',950,40],['Laser / Luz pulsada',450,40],['Hidratação facial',200,50]];
 const defaults=()=>({
   patients:[],appointments:[],budgets:[],returns:[],
-  procedures:SEED_PROCS.map(([name,price,duration,kind])=>({id:uid(),name,price,duration,kind:kind||'procedimento'})),
+  procedures:SEED_PROCS.map(([name,price,duration,kind])=>({id:uid(),name,price,duration,kind:kind||'procedimento',cat:kind==='consulta'?'clinica':'estetica'})),messages:[],
   settings:{doctor:'',clinic:'',doctorPhone:'',summaryDay:1,lastSummary:'',
     template:'Olá, {nome}! ✨\n\nAqui é da {clinica}. Está chegando o momento do seu retorno de {procedimento}, previsto para {data}.\n\nVamos agendar o melhor dia e horário para você? 💆‍♀️\n\n{doutora}',
     budgetIntro:'Olá, {nome}! Segue o seu orçamento personalizado:',dermSeeded:true,sources:['Google','Instagram','Indicação'],conditions:['Diabetes','Hipertensão','Herpes recorrente','Tendência a queloide','Gestante ou lactante','Doença autoimune','Marcapasso'],
     dermTemplate:'Olá, {nome}! ✨\n\nSua consulta dermatológica completa 6 meses em {data}. Para manter o acompanhamento da sua pele em dia, vamos agendar a renovação?\n\n{doutora}\n{clinica}'}
 });
 let memoryOnly=false;
-const withDefaults=d=>{const def=defaults();const r={...def,...d,settings:{...def.settings,...((d&&d.settings)||{})}};if(d&&!(d.settings&&d.settings.dermSeeded)){if(!r.procedures.some(x=>x.kind==='consulta'))r.procedures.unshift({id:uid(),name:'Consulta dermatológica',price:350,duration:40,kind:'consulta'});r.settings.dermSeeded=true}return r};
+const withDefaults=d=>{const def=defaults();const r={...def,...d,settings:{...def.settings,...((d&&d.settings)||{})}};(r.procedures||[]).forEach(x=>{if(!x.cat)x.cat=x.kind==='consulta'?'clinica':'estetica'});if(!r.messages)r.messages=[];if(d&&!(d.settings&&d.settings.dermSeeded)){if(!r.procedures.some(x=>x.kind==='consulta'))r.procedures.unshift({id:uid(),name:'Consulta dermatológica',price:350,duration:40,kind:'consulta'});r.settings.dermSeeded=true}return r};
 const localKey=()=>KEY+':'+(session?session.user.id:'anon');
 function readLocal(k){try{const raw=localStorage.getItem(k);return raw?withDefaults(JSON.parse(raw)):null}catch(e){memoryOnly=true;return null}}
 let db=defaults(),saveT;
@@ -1179,8 +1201,8 @@ async function startApp(){
     else{const legacy=readLocal(KEY);if(legacy&&(legacy.patients.length||legacy.appointments.length)){db=legacy;toast('Os dados deste aparelho foram enviados para a nuvem')}
       else if(!cached)db=defaults();await pushNow();try{localStorage.removeItem(KEY)}catch(e){}}
     S.anim=!cached;render();setCloud(cloud.pending?'saving':'ok');if(cloud.pending)pushNow();
+    waRefresh().then(()=>{renderShell();if(S.view==='ajustes'||S.view==='campanhas')render();autoSummary()});crmLoad();
   }catch(e){if(e.auth)return;setCloud('offline');if(!cached){db=defaults();render()}toast('Sem conexão — usando os dados salvos neste aparelho')}
-  setTimeout(autoSummary,1500);
 }
 
 /* ---------- tela de login ---------- */
@@ -1217,10 +1239,10 @@ function showLogin(mode,o={}){
     }catch(x){err.textContent=x.message;btn.disabled=false;btn.textContent=old}};
 }
 
-function startDemo(){
+function startDemo(){CRM.loaded=false;
   session={access_token:'',refresh_token:'',expires_at:9e12,user:{id:'demo',email:'Demonstração'}};
   document.body.classList.remove('locked');$('#auth').innerHTML='';
-  db=readLocal(localKey())||defaults();if(!db.patients.length)seedDemo();persist();S.anim=true;render();
+  db=readLocal(localKey())||defaults();if(!db.patients.length)seedDemo();crmBindLocal();persist();S.anim=true;render();
 }
 async function boot(){applyBrand();
   if(window.LUMIERE_DEMO)return startDemo();
@@ -1252,11 +1274,50 @@ const pendingCount=()=>dermDue().filter(x=>!x.d.notified).length+(()=>{const lim
 const ST={agendada:['Agendada','info'],realizada:['Realizada','ok'],cancelada:['Cancelada','bad']};
 const BST={aberto:['Em aberto','warn'],aprovado:['Aprovado','ok'],recusado:['Recusado','bad']};
 const RST={pendente:['Pendente','warn'],avisado:['Avisado','info'],concluido:['Concluído','ok']};
+/* ================= CRM: categorias, procedimentos realizados e mensagens ================= */
+const CATS=[['clinica','Clínica (avaliação)'],['cirurgia','Cirurgia'],['estetica','Estética']];
+const catName=k=>(CATS.find(c=>c[0]===k)||['','Sem categoria'])[1];
+const catShort=k=>({clinica:'Clínica',cirurgia:'Cirurgia',estetica:'Estética'})[k]||'—';
+const procById=id=>db.procedures.find(x=>x.id===id);
+const procCat=i=>{const pr=i.procId&&procById(i.procId);return pr?(pr.cat||(pr.kind==='consulta'?'clinica':'estetica')):(/consulta|avalia/.test(norm(i.name))?'clinica':'estetica')};
+function realized(){const out=[];db.appointments.forEach(a=>{if(a.status!=='realizada'||!P(a.patientId))return;(a.items||[]).forEach(i=>{if(!i.name)return;out.push({patientId:a.patientId,apptId:a.id,procId:i.procId||'',name:i.name,cat:procCat(i),date:a.date,value:(+i.price||0)*(+i.qty||1)})})});return out.sort((a,b)=>b.date.localeCompare(a.date))}
+function logMsg(pid,kind,text,dir){if(!pid||!text)return;db.messages=db.messages||[];db.messages.push({id:uid(),patientId:pid,at:new Date().toISOString(),dir:dir||'out',kind,text:String(text).slice(0,2000)});save()}
+const MSGK={retorno:'Aviso de retorno',orcamento:'Orçamento enviado',renovacao:'Renovação da consulta',campanha:'Campanha',resposta:'Resposta',avulsa:'Mensagem'};
+
+/* ================= CRM: campanhas, envios, respostas e descadastros ================= */
+const CRM={campaigns:[],sends:[],replies:[],optouts:[],loaded:false};
+const TBL={campaigns:'lumiere_campaigns',sends:'lumiere_campaign_sends',replies:'lumiere_campaign_replies',optouts:'lumiere_optouts'};
+const crmLocal=()=>!!window.LUMIERE_DEMO||!session;
+function crmBindLocal(){db.crm=db.crm||{campaigns:[],sends:[],replies:[],optouts:[]};['campaigns','sends','replies','optouts'].forEach(k=>{db.crm[k]=db.crm[k]||[];CRM[k]=db.crm[k]});CRM.loaded=true}
+async function crmLoad(){
+  if(crmLocal()){crmBindLocal();return}
+  try{const [c,sd,rp,o]=await Promise.all([rest('lumiere_campaigns?select=*&order=created_at.desc'),rest('lumiere_campaign_sends?select=*&order=created_at.desc&limit=5000'),rest('lumiere_campaign_replies?select=*&order=received_at.desc&limit=3000'),rest('lumiere_optouts?select=*')]);
+    const before=pendingReviews().length;const A=x=>Array.isArray(x)?x:[];Object.assign(CRM,{campaigns:A(c),sends:A(sd),replies:A(rp),optouts:A(o),loaded:true});
+    renderShell();if(S.view==='campanhas'||(S.view==='agenda'&&before!==pendingReviews().length))render();layers.forEach(l=>l.refresh&&l.refresh())}catch(e){}
+}
+setInterval(()=>{if(!document.hidden&&session&&!crmLocal())crmLoad()},45000);
+async function crmInsert(t,rows){rows=[].concat(rows);const now=new Date().toISOString();
+  if(crmLocal()){rows.forEach(r=>{r.id=r.id||uid();r.created_at=r.created_at||now});CRM[t].unshift(...rows);save();return rows}
+  const res=await rest(TBL[t],{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(rows.map(r=>({...r,user_id:session.user.id})))});CRM[t].unshift(...(res||[]));return res||[]}
+async function crmUpdate(t,id,patch){const row=CRM[t].find(x=>x.id===id);if(row)Object.assign(row,patch);
+  if(crmLocal()){save();return}await rest(`${TBL[t]}?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(patch)})}
+async function crmDelete(t,id){const i=CRM[t].findIndex(x=>x.id===id);if(i>-1)CRM[t].splice(i,1);
+  if(t==='campaigns'){for(const k of ['sends','replies'])for(let j=CRM[k].length-1;j>=0;j--)if(CRM[k][j].campaign_id===id)CRM[k].splice(j,1)}
+  if(crmLocal()){save();return}await rest(`${TBL[t]}?id=eq.${id}`,{method:'DELETE'})}
+const isOut=pid=>CRM.optouts.some(o=>o.patient_id===pid);
+const optOutOf=pid=>CRM.optouts.find(o=>o.patient_id===pid);
+async function crmOptOut(pid,source,reason){if(isOut(pid))return;const row={patient_id:pid,source:source||'manual',reason:(reason||'').slice(0,300),created_at:new Date().toISOString()};
+  if(crmLocal()){CRM.optouts.push(row);save();return}
+  await rest(TBL.optouts,{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({...row,user_id:session.user.id})});CRM.optouts.push(row)}
+async function crmOptIn(pid){const i=CRM.optouts.findIndex(o=>o.patient_id===pid);if(i>-1)CRM.optouts.splice(i,1);
+  if(crmLocal()){save();return}await rest(`${TBL.optouts}?patient_id=eq.${encodeURIComponent(pid)}`,{method:'DELETE'})}
+const pendingReviews=()=>CRM.replies.filter(r=>r.review_status==='pendente');
+
 const badge=(m,k)=>{const[l,c]=m[k]||[k,''];return`<span class="badge ${c}">${l}</span>`};
 const av=(name,cls='')=>`<div class="avatar ${cls}">${esc(initials(name))}</div>`;
 
 /* ================= estado da interface ================= */
-const S={view:'agenda',anim:true,calMonth:mKey(today()),selDay:today(),calSlide:'',pq:'',psort:'recent',bf:'todos',bq:'',retMode:'month',retMonth:mKey(addMonths(today(),1)),retSel:null,retSelKey:''};
+const S={cf:{proc:'',cat:'',from:'',to:'',bst:''},pmode:'cards',view:'agenda',anim:true,calMonth:mKey(today()),selDay:today(),calSlide:'',pq:'',psort:'recent',bf:'todos',bq:'',retMode:'month',retMonth:mKey(addMonths(today(),1)),retSel:null,retSelKey:''};
 
 /* ================= toast / modal / menu / datepicker ================= */
 function toast(msg){const box=$('#toasts');[...box.children].forEach(c=>{if(c.textContent===msg)c.remove()});while(box.children.length>=2)box.firstChild.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='.3s';t.style.opacity='0';t.style.transform='translateY(8px)'},2600);setTimeout(()=>t.remove(),2950)}
@@ -1306,15 +1367,15 @@ function pickDate(anchor,val,quick,yearFirst){return new Promise(res=>{
 })}
 
 /* ================= shell / navegação ================= */
-const NAV=[['agenda','Agenda','cal','Agenda'],['pacientes','Pacientes','users','Pacientes'],['orcamentos','Orçamentos','doc','Orçam.'],['retornos','Retornos','ret','Retornos'],['procedimentos','Procedimentos','tag','Proced.'],['ajustes','Ajustes','cog','Ajustes']];
-function navHTML(mob){const n=pendingCount();return NAV.filter(([k])=>mob||k!=='ajustes').map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}</button>`).join('')}
+const NAV=[['agenda','Agenda','cal','Agenda'],['pacientes','Pacientes','users','Pacientes'],['orcamentos','Orçamentos','doc','Orçam.'],['retornos','Retornos','ret','Retornos'],['campanhas','Campanhas','megaphone','Campanhas'],['procedimentos','Procedimentos','tag','Proced.'],['ajustes','Ajustes','cog','Ajustes']];
+function navHTML(mob){const n=pendingCount();return NAV.filter(([k])=>mob?k!=='procedimentos':k!=='ajustes').map(([k,l,i,ml])=>`<button class="nav ${S.view===k?'on':''}" data-nav="${k}">${ic(i)}<span>${mob?ml:l}</span>${k==='retornos'&&n?`<span class="count">${n}</span>`:''}${k==='campanhas'&&pendingReviews().length?`<span class="count">${pendingReviews().length}</span>`:''}</button>`).join('')}
 function renderShell(){applyBrand();
   $('#side').innerHTML=`<div class="brand"><div class="brand-mark">${esc(brandInitial())}</div><div><b>${esc(brandName())}</b><small>${esc(db.settings.clinic||'Estética & Pele')}</small></div></div>${navHTML()}<button class="theme-btn" data-theme-toggle title="${document.documentElement.dataset.theme==='dark'?'Modo claro':'Modo escuro'}">${ic(document.documentElement.dataset.theme==='dark'?'sun':'moon')}</button><div class="side-foot"><i id="syncDot" class="sync ${cloud.state}"></i><button class="gear-btn ${S.view==='ajustes'?'on':''}" data-nav="ajustes" title="Ajustes" aria-label="Ajustes">${ic('gear')}</button></div>`;
   $('#tabbar').innerHTML=navHTML(true);
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav);if(e.target.closest('[data-theme-toggle]'))setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
 function go(v){if(S.view===v&&v!=='agenda')return;S.view=v;S.anim=true;render();$('#view').scrollTop=0}
-const VIEWS={agenda:vAgenda,pacientes:vPacientes,orcamentos:vOrcamentos,retornos:vRetornos,procedimentos:vProcedimentos,ajustes:vAjustes};
+const VIEWS={campanhas:vCampanhas,agenda:vAgenda,pacientes:vPacientes,orcamentos:vOrcamentos,retornos:vRetornos,procedimentos:vProcedimentos,ajustes:vAjustes};
 function render(){
   renderShell();const v=$('#view'),st=v.scrollTop;v.innerHTML=VIEWS[S.view]();
   if(S.anim){v.classList.remove('anim');void v.offsetWidth;v.classList.add('anim');S.anim=false}else v.scrollTop=st;
@@ -1341,6 +1402,7 @@ function vAgenda(){
   const newP=db.patients.filter(p=>p.createdAt&&mKey(iso(new Date(p.createdAt)))===mk).length;
   let html=topbar(greet,'',`<button class="btn" data-act="newPatient">${ic('user')}<span class="btn-label">Paciente</span></button><button class="btn" data-act="newBudget">${ic('doc')}<span class="btn-label">Orçamento</span></button><button class="btn dark" data-act="newAppt">${ic('plus')}Nova consulta</button>`,cap(fmtLong(t)));
   html+=`<button class="spot-trigger" data-act="spot" aria-label="Buscar">${ic('search')}<span>Buscar pacientes, consultas, orçamentos…</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform)?'⌘':'Ctrl'} K</kbd></button>`;
+  const pr=pendingReviews().length;if(pr)html+=`<div class="banner glass"><div class="ic">${ic('inbox')}</div><div style="flex:1"><b>${pr} mensage${pr===1?'m':'ns'} de campanha para revisar</b><div class="small muted">Respostas em que a IA não teve certeza se a pessoa quer sair da lista.</div></div><button class="btn" data-act="reviews">Revisar</button></div>`;
   const dd=dermDue();if(dd.length)html+=`<div class="derm-card"><div class="derm-ic">${ic('steth')}</div><div class="derm-tx"><b>Renovação da consulta dermatológica</b><span>${dd.length} paciente${dd.length>1?'s precisam':' precisa'} renovar · o aviso começa 15 dias antes de completar 6 meses</span><div class="derm-names">${dd.slice(0,3).map(x=>`<i class="${x.d.st}">${esc(first(x.p.name))} · ${dermLabel(x.d)}</i>`).join('')}${dd.length>3?`<i>+${dd.length-3}</i>`:''}</div></div><button class="btn" data-act="goDerm">Ver e avisar</button></div>`;
   if(!db.patients.length)html+=`<div class="banner glass"><div class="ic">${ic('spark')}</div><div style="flex:1"><b>Bem-vinda ao seu sistema</b><div class="small muted">Cadastre seu primeiro paciente (só o nome é obrigatório) ou veja o sistema com dados de exemplo.</div></div><button class="btn" data-act="demo">Ver exemplo</button><button class="btn dark" data-act="newPatient">Cadastrar</button></div>`;
   else if(summaryNeeded())html+=`<div class="banner glass"><div class="ic">${ic('bell')}</div><div style="flex:1"><b>Retornos de ${mName(nk)}: ${rn.length} paciente${rn.length>1?'s':''}</b><div class="small muted">Sua lista do próximo mês está pronta para organizar a agenda.</div></div><button class="btn" data-act="goRet">Ver lista</button><button class="btn wa" data-act="sendSummary">${ic('wa')}<span class="btn-label">Enviar no meu WhatsApp</span></button></div>`;
@@ -1393,7 +1455,7 @@ Object.assign(ACT,{
   folder:id=>openFolder(id),
   goRet:()=>{S.retMode='month';S.retMonth=mShift(mKey(today()),1);go('retornos')},
   sendSummary:()=>sendSummary(mShift(mKey(today()),1)),
-  demo:()=>{seedDemo();changed();toast('Dados de exemplo carregados')}
+  demo:()=>{seedDemo();if(crmLocal())crmBindLocal();changed();toast('Dados de exemplo carregados')}
 });
 
 /* ================= MARCA = NOME DA CLÍNICA (muda sozinha quando a clínica muda o nome) ================= */
@@ -1583,6 +1645,198 @@ function attachBox(host,pid,getList,onAdd,onRemove){
   draw();
 }
 
+/* ================= CAMPANHAS ================= */
+const LGPD_FOOT='\n\nSe não quiser mais receber mensagens, é só avisar.';
+const CST={rascunho:['Rascunho',''],enviando:['Enviando','info'],pausada:['Pausada','warn'],concluida:['Concluída','ok']};
+const SST={na_fila:['Na fila',''],enviando:['Enviando','info'],enviado:['Enviada','ok'],manual:['Enviada','ok'],falhou:['Falhou','bad'],cancelado:['Cancelada','']};
+const RCL={sair:['Pediu para sair','bad'],normal:['Resposta','ok'],duvida:['Para revisar','warn']};
+const FDEF=()=>({proc:'',cat:'',pFrom:'',pTo:'',lastMode:'',lastMonths:6,lastFrom:'',lastTo:'',bday:'',bairro:'',cidade:'',cep:'',openBudget:false,ageMin:'',ageMax:'',gender:'',source:'',skin:''});
+function campaignTargets(f){const R=realized(),t=today(),out={list:[],noPhone:0,optOut:0};
+  for(const p of db.patients){
+    const pr=R.filter(r=>r.patientId===p.id);let mp=pr;
+    if(f.proc||f.cat||f.pFrom||f.pTo){mp=pr.filter(r=>(!f.proc||r.procId===f.proc)&&(!f.cat||r.cat===f.cat)&&(!f.pFrom||r.date>=f.pFrom)&&(!f.pTo||r.date<=f.pTo));if(!mp.length)continue}
+    if(f.lastMode){const last=(pr[0]||{}).date||'';
+      if(f.lastMode==='mais'&&last&&last>addMonths(t,-(+f.lastMonths||6)))continue;
+      if(f.lastMode==='periodo'&&(!last||(f.lastFrom&&last<f.lastFrom)||(f.lastTo&&last>f.lastTo)))continue}
+    if(f.bday){if(!p.birth)continue;const m=+p.birth.slice(5,7),tm=+t.slice(5,7);if(f.bday==='este'&&m!==tm)continue;if(f.bday==='proximo'&&m!==tm%12+1)continue}
+    const ad=norm([fullAddr(p),p.cep].join(' '));
+    if(f.bairro&&!ad.includes(norm(f.bairro)))continue;if(f.cidade&&!ad.includes(norm(f.cidade)))continue;if(f.cep&&!digits(p.cep).startsWith(digits(f.cep)))continue;
+    if(f.openBudget&&!db.budgets.some(b=>b.patientId===p.id&&b.status==='aberto'))continue;
+    const a=age(p.birth);if(f.ageMin||f.ageMax){if(a==='')continue;if(f.ageMin&&a<+f.ageMin)continue;if(f.ageMax&&a>+f.ageMax)continue}
+    if(f.gender&&p.gender!==f.gender)continue;if(f.source&&norm(p.source)!==norm(f.source))continue;if(f.skin&&!(p.skin||'').split(/,\s*/).includes(f.skin))continue;
+    if(isOut(p.id)){out.optOut++;continue}
+    if(!p.phone){out.noPhone++;continue}
+    out.list.push({p,match:mp[0]||pr[0]||null})}
+  out.list.sort((a,b)=>a.p.name.localeCompare(b.p.name));return out}
+function campMsg(tpl,x){const s=db.settings;return fill(tpl,{nome:x.p.socialName||first(x.p.name),procedimento:x.match?x.match.name:'seu tratamento',data:x.match?fmtD(x.match.date):'',clinica:s.clinic||'nossa clínica',doutora:s.doctor||''}).trim()+LGPD_FOOT}
+function filtersSummary(f){const o=[];const pr=f.proc&&procById(f.proc);
+  if(pr)o.push(`fez ${pr.name}`);if(f.cat)o.push(`categoria ${catShort(f.cat).toLowerCase()}`);if(f.pFrom||f.pTo)o.push(`procedimento ${f.pFrom?'de '+fmtD(f.pFrom):''}${f.pTo?' até '+fmtD(f.pTo):''}`.trim());
+  if(f.lastMode==='mais')o.push(`sem vir há mais de ${f.lastMonths} meses`);if(f.lastMode==='periodo')o.push(`última consulta ${f.lastFrom?'de '+fmtD(f.lastFrom):''}${f.lastTo?' até '+fmtD(f.lastTo):''}`.trim());
+  if(f.bday)o.push(f.bday==='este'?'aniversariantes do mês':'aniversariantes do próximo mês');
+  if(f.bairro)o.push(`bairro ${f.bairro}`);if(f.cidade)o.push(`cidade ${f.cidade}`);if(f.cep)o.push(`CEP ${f.cep}…`);if(f.openBudget)o.push('orçamento em aberto');
+  if(f.ageMin||f.ageMax)o.push(`idade ${f.ageMin||0}–${f.ageMax||'∞'}`);if(f.gender)o.push(GENDER[f.gender].toLowerCase());if(f.source)o.push(`veio por ${f.source}`);if(f.skin)o.push(`pele ${f.skin.toLowerCase()}`);
+  return o.length?o:['todas as pacientes com WhatsApp']}
+function campStats(cid){const S2=CRM.sends.filter(x=>x.campaign_id===cid);const sent=S2.filter(x=>x.sent_at&&(x.status==='enviado'||x.status==='manual'));const R=CRM.replies.filter(r=>r.campaign_id===cid);
+  const responded=new Set(R.map(r=>r.send_id||r.patient_id)).size;
+  return{total:S2.length,sent:sent.length,queue:S2.filter(x=>x.status==='na_fila'||x.status==='enviando').length,failed:S2.filter(x=>x.status==='falhou').length,replies:R.length,responded,rate:sent.length?Math.round(responded/sent.length*100):0}}
+
+function vCampanhas(){const pend=pendingReviews().length;
+  const waTxt=window.LUMIERE_DEMO?'<span class="badge">Demonstração · envio manual pelo WhatsApp</span>':!WA.checked?'<span class="badge">Verificando o WhatsApp…</span>':WA.configured?(WA.state==='open'?'<span class="badge ok">● WhatsApp conectado · envio automático</span>':'<span class="badge warn">● WhatsApp desconectado · conecte em Ajustes</span>'):'<span class="badge">Envio manual · o WhatsApp abre com a mensagem pronta</span>';
+  const L=[...CRM.campaigns].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+  return topbar('Campanhas','Mensagens personalizadas para grupos de pacientes.',`<button class="btn dark" data-act="newCamp">${ic('plus')}Nova campanha</button>`)+
+  `<div class="row wrap between" style="margin:-6px 0 16px;gap:10px">${waTxt}<span class="small muted">${CRM.optouts.length} paciente${CRM.optouts.length===1?'':'s'} fora das campanhas</span></div>
+  ${pend?`<div class="derm-card"><div class="derm-ic">${ic('inbox')}</div><div class="derm-tx"><b>${pend} mensage${pend===1?'m':'ns'} para revisar</b><span>Respostas que a IA não teve certeza. Escolha tirar da lista, manter ou responder.</span></div><button class="btn" data-act="reviews">Revisar</button></div>`:''}
+  ${!CRM.loaded?'<div class="empty">Carregando campanhas…</div>':L.length?`<div class="cgrid">${L.map(c=>{const st=campStats(c.id);return`<button class="ccard glass" data-act="openCamp" data-id="${c.id}">
+    <div class="row between" style="gap:8px"><b class="cname">${esc(c.name)}</b>${badge(CST,c.status)}</div>
+    <div class="small muted">${new Date(c.created_at).toLocaleDateString('pt-BR')} · ${esc(filtersSummary(c.filters||{}).slice(0,2).join(' · '))}</div>
+    <div class="cstats"><div><b>${st.total}</b><small>Público</small></div><div><b>${st.sent}</b><small>Enviadas</small></div><div><b>${st.responded}</b><small>Responderam</small></div><div><b>${st.rate}%</b><small>Resposta</small></div></div>
+    ${st.total?`<div class="progress"><i style="width:${st.total?Math.round(st.sent/st.total*100):0}%"></i></div>`:''}</button>`}).join('')}</div>`
+    :`<div class="glass">${empty('megaphone','Nenhuma campanha ainda','Escolha um público com filtros, escreva a mensagem e veja a lista antes de enviar.',`<button class="btn dark" data-act="newCamp">${ic('plus')}Criar campanha</button>`)}</div>`}`;
+}
+Object.assign(ACT,{newCamp:()=>openCampEditor(),openCamp:id=>openCampaign(id),reviews:()=>openReviews()});
+
+function openCampEditor(base){
+  const f=Object.assign(FDEF(),clone((base&&base.filters)||{}));delete f.excluded;
+  const excluded=new Set((base&&base.filters&&base.filters.excluded)||[]);
+  let name=base?(base.status==='rascunho'?base.name:base.name+' (cópia)'):'',tpl=base?base.template:'Olá, {nome}! ✨\n\nAqui é da {clinica}. Já faz um tempo desde a sua última sessão de {procedimento}, em {data}. Que tal agendar uma avaliação para manter os resultados?';
+  const editingDraft=base&&base.status==='rascunho'?base:null;
+  const seg=(k,opts)=>`<div class="seg" data-f="${k}">${opts.map(([v,l])=>`<button type="button" data-v="${v}">${l}</button>`).join('')}</div>`;
+  const dbtn=(k,l)=>`<button type="button" class="fchip" data-fd="${k}">${ic('cal')}<span>${l}</span></button>`;
+  openModal({title:editingDraft?'Editar campanha':'Nova campanha',size:'lg',body:`<div class="stack pform">
+    <label class="field"><span>Nome da campanha <em>*</em></span><input class="in" data-cn value="${esc(name)}" placeholder="Ex.: Retorno de botox – 6 meses"></label>
+    <div class="fsec">${ic('tag')}Procedimento realizado</div>
+    <div class="box stack"><div class="row wrap" style="gap:8px"><button type="button" class="fchip" data-fproc></button>${seg('cat',[['','Todas'],...CATS.map(([k])=>[k,catShort(k)])])}</div>
+      <div class="row wrap" style="gap:8px"><span class="small muted">Data do procedimento</span>${dbtn('pFrom','De')}${dbtn('pTo','Até')}</div></div>
+    <div class="fsec">${ic('clock')}Última consulta e aniversário</div>
+    <div class="box stack">${seg('lastMode',[['','Qualquer'],['mais','Sem vir há mais de…'],['periodo','Entre datas']])}
+      <div class="row wrap" data-lastm style="gap:8px"><input class="in" data-fn="lastMonths" type="number" min="1" max="60" style="width:90px"><span class="small muted">meses</span></div>
+      <div class="row wrap" data-lastp style="gap:8px">${dbtn('lastFrom','De')}${dbtn('lastTo','Até')}</div>
+      <div class="row wrap" style="gap:8px"><span class="small muted">Aniversário</span>${seg('bday',[['','Qualquer'],['este','Este mês'],['proximo','Próximo mês']])}</div></div>
+    <div class="fsec">${ic('users')}Cadastro</div>
+    <div class="box stack"><div class="grid3"><label class="field"><span>Bairro</span><input class="in" data-fn="bairro" placeholder="Ex.: Jardins"></label><label class="field"><span>Cidade</span><input class="in" data-fn="cidade" placeholder="Ex.: São Paulo"></label><label class="field"><span>CEP começa com</span><input class="in" data-fn="cep" inputmode="numeric" placeholder="Ex.: 014"></label></div>
+      <div class="grid3"><label class="field"><span>Idade mínima</span><input class="in" data-fn="ageMin" type="number" min="0"></label><label class="field"><span>Idade máxima</span><input class="in" data-fn="ageMax" type="number" min="0"></label><div class="field"><span>Sexo</span>${seg('gender',[['','Todos'],['F','Fem.'],['M','Masc.'],['O','Outro']])}</div></div>
+      <div class="field"><span>Como conheceu</span><div class="chips" data-fsrc></div></div>
+      <div class="field"><span>Tipo de pele</span><div class="chips" data-fskin></div></div>
+      <label class="sw-row" style="padding:4px 0"><span><b>Só quem tem orçamento em aberto</b></span><span class="switch"><input type="checkbox" data-fob><i></i></span></label></div>
+    <div class="fsec">${ic('wa')}Mensagem</div>
+    <div class="box stack"><textarea class="in" data-ct style="min-height:130px">${esc(tpl)}</textarea>
+      <div class="chips">${['nome','procedimento','data'].map(v=>`<button type="button" class="chip" data-var="${v}">{${v}}</button>`).join('')}</div>
+      <div class="small muted">O rodapé “Se não quiser mais receber mensagens, é só avisar.” entra automaticamente em todas as mensagens.</div></div>
+    <div class="fsec">${ic('eye')}Pré-visualização</div>
+    <div class="box" data-prev></div>
+  </div>`,
+  foot:`<button class="btn" data-cancel>Cancelar</button><button class="btn" data-draft>Salvar rascunho</button><button class="btn dark" data-send>${ic('send')}Enviar</button>`,
+  onMount:(el,m)=>{
+    const prevBox=$('[data-prev]',el);let T={list:[]},timer;
+    const sync=()=>{
+      $$('[data-f]',el).forEach(g=>$$('button',g).forEach(b=>b.classList.toggle('on',b.dataset.v===String(f[g.dataset.f]))));
+      const pr=f.proc&&procById(f.proc);$('[data-fproc]',el).innerHTML=`${ic('tag')}<span>${pr?esc(pr.name):'Qualquer procedimento'}</span><span class="dd">▾</span>`;$('[data-fproc]',el).classList.toggle('on',!!pr);
+      $$('[data-fd]',el).forEach(b=>{const k=b.dataset.fd;b.classList.toggle('on',!!f[k]);$('span',b).textContent=(/From$/.test(k)?'De ':'Até ')+(f[k]?fmtD(f[k]):'…')});
+      $('[data-lastm]',el).style.display=f.lastMode==='mais'?'':'none';$('[data-lastp]',el).style.display=f.lastMode==='periodo'?'':'none';
+      $('[data-fob]',el).checked=!!f.openBudget;
+      const chipsOf=(box,list,key)=>{box.innerHTML=[['','Todos'],...list.map(x=>[x,x])].map(([v,l])=>`<button type="button" class="chip ${f[key]===v?'on':''}" data-v="${esc(v)}">${esc(l)}</button>`).join('')};
+      chipsOf($('[data-fsrc]',el),db.settings.sources||[],'source');chipsOf($('[data-fskin]',el),SKINS,'skin');
+      clearTimeout(timer);timer=setTimeout(preview,80)};
+    const preview=()=>{T=campaignTargets(f);tpl=$('[data-ct]',el).value;const sel=T.list.filter(x=>!excluded.has(x.p.id));const ex=sel[0]||T.list[0];
+      prevBox.innerHTML=`<div class="row between wrap" style="gap:8px;margin-bottom:10px"><b class="pv-n">${sel.length} paciente${sel.length===1?'':'s'} vão receber</b><span class="small muted">${[T.optOut?`${T.optOut} fora das campanhas`:'',T.noPhone?`${T.noPhone} sem WhatsApp`:'',excluded.size?`${[...excluded].filter(id=>T.list.some(x=>x.p.id===id)).length} desmarcada(s)`:''].filter(Boolean).join(' · ')}</span></div>
+        ${ex?`<div class="small muted" style="margin-bottom:6px">Exemplo para ${esc(ex.p.name)}:</div><div class="msg-prev">${esc(campMsg(tpl,ex))}</div>`:'<div class="small muted">Nenhuma paciente com esses filtros.</div>'}
+        ${T.list.length?`<div class="pv-list scroll">${T.list.map(x=>`<label class="pv-it"><input type="checkbox" class="ck" data-pv="${x.p.id}" ${excluded.has(x.p.id)?'':'checked'}><span class="grow"><b>${esc(x.p.name)}</b><small>${esc(x.p.phone)}${x.match?` · ${esc(x.match.name)} em ${fmtD(x.match.date)}`:''}</small></span></label>`).join('')}</div>`:''}`;
+      $('[data-send]',el).innerHTML=`${ic('send')}Enviar para ${sel.length}`;$('[data-send]',el).disabled=!sel.length};
+    sync();$('[data-fn="lastMonths"]',el).value=f.lastMonths;['bairro','cidade','cep','ageMin','ageMax'].forEach(k=>$(`[data-fn="${k}"]`,el).value=f[k]||'');
+    el.addEventListener('click',async e=>{
+      const sg=e.target.closest('[data-f] [data-v]');if(sg){const k=sg.closest('[data-f]').dataset.f;f[k]=sg.dataset.v;if(k==='cat'&&f.proc&&procById(f.proc)?.cat!==f.cat&&f.cat)f.proc='';sync();return}
+      const ch=e.target.closest('[data-fsrc] [data-v],[data-fskin] [data-v]');if(ch){f[ch.closest('[data-fsrc]')?'source':'skin']=ch.dataset.v;sync();return}
+      const fd=e.target.closest('[data-fd]');if(fd){const v=await pickDate(fd,f[fd.dataset.fd]||today(),[['Limpar','']]);if(v!==null){f[fd.dataset.fd]=v;sync()}return}
+      const fp=e.target.closest('[data-fproc]');if(fp){const L=db.procedures.filter(x=>!f.cat||x.cat===f.cat).sort((a,b)=>a.name.localeCompare(b.name));openMenu(fp,[{label:'Qualquer procedimento',icon:'tag',fn:()=>{f.proc='';sync()}},...L.map(x=>({label:esc(x.name),icon:x.cat==='cirurgia'?'scalpel':'tag',fn:()=>{f.proc=x.id;sync()}}))]);return}
+      const vr=e.target.closest('[data-var]');if(vr){const t=$('[data-ct]',el),a=t.selectionStart,b=t.selectionEnd,v=`{${vr.dataset.var}}`;t.value=t.value.slice(0,a)+v+t.value.slice(b);t.focus();t.selectionStart=t.selectionEnd=a+v.length;preview();return}
+    });
+    el.addEventListener('change',e=>{const pv=e.target.closest('[data-pv]');if(pv){pv.checked?excluded.delete(pv.dataset.pv):excluded.add(pv.dataset.pv);preview()}if(e.target.matches('[data-fob]')){f.openBudget=e.target.checked;sync()}});
+    el.addEventListener('input',e=>{const k=e.target.dataset.fn;if(k){f[k]=e.target.value.trim();sync()}if(e.target.matches('[data-ct]'))preview()});
+    $('[data-cancel]',el).onclick=m.close;
+    const save=async send=>{name=$('[data-cn]',el).value.trim();tpl=$('[data-ct]',el).value.trim();
+      if(!name){toast('Dê um nome para a campanha');$('[data-cn]',el).focus();return}if(!tpl){toast('Escreva a mensagem');return}
+      const sel=T.list.filter(x=>!excluded.has(x.p.id));
+      if(send){if(!sel.length){toast('Nenhuma paciente para enviar');return}
+        if(!await confirmBox(evoOn()?`Enviar para <b>${sel.length}</b> paciente${sel.length===1?'':'s'}? A fila envia cerca de 4 mensagens por minuto, com intervalos variados, das 8h às 20h.`:`Preparar o envio para <b>${sel.length}</b> paciente${sel.length===1?'':'s'}? O WhatsApp vai abrir com a mensagem pronta, uma paciente por vez.`,'Enviar'))return}
+      const filters={...f,excluded:[...excluded]};
+      try{let c=editingDraft;
+        if(c){await crmUpdate('campaigns',c.id,{name,filters,template:tpl,status:send?'enviando':'rascunho',updated_at:new Date().toISOString()})}
+        else{[c]=await crmInsert('campaigns',{name,filters,template:tpl,status:send?'enviando':'rascunho'})}
+        if(send){await crmInsert('sends',sel.map(x=>({campaign_id:c.id,patient_id:x.p.id,patient_name:x.p.name,phone:waNum(x.p.phone),message:campMsg(tpl,x),status:'na_fila'})))}
+        m.close();changed();toast(send?'Campanha criada':'Rascunho salvo');openCampaign(c.id);if(send&&!evoOn())setTimeout(()=>manualQueue(c.id),350)}
+      catch(e){toast('Não foi possível salvar: '+e.message)}};
+    $('[data-draft]',el).onclick=()=>save(false);$('[data-send]',el).onclick=()=>save(true);
+  }});
+}
+
+function openCampaign(id){let tab='envios';
+  openModal({title:'Campanha',size:'lg',body:'<div data-cp></div>',onMount:(el,m)=>{
+    const draw=()=>{const c=CRM.campaigns.find(x=>x.id===id);if(!c){m.close();return}const st=campStats(id);
+      const S2=CRM.sends.filter(x=>x.campaign_id===id).sort((a,b)=>String(b.sent_at||b.created_at).localeCompare(String(a.sent_at||a.created_at)));
+      const RP=CRM.replies.filter(x=>x.campaign_id===id).sort((a,b)=>String(b.received_at).localeCompare(String(a.received_at)));
+      const repBy=new Set(RP.map(r=>r.send_id));
+      $('[data-cp]',el).innerHTML=`<div class="row between wrap" style="gap:10px"><div><h2 class="cp-t">${esc(c.name)}</h2><div class="small muted">${esc(filtersSummary(c.filters||{}).join(' · '))}</div></div>${badge(CST,c.status)}</div>
+        <div class="f-stats" style="grid-template-columns:repeat(5,1fr)"><div><small>Público</small><b>${st.total}</b></div><div><small>Enviadas</small><b>${st.sent}</b></div><div><small>Na fila</small><b>${st.queue}</b></div><div><small>Responderam</small><b>${st.responded}</b></div><div><small>Taxa de resposta</small><b>${st.rate}%</b></div></div>
+        ${st.total?`<div class="progress"><i style="width:${Math.round(st.sent/st.total*100)}%"></i></div>`:''}
+        <div class="row wrap" style="gap:8px;margin:12px 0 16px">
+          ${c.status==='rascunho'?`<button class="btn dark sm" data-edit>${ic('edit')}Editar e enviar</button>`:''}
+          ${st.queue&&!evoOn()?`<button class="btn wa sm" data-manual>${ic('wa')}Enviar pelo WhatsApp (${st.queue})</button>`:''}
+          ${c.status==='enviando'&&evoOn()?`<button class="btn sm" data-pause>Pausar</button>`:''}${c.status==='pausada'?`<button class="btn sm" data-resume>Retomar</button>`:''}
+          ${st.queue?`<button class="btn sm ghost danger" data-cancelq>Cancelar fila</button>`:''}
+          <button class="btn sm" data-dup>${ic('copy')}Duplicar</button><button class="btn sm ghost danger" data-del>${ic('trash')}Excluir</button></div>
+        <details class="box" style="margin-bottom:14px"><summary class="strong" style="cursor:pointer">Mensagem</summary><div class="msg-prev" style="margin-top:10px">${esc(c.template+LGPD_FOOT)}</div></details>
+        <div class="seg" style="margin-bottom:12px"><button class="${tab==='envios'?'on':''}" data-tab="envios">Envios · ${S2.length}</button><button class="${tab==='respostas'?'on':''}" data-tab="respostas">Respostas · ${RP.length}</button></div>
+        ${tab==='envios'?(S2.length?`<div class="rtable st"><div class="rt-h"><span>Paciente</span><span>Telefone</span><span>Envio</span><span>Status</span></div>${S2.map(x=>`<div class="rt-r"><span class="strong">${esc(x.patient_name||P(x.patient_id)?.name||'—')}</span><span>${esc(maskPhone(String(x.phone).replace(/^55/,'')))}</span><span>${x.sent_at?new Date(x.sent_at).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):'—'}</span><span>${badge(SST,x.status)}${repBy.has(x.id)||x.replied_at?' <i class="badge info">Respondeu</i>':''}${x.error?` <i class="small muted" title="${esc(x.error)}">⚠</i>`:''}</span></div>`).join('')}</div>`:empty('send','Nada enviado ainda','Os envios aparecem aqui.'))
+          :(RP.length?`<div class="stack">${RP.map(r=>`<div class="rep"><div class="row between wrap"><b>${esc(P(r.patient_id)?.name||r.phone)}</b><span class="small muted">${new Date(r.received_at).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</span></div><div class="bubble b-in">${esc(r.text)}</div><div class="row wrap" style="gap:6px;margin-top:6px">${r.classification?badge(RCL,r.classification):'<span class="badge">Analisando…</span>'}${r.review_status==='pendente'?`<button class="btn sm" data-rv="${r.id}">Revisar</button>`:''}</div></div>`).join('')}</div>`:empty('inbox','Sem respostas ainda','Quando alguém responder pelo WhatsApp, aparece aqui.'))}`};
+    m.refresh=draw;draw();
+    el.addEventListener('click',async e=>{const c=CRM.campaigns.find(x=>x.id===id);const t=e.target;
+      if(t.closest('[data-tab]')){tab=t.closest('[data-tab]').dataset.tab;draw()}
+      else if(t.closest('[data-edit]')){m.close();openCampEditor(c)}
+      else if(t.closest('[data-dup]')){m.close();openCampEditor({...c,status:'concluida'})}
+      else if(t.closest('[data-manual]'))manualQueue(id);
+      else if(t.closest('[data-pause]')){await crmUpdate('campaigns',id,{status:'pausada'});changed()}
+      else if(t.closest('[data-resume]')){await crmUpdate('campaigns',id,{status:'enviando'});changed()}
+      else if(t.closest('[data-cancelq]')){if(!await confirmBox('Cancelar as mensagens que ainda estão na fila?','Cancelar fila'))return;for(const x of CRM.sends.filter(x=>x.campaign_id===id&&x.status==='na_fila'))await crmUpdate('sends',x.id,{status:'cancelado'});await crmUpdate('campaigns',id,{status:'concluida'});changed()}
+      else if(t.closest('[data-del]')){if(!await confirmBox('Excluir esta campanha, com os envios e as respostas?'))return;await crmDelete('campaigns',id);m.close();changed();toast('Campanha excluída')}
+      else if(t.closest('[data-rv]'))openReviews(t.closest('[data-rv]').dataset.rv);
+    });
+  }});
+}
+
+function manualQueue(cid){const L=CRM.sends.filter(x=>x.campaign_id===cid&&x.status==='na_fila');if(!L.length){toast('Nada na fila');return}let i=0,sent=0;
+  openModal({title:'Enviar pelo WhatsApp',size:'sm',body:'<div data-q></div>',onMount:(el,m)=>{
+    const draw=()=>{const box=$('[data-q]',el);
+      if(i>=L.length){box.innerHTML=`<div class="queue-card"><h3 style="justify-content:center;margin:6px 0">Pronto!</h3><div class="muted">${sent} de ${L.length} mensagens enviadas.</div><button class="btn dark" style="margin-top:18px;width:100%" data-end>Concluir</button></div>`;$('[data-end]',el).onclick=m.close;return}
+      const x=L[i];box.innerHTML=`<div class="row between small muted"><span>${i+1} de ${L.length}</span><span>${sent} enviada${sent===1?'':'s'}</span></div><div class="progress"><i style="width:${i/L.length*100}%"></i></div>
+        <div class="strong" style="margin-bottom:8px">${esc(x.patient_name)}</div><div class="msg-prev scroll" style="max-height:220px">${esc(x.message)}</div>
+        <div class="row" style="margin-top:16px"><button class="btn" data-skip style="flex:1">Pular</button><button class="btn wa" data-go style="flex:2">${ic('wa')}Abrir no WhatsApp</button></div>
+        <div class="small muted" style="margin-top:10px;text-align:center">Envie no WhatsApp e volte aqui para a próxima.</div>`;
+      $('[data-skip]',el).onclick=()=>{i++;draw()};
+      $('[data-go]',el).onclick=async()=>{window.open(`https://wa.me/${x.phone}?text=${encodeURIComponent(x.message)}`,'_blank');try{await crmUpdate('sends',x.id,{status:'manual',sent_at:new Date().toISOString()})}catch(e){}sent++;i++;draw()}};
+    draw()},onClose:async()=>{const left=CRM.sends.some(x=>x.campaign_id===cid&&x.status==='na_fila');if(!left)try{await crmUpdate('campaigns',cid,{status:'concluida'})}catch(e){}changed()}});
+}
+
+function openReviews(onlyId){
+  openModal({title:'Mensagens para revisar',size:'lg',body:'<div data-rvs></div>',onMount:(el,m)=>{
+    const draw=()=>{const L=pendingReviews().filter(r=>!onlyId||r.id===onlyId);
+      $('[data-rvs]',el).innerHTML=L.length?`<div class="small muted" style="margin-bottom:12px">A IA não teve certeza se a pessoa quer sair da lista ou se precisa de resposta.</div><div class="stack">${L.map(r=>{const c=CRM.campaigns.find(k=>k.id===r.campaign_id),pt=P(r.patient_id);return`<div class="rep"><div class="row between wrap"><b>${esc(pt?.name||r.phone)}</b><span class="small muted">${c?esc(c.name)+' · ':''}${new Date(r.received_at).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</span></div><div class="bubble b-in">${esc(r.text)}</div>
+        <div class="row wrap" style="gap:8px;margin-top:10px"><button class="btn sm ghost danger" data-out="${r.id}">Tirar da lista</button><button class="btn sm" data-keep="${r.id}">Manter</button><button class="btn sm dark" data-reply="${r.id}">${ic('wa')}Responder</button></div></div>`}).join('')}</div>`:empty('check','Tudo revisado','Nenhuma mensagem esperando.');};
+    m.refresh=draw;draw();
+    el.addEventListener('click',async e=>{const t=e.target,b=t.closest('[data-out],[data-keep],[data-reply]');if(!b)return;const id=b.dataset.out||b.dataset.keep||b.dataset.reply;const r=CRM.replies.find(x=>x.id===id);if(!r)return;
+      if(b.dataset.out){await crmOptOut(r.patient_id,'revisao',r.text);await crmUpdate('replies',id,{review_status:'removido'});toast('Tirada da lista de campanhas')}
+      else if(b.dataset.keep){await crmUpdate('replies',id,{review_status:'mantido'});toast('Mantida nas campanhas')}
+      else{replyTo(r);return}
+      changed();draw()});
+  }});
+}
+function replyTo(r){const pt=P(r.patient_id);const phone=r.phone||pt?.phone;
+  openModal({title:'Responder',size:'sm',body:`<div class="stack"><div class="bubble b-in">${esc(r.text)}</div><textarea class="in" data-rt style="min-height:120px" placeholder="Escreva a resposta…"></textarea></div>`,foot:`<button class="btn" data-c>Cancelar</button><button class="btn wa" data-s>${ic('wa')}Enviar</button>`,
+    onMount:(el,m)=>{setTimeout(()=>$('[data-rt]',el).focus(),60);$('[data-c]',el).onclick=m.close;
+      $('[data-s]',el).onclick=async()=>{const tx=$('[data-rt]',el).value.trim();if(!tx){toast('Escreva a resposta');return}
+        if(evoOn()){try{await evoSend(phone,tx)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(`https://wa.me/${waNum(phone)}?text=${encodeURIComponent(tx)}`,'_blank');
+        if(r.patient_id)logMsg(r.patient_id,'avulsa',tx);await crmUpdate('replies',r.id,{review_status:'respondido'});m.close();changed();toast('Resposta enviada')}}});
+}
+
 /* ================= seletor de paciente ================= */
 function patientPicker(host,st){
   let typed='',hl=0,opts=[];
@@ -1732,7 +1986,7 @@ function openPatient(id,cb){
       <div class="fsec">${ic('folder')}Documentos e anexos</div>
       <div class="box" data-att></div>
       <div class="fsec">${ic('check')}Consentimentos</div>
-      <div class="box sw-list">${sw('imageConsent','Autoriza uso de imagem','Fotos de antes e depois para registro clínico')}${sw('lgpdConsent','Aceitou o termo de privacidade (LGPD)','Consentimento para guardar os dados pessoais')}</div>
+      <div class="box sw-list">${sw('imageConsent','Autoriza uso de imagem','Fotos de antes e depois para registro clínico')}${sw('lgpdConsent','Aceitou o termo de privacidade (LGPD)','Consentimento para guardar os dados pessoais')}<div class="sw-row" data-camp></div></div>
       <label class="field"><span>Observações</span><textarea class="in" data-k="notes" placeholder="Histórico, preferências, observações...">${esc(p.notes||'')}</textarea></label>
       <div class="small muted">Apenas o nome é obrigatório. Complete o resto quando quiser.</div>
     </div>`,
@@ -1766,6 +2020,9 @@ function openPatient(id,cb){
       // fototipo
       const ph=K('phototype'),dp=()=>{$$('[data-photo] .chip',el).forEach(b=>b.classList.toggle('on',b.dataset.v===ph.value));const x=PHOTO.find(z=>z[0]===ph.value);$('[data-photohint]',el).textContent=x?x[1]:''};dp();
       $('[data-photo]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){ph.value=ph.value===b.dataset.v?'':b.dataset.v;dp()}};
+      // campanhas (LGPD): sair é imediato; voltar é sempre manual
+      const campBox=$('[data-camp]',el);const drawCamp=()=>{const o=optOutOf(p.id);campBox.innerHTML=o?`<span><b>Não recebe campanhas</b><small>Desde ${fmtD(String(o.created_at||'').slice(0,10))}${o.reason?` · “${esc(o.reason.slice(0,60))}”`:''}</small></span><button type="button" class="btn sm" data-in>Voltar para campanhas</button>`:`<span><b>Aceita receber campanhas</b><small>Mensagens de marketing pelo WhatsApp</small></span><button type="button" class="btn sm ghost danger" data-out>Tirar da lista</button>`};drawCamp();
+      campBox.onclick=async e=>{if(e.target.closest('[data-in]')){await crmOptIn(p.id);toast('Voltou para as campanhas')}else if(e.target.closest('[data-out]')){await crmOptOut(p.id,'manual','Retirada pela equipe');toast('Não recebe mais campanhas')}else return;drawCamp()};
       // anexos
       attachBox($('[data-att]',el),p.id,()=>atts,a=>{atts.push(a);added.push(a)},a=>{const i=atts.indexOf(a);if(i>-1)atts.splice(i,1);const j=added.indexOf(a);if(j>-1){added.splice(j,1);if(a.path)storageDel([a.path])}else (p._removed=p._removed||[]).push(a)});
       setTimeout(()=>K('name').focus(),60);
@@ -1799,31 +2056,82 @@ function patientStats(id){
   const nextA=A.filter(a=>a.status==='agendada'&&a.date>=today()).sort((a,b)=>a.date.localeCompare(b.date))[0];
   return{A,done,total:done.reduce((s,a)=>s+calc(a).total,0),last:done[0]?.date||'',nextR,nextA};
 }
-function vPacientes(){
-  return topbar('Pacientes',db.patients.length?`${db.patients.length} ${db.patients.length===1?'cadastro':'cadastros'}. Toque em um nome para abrir a pasta.`:'Cadastre com apenas o nome.',`<button class="btn dark" data-act="newPatient">${ic('plus')}Novo paciente</button>`)+
-  `<div class="row wrap" style="margin-bottom:16px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar por nome ou telefone..." data-inp="pq" value="${esc(S.pq)}"></div>
-  <div class="seg">${[['recent','Recentes'],['az','A–Z'],['ret','Próx. retorno'],['value','Maior valor']].map(([k,l])=>`<button class="${S.psort===k?'on':''}" data-act="psort" data-id="${k}">${l}</button>`).join('')}</div></div>
-  <div id="plist">${pListHTML()}</div>`;
+function crmFilterActive(){const f=S.cf;return !!(f.proc||f.cat||f.from||f.to||f.bst)}
+function crmFiltered(){const f=S.cf,q=norm(S.pq),qd=digits(S.pq);
+  const byProc=!!(f.proc||f.cat||f.from||f.to);
+  const okP=p=>(!q||norm(p.name).includes(q)||(qd&&(digits(p.phone).includes(qd)||digits(p.cpf).includes(qd))))&&(!f.bst||db.budgets.some(b=>b.patientId===p.id&&b.status===f.bst));
+  const R=realized().filter(r=>(!f.proc||r.procId===f.proc)&&(!f.cat||r.cat===f.cat)&&(!f.from||r.date>=f.from)&&(!f.to||r.date<=f.to)&&okP(P(r.patientId)));
+  const byP={};R.forEach(r=>(byP[r.patientId]=byP[r.patientId]||[]).push(r));
+  const pats=db.patients.filter(p=>okP(p)&&(!byProc||byP[p.id]));
+  return{R,byP,pats,byProc}}
+function vPacientes(){const f=S.cf,pr=f.proc&&procById(f.proc);
+  return topbar('Pacientes',db.patients.length?`${db.patients.length} ${db.patients.length===1?'cadastro':'cadastros'}. Filtre por procedimento, categoria, período ou orçamento.`:'Cadastre com apenas o nome.',`<button class="btn dark" data-act="newPatient">${ic('plus')}Novo paciente</button>`)+
+  `<div class="row wrap" style="margin-bottom:12px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar por nome, telefone ou CPF..." data-inp="pq" value="${esc(S.pq)}"></div>
+  <div class="seg">${[['cards','Pacientes'],['tabela','Procedimentos realizados']].map(([k,l])=>`<button class="${S.pmode===k?'on':''}" data-act="pmode" data-id="${k}">${l}</button>`).join('')}</div></div>
+  <div class="crm-f glass">
+    <button class="fchip ${f.proc?'on':''}" data-act="cfProc">${ic('tag')}${pr?esc(pr.name):'Procedimento'}<span class="dd">▾</span></button>
+    <div class="seg">${[['','Todas'],...CATS.map(([k])=>[k,catShort(k)])].map(([k,l])=>`<button class="${f.cat===k?'on':''}" data-act="cfCat" data-id="${k}">${l}</button>`).join('')}</div>
+    <button class="fchip ${f.from?'on':''}" data-act="cfDate" data-id="from">${ic('cal')}De ${f.from?fmtD(f.from):'…'}</button>
+    <button class="fchip ${f.to?'on':''}" data-act="cfDate" data-id="to">${ic('cal')}Até ${f.to?fmtD(f.to):'…'}</button>
+    <button class="fchip ${f.bst?'on':''}" data-act="cfBst">${ic('doc')}${f.bst?'Orçamento '+BST[f.bst][0].toLowerCase():'Status do orçamento'}<span class="dd">▾</span></button>
+    ${crmFilterActive()?`<button class="fchip clear" data-act="cfClear">${ic('x')}Limpar filtros</button>`:''}
+  </div>
+  ${S.pmode==='cards'?`<div class="row wrap" style="margin:0 0 14px;gap:10px"><span class="small muted">Ordenar:</span><div class="seg">${[['recent','Recentes'],['az','A–Z'],['ret','Próx. retorno'],['value','Maior valor']].map(([k,l])=>`<button class="${S.psort===k?'on':''}" data-act="psort" data-id="${k}">${l}</button>`).join('')}</div></div>`:''}
+  <div id="plist">${S.pmode==='tabela'?realizedHTML():pListHTML()}</div>`;
 }
+function realizedHTML(){const {R}=crmFiltered();const tot=R.reduce((s,r)=>s+r.value,0);
+  if(!R.length)return`<div class="glass">${empty('tag','Nenhum procedimento encontrado','Mude os filtros ou registre consultas como “Realizada”.')}</div>`;
+  return`<div class="glass card"><div class="row between wrap" style="margin-bottom:10px"><b>${R.length} procedimento${R.length===1?'':'s'} realizado${R.length===1?'':'s'}</b><span class="price">${money(tot)}</span></div>
+  <div class="rtable"><div class="rt-h"><span>Paciente</span><span>Procedimento</span><span>Categoria</span><span>Data</span><span class="r">Valor</span></div>
+  ${R.slice(0,500).map(r=>`<button class="rt-r" data-act="folder" data-id="${r.patientId}"><span class="strong">${esc(P(r.patientId).name)}</span><span>${esc(r.name)}</span><span><i class="badge cat-${r.cat}">${catShort(r.cat)}</i></span><span>${fmtD(r.date)}</span><span class="r price">${money(r.value)}</span></button>`).join('')}</div>
+  ${R.length>500?`<div class="small muted" style="margin-top:8px">Mostrando os 500 mais recentes.</div>`:''}</div>`}
 function pListHTML(){
   if(!db.patients.length)return`<div class="glass">${empty('users','Nenhum paciente ainda','Cadastre com apenas o nome — rápido e prático.',`<button class="btn dark" data-act="newPatient">${ic('plus')}Cadastrar paciente</button>`)}</div>`;
-  const q=norm(S.pq),qd=digits(S.pq);
-  let L=db.patients.filter(p=>!q||norm(p.name).includes(q)||(qd&&(digits(p.phone).includes(qd)||digits(p.cpf).includes(qd)))).map(p=>({p,s:patientStats(p.id)}));
+  const {pats,byP,byProc}=crmFiltered();
+  let L=pats.map(p=>({p,s:patientStats(p.id)}));
   const srt={recent:(a,b)=>(b.s.last||'').localeCompare(a.s.last||'')||(b.p.createdAt||0)-(a.p.createdAt||0),az:(a,b)=>a.p.name.localeCompare(b.p.name),ret:(a,b)=>(a.s.nextR?.date||'9').localeCompare(b.s.nextR?.date||'9'),value:(a,b)=>b.s.total-a.s.total};
   L.sort(srt[S.psort]);
-  if(!L.length)return`<div class="glass">${empty('search','Nada encontrado',`Nenhum paciente para “${esc(S.pq)}”.`,`<button class="btn dark" data-act="quickCreate">${ic('plus')}Cadastrar “${esc(S.pq)}”</button>`)}</div>`;
-  return`<div class="pgrid">${L.map(({p,s})=>`<div class="pcard glass" data-act="folder" data-id="${p.id}">
-    <div class="row">${av(p.name)}<div class="grow" style="min-width:0;flex:1"><div class="strong" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div><div class="small muted">${esc(p.phone||'sem WhatsApp')}</div></div>${p.phone?`<a class="btn sm icon" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp">${ic('wa')}</a>`:''}</div>
+  if(!L.length)return crmFilterActive()?`<div class="glass">${empty('search','Ninguém com esses filtros','Mude ou limpe os filtros.',`<button class="btn" data-act="cfClear">Limpar filtros</button>`)}</div>`:`<div class="glass">${empty('search','Nada encontrado',`Nenhum paciente para “${esc(S.pq)}”.`,`<button class="btn dark" data-act="quickCreate">${ic('plus')}Cadastrar “${esc(S.pq)}”</button>`)}</div>`;
+  return`${crmFilterActive()?`<div class="small muted" style="margin:0 4px 10px"><b style="color:var(--ink)">${L.length}</b> paciente${L.length===1?'':'s'} com esses filtros</div>`:''}<div class="pgrid">${L.map(({p,s})=>{const mt=byP[p.id];return`<div class="pcard glass" data-act="folder" data-id="${p.id}">
+    <div class="row">${av(p.name)}<div class="grow" style="min-width:0;flex:1"><div class="strong" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div><div class="small muted">${esc(p.phone||'sem WhatsApp')}${isOut(p.id)?' · fora das campanhas':''}</div></div>${p.phone?`<a class="btn sm icon" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp">${ic('wa')}</a>`:''}</div>
+    ${byProc&&mt?`<div class="match">${ic('check')}<span>${esc(mt[0].name)} em ${fmtD(mt[0].date)}${mt.length>1?` · +${mt.length-1}`:''}</span></div>`:''}
     <div class="meta"><div><small>Última visita</small>${s.last?fmtD(s.last):'—'}</div><div><small>Retorno</small>${s.nextR?fmtD(s.nextR.date):'—'}</div><div><small>Atendimentos</small>${s.done.length}</div><div><small>Investido</small>${money(s.total)}</div></div>
-  </div>`).join('')}</div>`;
+  </div>`}).join('')}</div>`;
 }
-INP.pq=el=>{S.pq=el.value;$('#plist').innerHTML=pListHTML()};
+INP.pq=el=>{S.pq=el.value;$('#plist').innerHTML=S.pmode==='tabela'?realizedHTML():pListHTML()};
+Object.assign(ACT,{
+  pmode:k=>{S.pmode=k;render()},
+  cfCat:k=>{S.cf.cat=k;if(k&&S.cf.proc&&procById(S.cf.proc)?.cat!==k)S.cf.proc='';render()},
+  cfProc:(_,a)=>{const L=db.procedures.filter(x=>!S.cf.cat||x.cat===S.cf.cat).sort((x,y)=>x.name.localeCompare(y.name));openMenu(a,[{label:'Qualquer procedimento',icon:'tag',fn:()=>{S.cf.proc='';render()}},...L.map(x=>({label:esc(x.name),icon:x.cat==='cirurgia'?'scalpel':x.kind==='consulta'?'steth':'tag',fn:()=>{S.cf.proc=x.id;render()}}))])},
+  cfDate:async(k,a)=>{const v=await pickDate(a,S.cf[k]||today(),[['Limpar','']]);if(v===null)return;S.cf[k]=v;render()},
+  cfBst:(_,a)=>openMenu(a,[{label:'Qualquer status',icon:'doc',fn:()=>{S.cf.bst='';render()}},...Object.entries(BST).map(([k,[l]])=>({label:'Orçamento '+l.toLowerCase(),icon:'doc',fn:()=>{S.cf.bst=k;render()}}))]),
+  cfClear:()=>{S.cf={proc:'',cat:'',from:'',to:'',bst:''};render()}
+});
 ACT.psort=k=>{S.psort=k;render()};
 ACT.quickCreate=()=>{const p={id:uid(),name:S.pq.trim(),createdAt:Date.now()};db.patients.push(p);S.pq='';changed();toast('Paciente cadastrado');openFolder(p.id)};
 
 /* ================= PASTA DO PACIENTE ================= */
+const tlAppt=x=>{const c=calc(x);return`<div class="tl-i click item" style="display:block" data-ea="${x.id}"><div class="row between wrap"><div class="row"><b>${fmtD(x.date)}</b>${x.time?`<span class="muted small">${x.time}</span>`:''}${badge(ST,x.status)}</div><div class="price">${c.disc?`<span class="strike">${money(c.sub)}</span> `:''}${money(c.total)}</div></div>
+            ${x.items.length?`<div class="procs">${x.items.map(i=>`<span class="badge">${esc(i.name)}${(+i.qty||1)>1?' ×'+i.qty:''} · ${money(i.price*(i.qty||1))}</span>`).join('')}</div>`:''}
+            ${c.disc?`<div class="small muted" style="margin-top:6px">Desconto de ${money(c.disc)}${x.discountType==='pct'?` (${x.discountValue}%)`:''}</div>`:''}
+            ${x.notes?`<div class="small" style="margin-top:8px;color:var(--ink-2);white-space:pre-wrap">${esc(x.notes)}</div>`:''}</div>`};
+function timelineHTML(pid,f){
+  const ev=[];
+  db.appointments.filter(a=>a.patientId===pid).forEach(a=>ev.push({t:'consulta',at:a.date+'T'+(a.time||'00:00'),html:tlAppt(a)}));
+  db.budgets.filter(b=>b.patientId===pid).forEach(b=>{const c=calc(b);ev.push({t:'orcamento',at:b.date+'T00:01',html:`<div class="tl-i click item tl-b" style="display:block" data-eb="${b.id}"><div class="row between wrap"><div class="row"><span class="tl-k">${ic('doc')}Orçamento</span><b>${fmtD(b.date)}</b>${badge(BST,b.status)}</div><div class="price">${money(c.total)}</div></div><div class="procs">${b.items.map(i=>`<span class="badge">${esc(i.name)}</span>`).join('')}</div></div>`})});
+  (db.messages||[]).filter(m=>m.patientId===pid).forEach(m=>ev.push({t:'mensagem',at:m.at,html:msgHTML(m.dir,MSGK[m.kind]||'Mensagem',m.at,m.text)}));
+  CRM.sends.filter(x=>x.patient_id===pid&&x.sent_at).forEach(x=>{const c=CRM.campaigns.find(k=>k.id===x.campaign_id);ev.push({t:'mensagem',at:x.sent_at,html:msgHTML('out','Campanha'+(c?' · '+c.name:''),x.sent_at,x.message)})});
+  CRM.replies.filter(x=>x.patient_id===pid).forEach(x=>{const c=CRM.campaigns.find(k=>k.id===x.campaign_id);ev.push({t:'mensagem',at:x.received_at,html:msgHTML('in','Respondeu'+(c?' · '+c.name:''),x.received_at,x.text,x.classification)})});
+  ev.sort((a,b)=>String(b.at).localeCompare(String(a.at)));
+  const L=f==='tudo'?ev:ev.filter(e=>e.t===f);
+  const cnt=k=>ev.filter(e=>e.t===k).length;
+  return`<div class="chips" style="margin-bottom:14px">${[['tudo','Tudo',ev.length],['consulta','Consultas',cnt('consulta')],['orcamento','Orçamentos',cnt('orcamento')],['mensagem','Mensagens',cnt('mensagem')]].map(([k,l,n])=>`<button class="chip ${f===k?'on':''}" data-tlf="${k}">${l} · ${n}</button>`).join('')}</div>
+    ${L.length?`<div class="tl">${L.map(e=>e.html).join('')}</div>`:empty('clock','Nada por aqui ainda','Consultas, orçamentos e mensagens aparecem nesta linha do tempo.')}`;
+}
+function msgHTML(dir,title,at,text,cls){const d=new Date(at);const when=isNaN(d)?'':d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  return`<div class="tl-i tl-m m-${dir}"><div class="row between wrap"><span class="tl-k">${ic(dir==='in'?'inbox':'wa')}${esc(title)}</span><span class="small muted">${when}</span></div><div class="bubble b-${dir}">${esc(text)}</div>${cls?`<div style="margin-top:6px">${badge(RCL,cls)}</div>`:''}</div>`}
 function openFolder(id,tab='hist'){
-  let cur=tab;
+  let cur=tab,tlf='tudo';
   const m=openModal({title:'Pasta do paciente',size:'lg',body:'<div data-fb></div>',
     foot:`<button class="btn" data-nb>${ic('doc')}Orçamento</button><button class="btn dark" data-na>${ic('plus')}Nova consulta</button>`,
     onMount:(el,mm)=>{
@@ -1833,10 +2141,7 @@ function openFolder(id,tab='hist'){
       const draw=()=>{const p=P(id),s=patientStats(id),B=db.budgets.filter(b=>b.patientId===id).sort((a,b)=>b.date.localeCompare(a.date)),R=db.returns.filter(r=>r.patientId===id).sort((a,b)=>b.date.localeCompare(a.date));
         const a=age(p.birth);
         let body='';
-        if(cur==='hist')body=s.A.length?`<div class="tl">${s.A.map(x=>{const c=calc(x);return`<div class="tl-i click item" style="display:block" data-ea="${x.id}"><div class="row between wrap"><div class="row"><b>${fmtD(x.date)}</b>${x.time?`<span class="muted small">${x.time}</span>`:''}${badge(ST,x.status)}</div><div class="price">${c.disc?`<span class="strike">${money(c.sub)}</span> `:''}${money(c.total)}</div></div>
-            ${x.items.length?`<div class="procs">${x.items.map(i=>`<span class="badge">${esc(i.name)}${(+i.qty||1)>1?' ×'+i.qty:''} · ${money(i.price*(i.qty||1))}</span>`).join('')}</div>`:''}
-            ${c.disc?`<div class="small muted" style="margin-top:6px">Desconto de ${money(c.disc)}${x.discountType==='pct'?` (${x.discountValue}%)`:''}</div>`:''}
-            ${x.notes?`<div class="small" style="margin-top:8px;color:var(--ink-2);white-space:pre-wrap">${esc(x.notes)}</div>`:''}</div>`}).join('')}</div>`:empty('clock','Sem atendimentos','Registre a primeira consulta desta paciente.');
+        if(cur==='hist')body=timelineHTML(id,tlf);
         if(cur==='orc')body=B.length?`<div class="list">${B.map(b=>`<button class="item" data-eb="${b.id}">${ic('doc','style="width:20px;height:20px;opacity:.6"')}<div class="grow"><div class="t">${esc(procNames(b.items)||'Orçamento')}</div><div class="s">${fmtD(b.date)} · ${b.items.length} item(ns)</div></div><div style="text-align:right"><div class="price small">${money(calc(b).total)}</div>${badge(BST,b.status)}</div></button>`).join('')}</div>`:empty('doc','Sem orçamentos','Crie um orçamento para informar os valores.');
         if(cur==='ret')body=R.length?`<div class="list">${R.map(r=>`<div class="item"><span class="time">${fmtDM(r.date)}</span><div class="grow"><div class="t">${esc(r.note||'Retorno')}</div><div class="s">${fmtD(r.date)} · ${relDays(r.date)}</div></div>${badge(RST,r.status)}<button class="btn sm icon ghost" data-rm="${r.id}">${ic('more')}</button></div>`).join('')}</div>`:empty('ret','Sem retornos','Os retornos são criados ao salvar uma consulta.');
         if(cur==='docs')body='<div data-docs></div>';
@@ -1845,19 +2150,23 @@ function openFolder(id,tab='hist'){
           <div class="kv-sec">Contato</div><dl class="kv">${row('WhatsApp',p.phone)}${row('E-mail',p.email)}${row('Instagram',p.instagram)}${row('Emergência',[p.emergencyName,p.emergencyPhone].filter(Boolean).join(' · '))}${row('Endereço',[fullAddr(p),p.cep&&`CEP ${p.cep}`].filter(Boolean).join(' · '))}</dl>
           <div class="kv-sec">Como chegou</div><dl class="kv">${row('Primeiro contato',p.firstContact?fmtD(p.firstContact):'')}${row('Como conheceu',p.source)}${p.referredBy?row('Quem indicou',p.referredBy):''}${row('Cliente desde',p.createdAt?new Date(p.createdAt).toLocaleDateString('pt-BR'):'')}</dl>
           <div class="kv-sec">Saúde e pele</div><dl class="kv">${row('Tipo de pele',p.skin)}${row('Fototipo',p.phototype?(PHOTO.find(x=>x[0]===p.phototype)||[])[1]:'')}${row('Condições',p.conditions)}${row('Alergias',p.allergies)}${row('Medicamentos',p.meds)}</dl>
-          <div class="kv-sec">Consentimentos</div><dl class="kv">${row('Uso de imagem',yn(p.imageConsent))}${row('Termo LGPD',yn(p.lgpdConsent))}</dl>
+          <div class="kv-sec">Consentimentos</div><dl class="kv">${row('Uso de imagem',yn(p.imageConsent))}${row('Termo LGPD',yn(p.lgpdConsent))}<dt>Recebe campanhas</dt><dd>${isOut(id)?`Não <button class="btn sm" data-optin style="margin-left:8px">Voltar para campanhas</button>`:`Sim <button class="btn sm ghost danger" data-optout style="margin-left:8px">Tirar da lista</button>`}</dd></dl>
           <div class="kv-sec">Observações</div><dl class="kv"><dt>Notas</dt><dd>${esc(p.notes||'—')}</dd></dl>`}
         $('[data-fb]',el).innerHTML=`<div class="f-head">${av(p.name,'lg')}<div style="flex:1;min-width:0"><h2>${esc(p.name)}</h2><div class="muted small">${[p.socialName&&`“${p.socialName}”`,p.phone,a!==''?a+' anos':'',GENDER[p.gender],p.phototype&&`fototipo ${p.phototype}`].filter(Boolean).map(esc).join(' · ')||'Ficha básica'}</div></div>
           <div class="row">${p.phone?`<a class="btn wa sm" href="${waLink(p.phone,`Olá, ${first(p.name)}!`)}" target="_blank" rel="noopener">${ic('wa')}<span class="btn-label">WhatsApp</span></a>`:''}<button class="btn sm icon" data-pm>${ic('more')}</button></div></div>
+          ${isOut(id)?`<div class="optout-line">${ic('megaphone')}<span><b>Fora das campanhas</b> desde ${fmtD(String(optOutOf(id).created_at||'').slice(0,10))}${optOutOf(id).source==='automatico'?' · pediu para sair pelo WhatsApp':optOutOf(id).source==='revisao'?' · retirada na revisão':''}</span><button class="btn sm" data-optin>Voltar para campanhas</button></div>`:''}
           ${p.allergies||p.conditions||p.meds?`<div class="row wrap" style="gap:6px;margin-top:12px">${p.allergies?`<span class="badge bad">⚠ Alergia: ${esc(p.allergies)}</span>`:''}${(p.conditions||'').split(/,\s*/).filter(Boolean).map(c=>`<span class="badge warn">${esc(c)}</span>`).join('')}${p.meds?`<span class="badge info">Usa: ${esc(p.meds)}</span>`:''}</div>`:''}
           ${(()=>{const d=dermInfo(id);return d?`<div class="derm-line ${d.st}">${ic('steth')}<span><b>Consulta dermatológica</b> · última em ${fmtD(d.last)} · válida até ${fmtD(d.renew)}${d.st!=='ok'?` · ${dermLabel(d)}`:''}</span>${badge(DST,d.st)}</div>`:''})()}
           <div class="f-stats"><div><small>Investido</small><b>${money(s.total)}</b></div><div><small>Atendimentos</small><b>${s.done.length}</b></div><div><small>Última visita</small><b>${s.last?fmtD(s.last):'—'}</b></div><div><small>Próx. retorno</small><b>${s.nextR?fmtD(s.nextR.date):'—'}</b></div></div>
-          <div class="seg" data-tabs style="margin-bottom:14px">${[['hist','Histórico'],['orc','Orçamentos'],['ret','Retornos'],['docs',`Documentos${(p.attachments||[]).length?' · '+p.attachments.length:''}`],['ficha','Ficha']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
+          <div class="seg" data-tabs style="margin-bottom:14px">${[['hist','Linha do tempo'],['orc','Orçamentos'],['ret','Retornos'],['docs',`Documentos${(p.attachments||[]).length?' · '+p.attachments.length:''}`],['ficha','Ficha']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-t="${k}">${l}</button>`).join('')}</div>
           <div style="animation:viewIn .3s var(--ease)">${body}</div>`;
         if(cur==='docs'){const pp=P(id);pp.attachments=pp.attachments||[];attachBox($('[data-docs]',el),id,()=>pp.attachments,a=>{pp.attachments.push(a);save();schedulePush()},a=>{pp.attachments.splice(pp.attachments.indexOf(a),1);if(a.path)storageDel([a.path]);save()})}
       };
       el.addEventListener('click',e=>{
         const t=e.target.closest('[data-t]');if(t){cur=t.dataset.t;draw();return}
+        const tf=e.target.closest('[data-tlf]');if(tf){tlf=tf.dataset.tlf;draw();return}
+        if(e.target.closest('[data-optin]')){crmOptIn(id).then(()=>{toast('Voltou para as campanhas');changed()});return}
+        if(e.target.closest('[data-optout]')){crmOptOut(id,'manual','Retirada pela equipe').then(()=>{toast('Não recebe mais campanhas');changed()});return}
         const ea=e.target.closest('[data-ea]');if(ea)return openAppt({id:ea.dataset.ea});
         const eb=e.target.closest('[data-eb]');if(eb)return openBudget({id:eb.dataset.eb});
         const rm=e.target.closest('[data-rm]');if(rm)return returnMenu(rm,rm.dataset.rm);
@@ -1882,7 +2191,7 @@ Object.assign(ACT,{bf:k=>{S.bf=k;render()},editBudget:id=>openBudget({id}),sendB
   budgetMenu:(id,a)=>{const b=db.budgets.find(x=>x.id===id);openMenu(a,[{label:'Converter em consulta',icon:'cal',fn:()=>budgetToAppt(b)},{label:'Enviar no WhatsApp',icon:'wa',fn:()=>sendBudget(id)},{label:'Imprimir / PDF',icon:'print',fn:()=>printBudget(b)},{label:'Abrir pasta do paciente',icon:'folder',fn:()=>openFolder(b.patientId,'orc')},{label:'Marcar como recusado',icon:'x',fn:()=>{b.status='recusado';changed()}},{label:'Excluir',icon:'trash',danger:true,fn:async()=>{if(await confirmBox('Excluir este orçamento?')){db.budgets=db.budgets.filter(x=>x!==b);changed()}}}])}});
 function budgetText(b){const p=P(b.patientId),c=calc(b),s=db.settings;
   return`${fill(s.budgetIntro,{nome:p.socialName||first(p.name)})}\n\n${b.items.map(i=>`• ${i.name}${(+i.qty||1)>1?` (×${i.qty})`:''} — ${money(i.price*(i.qty||1))}`).join('\n')}\n\n${c.disc?`Subtotal: ${money(c.sub)}\nDesconto: − ${money(c.disc)}\n`:''}*Total: ${money(c.total)}*${b.validUntil?`\n\nVálido até ${fmtD(b.validUntil)}.`:''}${b.notes?`\n\n${b.notes}`:''}${s.clinic||s.doctor?`\n\n${[s.doctor,s.clinic].filter(Boolean).join(' · ')}`:''}`}
-async function sendBudget(id){const b=db.budgets.find(x=>x.id===id),p=P(b.patientId);if(!p.phone){toast('Paciente sem WhatsApp cadastrado');return}if(evoOn()){toast('Enviando orçamento…');try{await evoSend(p.phone,budgetText(b));toast(`Orçamento enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,budgetText(b)),'_blank');b.sentAt=today();save()}
+async function sendBudget(id){const b=db.budgets.find(x=>x.id===id),p=P(b.patientId);if(!p.phone){toast('Paciente sem WhatsApp cadastrado');return}if(evoOn()){toast('Enviando orçamento…');try{await evoSend(p.phone,budgetText(b));toast(`Orçamento enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,budgetText(b)),'_blank');logMsg(p.id,'orcamento',budgetText(b));b.sentAt=today();save()}
 function budgetToAppt(b){openAppt({patientId:b.patientId,items:clone(b.items),discountType:b.discountType,discountValue:b.discountValue,budgetId:b.id,date:today(),notes:b.notes})}
 function printBudget(b){const p=P(b.patientId),c=calc(b),s=db.settings,w=window.open('','_blank');if(!w){toast('Permita pop-ups para imprimir');return}
   const num=String(db.budgets.indexOf(b)+1).padStart(4,'0');
@@ -1963,11 +2272,11 @@ function dermHTML(){const L=dermList(),due=L.filter(x=>x.d.st!=='agendada'),wp=d
   <div class="glass card">${L.length?`<div class="list">${L.map(({p,d})=>`<div class="item"><div class="grow" data-act="folder" data-id="${p.id}" style="cursor:pointer"><div class="t">${esc(p.name)}</div><div class="s">Última consulta ${fmtD(d.last)} · ${dermLabel(d)}</div></div>${d.notified&&d.st!=='agendada'?'<span class="badge info">Avisada</span>':''}${badge(DST,d.st)}${d.st!=='agendada'?`${p.phone?`<button class="btn sm icon" data-act="dermSend" data-id="${p.id}" title="Avisar no WhatsApp">${ic('wa')}</button>`:''}<button class="btn sm" data-act="dermBook" data-id="${p.id}">${ic('cal')}<span class="btn-label">Agendar</span></button>`:''}</div>`).join('')}</div>`:empty('steth','Nenhuma renovação no momento','Quando faltar 15 dias para uma consulta dermatológica completar 6 meses, a paciente aparece aqui.')}</div>
   ${wp.length?`<div class="rbar glass"><span class="small"><b>${wp.length}</b> para avisar</span><button class="btn dark" data-act="dermAll">${ic('send')}Avisar todas pelo WhatsApp</button></div>`:''}
   <details class="glass card" style="margin-top:16px"><summary style="cursor:pointer;font-weight:600;list-style:none" class="row between">Mensagem de renovação <span class="small muted">editar modelo ▾</span></summary><div class="field" style="margin-top:14px"><textarea class="in" data-inp="dtpl" style="min-height:160px">${esc(db.settings.dermTemplate)}</textarea><div class="small muted">Use {nome}, {data} (quando completa 6 meses), {doutora} e {clinica}.</div></div></details>`}
-const dermPseudo=(p,d)=>({id:'derm-'+p.id,patientId:p.id,date:d.renew,note:'Consulta dermatológica',status:'pendente',_tpl:db.settings.dermTemplate,_onSent:()=>{p.dermNotified=d.last}});
+const dermPseudo=(p,d)=>({_kind:'renovacao',id:'derm-'+p.id,patientId:p.id,date:d.renew,note:'Consulta dermatológica',status:'pendente',_tpl:db.settings.dermTemplate,_onSent:()=>{p.dermNotified=d.last}});
 INP.dtpl=el=>{db.settings.dermTemplate=el.value;save()};
 Object.assign(ACT,{
   goDerm:()=>{S.retMode='derm';if(S.view==='retornos')render();else go('retornos')},
-  dermSend:async pid=>{const p=P(pid),d=dermInfo(pid),r=dermPseudo(p,d),msg=fill(r._tpl,retVars(r));if(evoOn()){try{await evoSend(p.phone,msg);toast(`Aviso enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,msg),'_blank');r._onSent();changed()},
+  dermSend:async pid=>{const p=P(pid),d=dermInfo(pid),r=dermPseudo(p,d),msg=fill(r._tpl,retVars(r));if(evoOn()){try{await evoSend(p.phone,msg);toast(`Aviso enviado para ${first(p.name)}`)}catch(e){toast('Falha no envio: '+e.message);return}}else window.open(waLink(p.phone,msg),'_blank');logMsg(p.id,'renovacao',msg);r._onSent();changed()},
   dermAll:()=>{const L=dermDue().filter(x=>x.p.phone).map(x=>dermPseudo(x.p,x.d));if(L.length)openQueue(L)},
   dermBook:pid=>{const cp=db.procedures.find(x=>x.kind==='consulta');openAppt({patientId:pid,date:today(),items:cp?[{procId:cp.id,name:cp.name,price:cp.price,qty:1}]:[]})}
 });
@@ -2013,7 +2322,7 @@ function openQueue(L){
         <div class="row" style="margin-top:16px"><button class="btn" data-skip style="flex:1">Pular</button><button class="btn wa" data-go style="flex:2">${ic('wa')}Abrir no WhatsApp</button></div>
         <div class="small muted" style="margin-top:10px;text-align:center">O WhatsApp abre com a mensagem pronta — é só tocar em enviar e voltar aqui.</div>`;
       $('[data-skip]',el).onclick=()=>{i++;draw()};
-      $('[data-go]',el).onclick=()=>{window.open(waLink(p.phone,msg),'_blank');r.status='avisado';r.notifiedAt=today();r._onSent&&r._onSent();sent++;i++;save();draw()};
+      $('[data-go]',el).onclick=()=>{window.open(waLink(p.phone,msg),'_blank');logMsg(p.id,r._kind||'retorno',msg);r.status='avisado';r.notifiedAt=today();r._onSent&&r._onSent();sent++;i++;save();draw()};
     };draw();
   },onClose:()=>{S.retSel=null;changed()}});
 }
@@ -2030,48 +2339,50 @@ function openQueueAuto(L){
     const draw=()=>{const ok=st.filter(x=>x==='ok').length,er=st.filter(x=>x==='err').length,done=ok+er;
       $('[data-q]',el).innerHTML=`<div class="row between small muted"><span>${running?'Enviando…':done?'Finalizado':'Pronto para enviar'}</span><span>${ok} enviada${ok===1?'':'s'}${er?` · ${er} com erro`:''}</span></div><div class="progress"><i style="width:${done/L.length*100}%"></i></div>
       <div class="list scroll" style="max-height:300px">${L.map((r,i)=>{const p=P(r.patientId);const b={wait:'<span class="badge">Na fila</span>',send:'<span class="badge info">Enviando…</span>',ok:'<span class="badge ok">Enviada ✓</span>',err:`<span class="badge bad" title="${esc(r._err||'')}">Erro</span>`}[st[i]];return`<div class="item">${av(p.name)}<div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${esc(st[i]==='err'?r._err||'':p.phone)}</div></div>${b}</div>`}).join('')}</div>
-      <div class="small muted" style="margin:12px 0 0">Intervalo de ~${+EVOLUTION.intervalo||8}s entre mensagens para proteger seu número.</div>
+      <div class="small muted" style="margin:12px 0 0">Intervalo de ~${8}s entre mensagens para proteger seu número.</div>
       <div class="row" style="margin-top:14px">${running?`<button class="btn" data-stop style="flex:1">Parar</button>`:done===L.length?`<button class="btn dark" data-end style="flex:1">Concluir</button>`:`<button class="btn" data-end style="flex:1">Cancelar</button><button class="btn dark" data-go style="flex:2">${ic('send')}Enviar ${L.length-done} mensage${L.length-done===1?'m':'ns'}</button>`}</div>`;
       const g=$('[data-go]',el),e=$('[data-end]',el),s2=$('[data-stop]',el);if(g)g.onclick=run;if(e)e.onclick=m.close;if(s2)s2.onclick=()=>{stop=true;s2.disabled=true;s2.textContent='Parando…'}};
     const run=async()=>{running=true;stop=false;draw();
       for(let i=0;i<L.length;i++){if(stop)break;if(st[i]==='ok')continue;const r=L[i],p=P(r.patientId);st[i]='send';draw();
-        try{await evoSend(p.phone,fill(r._tpl||db.settings.template,retVars(r)));st[i]='ok';r.status='avisado';r.notifiedAt=today();r._onSent&&r._onSent();save()}catch(e){st[i]='err';r._err=e.message}
-        draw();if(i<L.length-1&&!stop){const d=(+EVOLUTION.intervalo||8)*1000;await wait(d*0.75+Math.random()*d*0.5)}}
+        try{const tx=fill(r._tpl||db.settings.template,retVars(r));await evoSend(p.phone,tx);logMsg(p.id,r._kind||'retorno',tx);st[i]='ok';r.status='avisado';r.notifiedAt=today();r._onSent&&r._onSent();save()}catch(e){st[i]='err';r._err=e.message}
+        draw();if(i<L.length-1&&!stop){const d=(8)*1000;await wait(d*0.75+Math.random()*d*0.5)}}
       running=false;draw()};
     m.refresh=null;draw();
   },onClose:()=>{L.forEach(r=>delete r._err);S.retSel=null;changed()}});
 }
-/* ---------- Evolution API (WhatsApp automático) ---------- */
-const evoOn=()=>!!(EVOLUTION.url&&EVOLUTION.instancia&&EVOLUTION.token);
-async function evoFetch(path,opt={}){
-  let base=String(EVOLUTION.url).trim().replace(/\/+$/,'');if(!/^https?:\/\//.test(base))base='https://'+base;
-  let r;try{r=await fetch(base+path,{...opt,headers:{'Content-Type':'application/json',apikey:String(EVOLUTION.token).trim()}})}catch(e){throw new Error('sem conexão com a Evolution (verifique a URL)')}
-  let j=null;try{j=await r.json()}catch(e){}
-  if(!r.ok){const m=j&&(j.response&&j.response.message||j.message||j.error);if(r.status===401)throw new Error('API Key inválida');if(r.status===404)throw new Error('instância não encontrada');throw new Error((Array.isArray(m)?m.join(' '):typeof m==='string'?m:'')||'erro '+r.status)}
-  return j;
-}
-const evoInst=()=>encodeURIComponent(String(EVOLUTION.instancia).trim());
-async function evoSend(phone,text){const number=waNum(phone);if(!number)throw new Error('telefone inválido');
-  try{return await evoFetch(`/message/sendText/${evoInst()}`,{method:'POST',body:JSON.stringify({number,text})})}
-  catch(e){if(/textMessage|erro 400|Bad Request/i.test(e.message))return await evoFetch(`/message/sendText/${evoInst()}`,{method:'POST',body:JSON.stringify({number,options:{delay:1200,presence:'composing'},textMessage:{text}})});throw e}}
+/* ---------- WhatsApp pelo servidor (Supabase Edge Function lumiere-wa) ----------
+   URL e chave da Evolution ficam nos segredos do Supabase, nunca no app. */
+const WA={configured:false,state:'',checked:false};
+const evoOn=()=>WA.configured&&!!session&&!window.LUMIERE_DEMO;
+async function fnCall(name,body){const t=await accessToken();let r;
+  try{r=await fetch(`${SB.url}/functions/v1/${name}`,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB.key,Authorization:'Bearer '+t},body:JSON.stringify(body||{})})}catch(e){throw new Error('sem conexão')}
+  let j={};try{j=await r.json()}catch(e){}if(!r.ok)throw new Error(j.error||('erro '+r.status));return j}
+async function waRefresh(){if(window.LUMIERE_DEMO||!session)return;try{const j=await fnCall('lumiere-wa',{action:'status'});WA.configured=!!j.configured;WA.state=j.state||''}catch(e){}WA.checked=true}
+async function evoSend(phone,text){const j=await fnCall('lumiere-wa',{action:'send',phone,text});if(!j.configured)throw new Error('WhatsApp não configurado');return j}
 
 /* ================= PROCEDIMENTOS ================= */
 function vProcedimentos(){
-  const use={};db.appointments.forEach(a=>a.status==='realizada'&&a.items.forEach(i=>{if(i.procId){use[i.procId]=use[i.procId]||{n:0,v:0};use[i.procId].n+=+i.qty||1;use[i.procId].v+=(+i.price||0)*(+i.qty||1)}}));
-  return topbar('Procedimentos','Serviços e valores usados nas consultas e nos orçamentos.',`<button class="btn dark" data-act="newProc">${ic('plus')}Novo procedimento</button>`)+
-  `${(()=>{const D=db.procedures.filter(x=>x.kind==='consulta');return`<div class="derm-hero glass"><div class="derm-ic">${ic('steth')}</div><div><b>Consulta dermatológica</b><span>Quem faz esta consulta recebe aviso de renovação 15 dias antes de completar 6 meses.</span></div></div>
-  <div class="glass card tlist" style="margin-bottom:18px">${D.length?`<div class="list">${D.map(p=>`<button class="item" data-act="editProc" data-id="${p.id}"><div class="avatar derm-av">${ic('steth','style="width:18px;height:18px"')}</div><div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${p.duration?p.duration+' min · ':''}${use[p.id]?`realizada ${use[p.id].n}× · ${money(use[p.id].v)}`:'ainda não realizada'} · renovação em 6 meses</div></div><div class="price">${money(p.price)}</div></button>`).join('')}</div>`:`<div class="empty"><b>Nenhuma consulta cadastrada</b><button class="btn dark sm" data-act="newDerm" style="margin-top:10px">${ic('plus')}Cadastrar consulta dermatológica</button></div>`}</div>
-  <div class="sec-t" style="margin-top:6px">Procedimentos estéticos</div>`})()}
-  <div class="glass card tlist">${db.procedures.length?`<div class="list">${[...db.procedures].filter(x=>x.kind!=='consulta').sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<button class="item" data-act="editProc" data-id="${p.id}"><div class="avatar">${ic('tag','style="width:17px;height:17px"')}</div><div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${p.duration?p.duration+' min · ':''}${use[p.id]?`realizado ${use[p.id].n}× · ${money(use[p.id].v)}`:'ainda não realizado'}</div></div><div class="price">${money(p.price)}</div></button>`).join('')}</div>`:empty('tag','Catálogo vazio','Cadastre seus procedimentos e valores.')}</div>`;
+  const use={};realized().forEach(r=>{if(r.procId){use[r.procId]=use[r.procId]||{n:0,v:0};use[r.procId].n++;use[r.procId].v+=r.value}});
+  const row=p=>`<button class="item" data-act="editProc" data-id="${p.id}"><div class="avatar cat-${p.cat}">${ic(p.kind==='consulta'?'steth':p.cat==='cirurgia'?'scalpel':'tag','style="width:17px;height:17px"')}</div><div class="grow"><div class="t">${esc(p.name)}</div><div class="s">${p.duration?p.duration+' min · ':''}${use[p.id]?`realizado ${use[p.id].n}× · ${money(use[p.id].v)}`:'ainda não realizado'}${p.kind==='consulta'?' · renovação em 6 meses':''}</div></div><div class="price">${money(p.price)}</div></button>`;
+  return topbar('Procedimentos','Serviços e valores, separados por categoria.',`<button class="btn dark" data-act="newProc">${ic('plus')}Novo procedimento</button>`)+
+  CATS.map(([k,l])=>{const L=db.procedures.filter(x=>(x.cat||'estetica')===k).sort((a,b)=>a.name.localeCompare(b.name));
+    return`<div class="sec-t cat-head">${l}<span class="small muted">${L.length} ${L.length===1?'item':'itens'}</span></div>
+    ${k==='clinica'?`<div class="small muted" style="margin:-4px 4px 10px">Itens com renovação a cada 6 meses geram aviso 15 dias antes de vencer.</div>`:''}
+    <div class="glass card tlist" style="margin-bottom:16px">${L.length?`<div class="list">${L.map(row).join('')}</div>`:`<div class="empty" style="padding:22px"><b>Nada em ${l.toLowerCase()}</b><button class="btn sm" data-act="newProcCat" data-id="${k}" style="margin-top:10px">${ic('plus')}Adicionar</button></div>`}</div>`}).join('');
 }
-Object.assign(ACT,{newProc:()=>openProc(),editProc:id=>openProc(id),newDerm:()=>openProc(null,'consulta')});
-function openProc(id,kind0){const ex=db.procedures.find(p=>p.id===id);let kind=ex?.kind||kind0||'procedimento';
-  openModal({title:ex?'Editar procedimento':'Novo procedimento',size:'sm',body:`<div class="stack"><div class="field"><span>Tipo</span><div class="seg" data-kind style="display:flex"><button type="button" data-v="procedimento" style="flex:1">Procedimento estético</button><button type="button" data-v="consulta" style="flex:1">Consulta dermatológica</button></div><div class="small muted" data-kh></div></div><label class="field"><span>Nome <em>*</em></span><input class="in" data-n value="${esc(ex?.name||(kind0==='consulta'?'Consulta dermatológica':''))}" placeholder="Ex.: Limpeza de pele"></label><div class="grid2"><label class="field"><span>Valor (R$)</span><input class="in" data-p inputmode="decimal" value="${ex?fmtNum(ex.price):''}" placeholder="0,00"></label><label class="field"><span>Duração (min)</span><input class="in" data-d type="number" value="${ex?.duration||''}" placeholder="60"></label></div></div>`,
+Object.assign(ACT,{newProc:()=>openProc(),editProc:id=>openProc(id),newDerm:()=>openProc(null,'consulta'),newProcCat:k=>openProc(null,null,k)});
+function openProc(id,kind0,cat0){const ex=db.procedures.find(p=>p.id===id);let kind=ex?.kind||kind0||'procedimento';let cat=ex?.cat||cat0||(kind==='consulta'?'clinica':'estetica');
+  openModal({title:ex?'Editar procedimento':'Novo procedimento',size:'sm',body:`<div class="stack">
+    <label class="field"><span>Nome <em>*</em></span><input class="in" data-n value="${esc(ex?.name||(kind0==='consulta'?'Consulta dermatológica':''))}" placeholder="Ex.: Limpeza de pele"></label>
+    <div class="field"><span>Categoria</span><div class="seg" data-cat style="display:flex">${CATS.map(([k,l])=>`<button type="button" data-v="${k}" style="flex:1">${catShort(k)}</button>`).join('')}</div></div>
+    <div class="grid2"><label class="field"><span>Valor (R$)</span><input class="in" data-p inputmode="decimal" value="${ex?fmtNum(ex.price):''}" placeholder="0,00"></label><label class="field"><span>Duração (min)</span><input class="in" data-d type="number" value="${ex?.duration||''}" placeholder="60"></label></div>
+    <label class="sw-row box" style="padding:12px 16px"><span><b>Renovação a cada 6 meses</b><small>Avisa 15 dias antes de vencer (ex.: consulta dermatológica)</small></span><span class="switch"><input type="checkbox" data-ren ${kind==='consulta'?'checked':''}><i></i></span></label></div>`,
     foot:`${ex?`<button class="btn ghost danger left" data-del>${ic('trash')}Excluir</button>`:''}<button class="btn" data-c>Cancelar</button><button class="btn dark" data-s>${ic('check')}Salvar</button>`,
     onMount:(el,m)=>{setTimeout(()=>$('[data-n]',el).focus(),60);$('[data-c]',el).onclick=m.close;
-      const dk=()=>{$$('[data-kind] button',el).forEach(b=>b.classList.toggle('on',b.dataset.v===kind));$('[data-kh]',el).textContent=kind==='consulta'?'Gera aviso de renovação 15 dias antes de completar 6 meses.':''};dk();
-      $('[data-kind]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){kind=b.dataset.v;dk()}};
-      $('[data-s]',el).onclick=()=>{const name=$('[data-n]',el).value.trim();if(!name){toast('Informe o nome');return}const r={name,price:parseMoney($('[data-p]',el).value),duration:+$('[data-d]',el).value||0,kind};if(ex)Object.assign(ex,r);else db.procedures.push({id:uid(),...r});m.close();changed();toast('Procedimento salvo')};
+      const dc=()=>$$('[data-cat] button',el).forEach(b=>b.classList.toggle('on',b.dataset.v===cat));dc();
+      $('[data-cat]',el).onclick=e=>{const b=e.target.closest('[data-v]');if(b){cat=b.dataset.v;dc()}};
+      $('[data-s]',el).onclick=()=>{const name=$('[data-n]',el).value.trim();if(!name){toast('Informe o nome');return}kind=$('[data-ren]',el).checked?'consulta':'procedimento';
+        const r={name,price:parseMoney($('[data-p]',el).value),duration:+$('[data-d]',el).value||0,kind,cat};if(ex)Object.assign(ex,r);else db.procedures.push({id:uid(),...r});m.close();changed();toast('Procedimento salvo')};
       if(ex)$('[data-del]',el).onclick=async()=>{if(await confirmBox(`Excluir “${esc(ex.name)}” do catálogo? O histórico das consultas é mantido.`)){db.procedures=db.procedures.filter(p=>p!==ex);m.close();changed()}}}})}
 
 /* ================= AJUSTES ================= */
@@ -2088,6 +2399,11 @@ function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><spa
   </div>
   <div class="stack">
     <div class="glass card"><h3>${ic(document.documentElement.dataset.theme==='dark'?'moon':'sun','style="width:18px;height:18px"')}Aparência</h3><div class="seg" style="display:flex">${[['light','Claro','sun'],['dark','Escuro','moon'],['auto','Automático','spark']].map(([k,l,i])=>`<button class="${themePref()===k?'on':''}" data-act="theme" data-id="${k}" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px">${ic(i,'style="width:15px;height:15px"')}${l}</button>`).join('')}</div><div class="small muted" style="margin-top:10px">“Automático” acompanha o modo do seu celular ou computador.</div></div>
+    <div class="glass card"><h3>${ic('wa','style="width:18px;height:18px"')}WhatsApp da clínica</h3><div class="stack small">
+      <div>${window.LUMIERE_DEMO?'<span class="badge">Demonstração: as mensagens abrem no WhatsApp para enviar</span>':!WA.checked?'<span class="badge">Verificando…</span>':!WA.configured?'<span class="badge">Envio manual: o WhatsApp abre com a mensagem pronta</span>':WA.state==='open'?'<span class="badge ok">● Conectado · campanhas e avisos saem automaticamente</span>':'<span class="badge warn">● Desconectado</span>'}</div>
+      ${WA.configured&&!window.LUMIERE_DEMO?`<div class="row wrap" style="gap:8px">${WA.state!=='open'?`<button class="btn sm dark" data-act="waQr">${ic('phone')}Conectar (QR Code)</button>`:''}<button class="btn sm" data-act="waCheck">${ic('check')}Verificar</button><button class="btn sm" data-act="waHook">${ic('inbox')}Ativar respostas das campanhas</button></div>`:''}
+    </div></div>
+    <button class="glass card proc-link" data-nav="procedimentos"><span>${ic('tag')}<b>Procedimentos e valores</b></span><span class="small muted">Catálogo por categoria ›</span></button>
     <div class="glass card"><h3>${ic('user','style="width:18px;height:18px"')}Sua conta</h3><div class="stack small"><div class="row between wrap"><div><div class="muted">Conectada como</div><b style="font-size:14px">${esc(session?session.user.email:'')}</b></div><button class="btn sm" data-act="logout">${ic('logout')}Sair</button></div><div id="syncTxt">${syncLabel()}</div><div class="muted">Seus dados ficam salvos na nuvem e aparecem em qualquer aparelho em que você entrar.</div></div></div>
     <div class="glass card"><h3>${ic('doc','style="width:18px;height:18px"')}Mensagem de orçamento</h3><label class="field"><span>Introdução</span><textarea class="in" data-chg="set" data-k="budgetIntro">${esc(s.budgetIntro)}</textarea></label><div class="small muted" style="margin-top:6px">A lista de procedimentos, desconto e total são adicionados automaticamente. O modelo de retorno é editado na aba Retornos.</div></div>
     <div class="glass card"><h3>${ic('down','style="width:18px;height:18px"')}Backup dos dados</h3><div class="small muted" style="margin-bottom:12px">Além da nuvem, você pode baixar uma cópia de segurança dos seus dados quando quiser.</div>
@@ -2103,6 +2419,12 @@ INP.importData=el=>{const f=el.files[0];if(!f)return;const r=new FileReader();r.
 Object.assign(ACT,{
   rmLogo:async()=>{if(await confirmBox('Remover a logo da clínica?','Remover')){delete db.settings.logo;save();render();toast('Logo removida')}},
   theme:k=>setTheme(k),
+  waCheck:async()=>{toast('Verificando…');await waRefresh();render();toast(WA.state==='open'?'WhatsApp conectado':'WhatsApp não está conectado')},
+  waHook:async()=>{try{await fnCall('lumiere-wa',{action:'setup-webhook'});toast('Respostas das campanhas ativadas')}catch(e){toast('Não foi possível ativar: '+e.message)}},
+  waQr:()=>{let timer;openModal({title:'Conectar WhatsApp',size:'sm',body:'<div data-qr style="text-align:center"><div class="muted">Gerando QR Code…</div></div>',onMount:(el,m)=>{
+      const box=$('[data-qr]',el);const load=async()=>{try{const st=await fnCall('lumiere-wa',{action:'status'});if(st.state==='open'){WA.state='open';box.innerHTML=`<b>WhatsApp conectado!</b><div class="small muted" style="margin-top:6px">Os envios automáticos já estão ativos.</div>`;clearInterval(timer);render();return}
+        const j=await fnCall('lumiere-wa',{action:'qr'});box.innerHTML=j.qr?`<img src="${j.qr.startsWith('data:')?j.qr:'data:image/png;base64,'+j.qr}" alt="QR Code" style="width:240px;height:240px;border-radius:18px;background:#fff;padding:10px"><div class="small muted" style="margin-top:10px">No celular da clínica: WhatsApp → Aparelhos conectados → Conectar aparelho.</div>`:'<div class="muted">Não foi possível gerar o QR Code.</div>'}catch(e){box.innerHTML=`<span class="badge bad">${esc(e.message)}</span>`;clearInterval(timer)}};
+      load();timer=setInterval(async()=>{try{const st=await fnCall('lumiere-wa',{action:'status'});if(st.state==='open')load()}catch(e){}},4000)},onClose:()=>clearInterval(timer)})},
   logout:async()=>{if(await confirmBox('Sair da sua conta neste aparelho?','Sair'))logout()},
   exportData:()=>{if(window.LUMIERE_DEMO){toast('Na demonstração não dá para baixar arquivos');return}const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`lumiere-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)},
   reset:async()=>{if(await confirmBox('Apagar <b>todos</b> os dados? Recomendo exportar um backup antes.','Apagar tudo')){db=defaults();changed();toast('Dados apagados')}}
@@ -2129,6 +2451,11 @@ function seedDemo(){
   db.budgets.push({id:uid(),patientId:ps[2].id,date:addDays(t,-3),validUntil:addDays(t,12),items:[{procId:pr[5].id,name:pr[5].name,price:pr[5].price,qty:2},{procId:pr[6].id,name:pr[6].name,price:pr[6].price,qty:1}],discountType:'pct',discountValue:10,notes:'Pagamento em até 3x sem juros.',status:'aberto',createdAt:Date.now()});
   db.budgets.push({id:uid(),patientId:ps[7].id,date:addDays(t,-12),validUntil:addDays(t,3),items:[{procId:pr[3].id,name:pr[3].name,price:pr[3].price,qty:1}],discountType:'val',discountValue:100,notes:'',status:'aprovado',createdAt:Date.now()});
   const cp=db.procedures.find(x=>x.kind==='consulta');
+  // cirurgias de exemplo
+  [['Blefaroplastia',6500,120],['Lipoaspiração de papada',5200,90]].forEach(([name,price,duration])=>{if(!db.procedures.some(x=>x.name===name))db.procedures.push({id:uid(),name,price,duration,kind:'procedimento',cat:'cirurgia'})});
+  const blef=db.procedures.find(x=>x.name==='Blefaroplastia'),lipo=db.procedures.find(x=>x.name==='Lipoaspiração de papada');
+  const surg=(pi,pr,date)=>db.appointments.push({id:uid(),patientId:ps[pi].id,date,time:'08:00',status:'realizada',items:[{procId:pr.id,name:pr.name,price:pr.price,qty:1}],discountType:'pct',discountValue:0,notes:'Cirurgia sem intercorrências.',createdAt:Date.now()});
+  surg(2,blef,addMonths(t,-8));surg(5,lipo,addMonths(t,-4));surg(7,blef,addMonths(t,-11));
   if(cp){const mk=(pi,date,status,time)=>db.appointments.push({id:uid(),patientId:ps[pi].id,date,time,status,items:[{procId:cp.id,name:cp.name,price:cp.price,qty:1}],discountType:'pct',discountValue:0,notes:status==='realizada'?'Avaliação dermatológica completa. Rotina de cuidados prescrita.':'Renovação da consulta dermatológica.',createdAt:Date.now()});
     mk(0,addDays(addMonths(t,-6),10),'realizada','09:00');  // vence em ~10 dias
     mk(5,addDays(addMonths(t,-6),14),'realizada','10:00');  // vence em ~14 dias
@@ -2136,6 +2463,19 @@ function seedDemo(){
     mk(1,addDays(addMonths(t,-6),5),'realizada','11:00');mk(1,addDays(t,6),'agendada','16:30'); // renovação já agendada
     mk(8,addMonths(t,-3),'realizada','14:00');               // em dia
   }
+  // campanhas de exemplo (ficam só neste navegador)
+  const iso_=(d,h)=>new Date(parse(d).getTime()+h*3600e3).toISOString();
+  const c1={id:uid(),name:'Revisão pós-cirurgia',filters:{...FDEF(),cat:'cirurgia'},template:'Olá, {nome}! ✨\n\nJá faz um tempo desde a sua {procedimento} ({data}). Que tal marcar a revisão para acompanharmos o resultado?',status:'concluida',created_at:iso_(addDays(t,-6),10)};
+  const c2={id:uid(),name:'Aniversariantes do mês',filters:{...FDEF(),bday:'este'},template:'Feliz aniversário, {nome}! 🎉 Neste mês você tem um presente especial na {clinica}. Responda esta mensagem para saber mais.',status:'rascunho',created_at:iso_(addDays(t,-1),15)};
+  const mk=(pi,c,h)=>({id:uid(),campaign_id:c.id,patient_id:ps[pi].id,patient_name:ps[pi].name,phone:waNum(ps[pi].phone),message:fill(c.template,{nome:ps[pi].socialName||first(ps[pi].name),procedimento:'blefaroplastia',data:fmtD(addMonths(t,-8)),clinica:'nossa clínica'})+LGPD_FOOT,status:'manual',created_at:c.created_at,sent_at:iso_(addDays(t,-6),h)});
+  const s1=mk(2,c1,10.2),s2=mk(5,c1,10.4),s3=mk(7,c1,10.6);
+  db.crm={campaigns:[c1,c2],sends:[s1,s2,s3],optouts:[],replies:[
+    {id:uid(),campaign_id:c1.id,send_id:s1.id,patient_id:s1.patient_id,phone:s1.phone,text:'Oi! Quero marcar sim, pode ser semana que vem? 😊',classification:'normal',review_status:'ok',received_at:iso_(addDays(t,-6),11)},
+    {id:uid(),campaign_id:c1.id,send_id:s2.id,patient_id:s2.patient_id,phone:s2.phone,text:'Quanto custa essa revisão? Estou sem tempo esses meses',classification:'duvida',review_status:'pendente',received_at:iso_(addDays(t,-5),9)},
+    {id:uid(),campaign_id:c1.id,send_id:s3.id,patient_id:s3.patient_id,phone:s3.phone,text:'Por favor, não me mandem mais mensagens.',classification:'sair',review_status:'removido',received_at:iso_(addDays(t,-5),14)}]};
+  db.crm.optouts.push({patient_id:s3.patient_id,source:'automatico',reason:'Por favor, não me mandem mais mensagens.',created_at:iso_(addDays(t,-5),14)});
+  db.messages=(db.messages||[]).concat([{id:uid(),patientId:ps[0].id,at:iso_(addDays(t,-20),9),dir:'out',kind:'retorno',text:'Olá, Bia! Está chegando o momento do seu retorno. Vamos agendar?'}]);
+  CRM.loaded=false;
   if(!db.settings.doctor)db.settings.doctor='Dra. Helena';if(!db.settings.clinic)db.settings.clinic='Helena Estética da Pele';
   S.retSel=null;
 }
