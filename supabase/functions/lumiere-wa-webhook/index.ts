@@ -70,6 +70,9 @@ function extrair(payload: any) {
   return out;
 }
 
+const MAX_RESPOSTAS = 3;
+const PEDE_SAIR = /\b(sair|pare|parar|para de|remove|remova|tira|tirar|descadastr|n[aã]o quero mais|n[aã]o mand|bloque)/i;
+
 Deno.serve(async (req) => {
   const token = new URL(req.url).searchParams.get("token") ?? "";
   const esperado = await internal("webhook_token");
@@ -89,6 +92,10 @@ Deno.serve(async (req) => {
     const k = phoneKey(m.phone);
     const envio = (recentes ?? []).find((s) => phoneKey(s.phone) === k);
     if (!envio) return; // não é resposta de campanha recente
+    // Só as 3 primeiras mensagens depois do envio contam como resposta da campanha
+    const { count } = await sb.from("lumiere_campaign_replies").select("id", { count: "exact", head: true }).eq("send_id", envio.id);
+    // (exceto pedido de saída: esse sempre é registrado, por causa da LGPD)
+    if ((count ?? 0) >= MAX_RESPOSTAS && !PEDE_SAIR.test(m.text)) return;
     const { data: reply, error } = await sb.from("lumiere_campaign_replies").insert({
       user_id: envio.user_id, campaign_id: envio.campaign_id, send_id: envio.id, patient_id: envio.patient_id,
       phone: m.phone, text: m.text, wa_message_id: m.id || null,

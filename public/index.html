@@ -1292,7 +1292,7 @@ function crmBindLocal(){db.crm=db.crm||{campaigns:[],sends:[],replies:[],optouts
 async function crmLoad(){
   if(crmLocal()){crmBindLocal();return}
   try{const [c,sd,rp,o]=await Promise.all([rest('lumiere_campaigns?select=*&order=created_at.desc'),rest('lumiere_campaign_sends?select=*&order=created_at.desc&limit=5000'),rest('lumiere_campaign_replies?select=*&order=received_at.desc&limit=3000'),rest('lumiere_optouts?select=*')]);
-    const before=pendingReviews().length;const A=x=>Array.isArray(x)?x:[];Object.assign(CRM,{campaigns:A(c),sends:A(sd),replies:A(rp),optouts:A(o),loaded:true});
+    const before=pendingReviews().length;const A=x=>Array.isArray(x)?x:[];Object.assign(CRM,{campaigns:A(c),sends:A(sd),replies:firstReplies(A(rp)),optouts:A(o),loaded:true});
     renderShell();if(S.view==='campanhas'||(S.view==='agenda'&&before!==pendingReviews().length))render();layers.forEach(l=>l.refresh&&l.refresh())}catch(e){}
 }
 setInterval(()=>{if(!document.hidden&&session&&!crmLocal())crmLoad()},45000);
@@ -1311,6 +1311,9 @@ async function crmOptOut(pid,source,reason){if(isOut(pid))return;const row={pati
   await rest(TBL.optouts,{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({...row,user_id:session.user.id})});CRM.optouts.push(row)}
 async function crmOptIn(pid){const i=CRM.optouts.findIndex(o=>o.patient_id===pid);if(i>-1)CRM.optouts.splice(i,1);
   if(crmLocal()){save();return}await rest(`${TBL.optouts}?patient_id=eq.${encodeURIComponent(pid)}`,{method:'DELETE'})}
+// Por envio, guarda só as 3 primeiras respostas (o resto da conversa não é resposta da campanha)
+const MAX_RESP=3;
+function firstReplies(rows){const n={};return [...rows].sort((a,b)=>String(a.received_at).localeCompare(String(b.received_at))).filter(r=>{const k=r.send_id||(r.campaign_id+'|'+r.patient_id);n[k]=(n[k]||0)+1;return n[k]<=MAX_RESP}).sort((a,b)=>String(b.received_at).localeCompare(String(a.received_at)))}
 const pendingReviews=()=>CRM.replies.filter(r=>r.review_status==='pendente');
 
 const badge=(m,k)=>{const[l,c]=m[k]||[k,''];return`<span class="badge ${c}">${l}</span>`};
