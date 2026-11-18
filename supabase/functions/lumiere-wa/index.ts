@@ -11,7 +11,12 @@ Deno.serve(async (req) => {
   const action = String(body.action ?? "status");
 
   await loadEvo();
-  if (!evoConfigured()) return json({ configured: false });
+  if (!evoConfigured()) {
+    // Diagnóstico: só os NOMES dos segredos parecidos, nunca os valores
+    const nomes = Object.keys(Deno.env.toObject()).filter((k) => /EVO|API|KEY|CHAVE|ANTHROPIC/i.test(k) && !/^SUPABASE_/.test(k));
+    console.log("WhatsApp não configurado. Segredos com nome parecido:", JSON.stringify(nomes));
+    return json({ configured: false, missing: ["EVOLUTION_API_KEY"].filter((k) => !env(k)) });
+  }
   const hookUrl = async () => `${env("SUPABASE_URL")}/functions/v1/lumiere-wa-webhook?token=${encodeURIComponent(await internal("webhook_token"))}`;
   const setHook = async () => evo("/webhook/set/{inst}", {
     method: "POST",
