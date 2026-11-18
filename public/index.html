@@ -1083,6 +1083,8 @@ html{background:var(--bg)}
 .pl-a .fav{color:var(--ink-4)}.pl-a .fav.on{color:#f59e0b}.pl-a .fav.on svg{fill:#f59e0b}.fchip.fav-f.on{color:#b45309}.fchip.fav-f.on svg{fill:#f59e0b;color:#f59e0b}
 @media (max-width:900px){.pl-h{display:none}.pl-r{grid-template-columns:1fr auto;gap:4px 10px;padding:12px 14px}.pl-p{grid-column:1/2}.pl-a{grid-column:2;grid-row:1}
   .pl-c{grid-column:1/-1;padding-left:52px;font-size:12.5px;color:var(--ink-2)}.pl-c:before{content:attr(data-l)': ';color:var(--ink-3)}.pl-c small{display:inline;margin-left:6px}.pl-c:has(.muted:only-child){display:none}}
+.imp-drop{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 16px;border:1.5px dashed var(--ink-4);border-radius:18px;text-align:center;cursor:pointer;transition:background .15s,border-color .15s}.imp-drop:hover,.imp-drop.over{background:var(--cellfill);border-color:var(--ink-3)}
+.imp-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 8px}.imp-sum div{background:var(--glass-2);border:.5px solid var(--line);border-radius:14px;padding:12px}.imp-sum b{display:block;font-size:24px;font-weight:700}.imp-sum span{font-size:12px;color:var(--ink-3)}
 .pv-tools{gap:8px;margin-top:14px}.pv-q{flex:1 1 220px;position:relative;display:flex;align-items:center}.pv-q svg{position:absolute;left:12px;width:16px;height:16px;opacity:.5;pointer-events:none}.pv-q .in{padding-left:36px;width:100%}
 .pv-list{max-height:280px;margin-top:12px;display:flex;flex-direction:column;border-top:.5px solid var(--line)}
 .pv-it{display:flex;align-items:center;gap:12px;padding:9px 2px;border-bottom:.5px solid var(--line);cursor:pointer}.pv-it .grow{display:flex;flex-direction:column;min-width:0}.pv-it small{color:var(--ink-3);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1567,6 +1569,7 @@ function dayHTML(){
   </div>`;
 }
 Object.assign(ACT,{
+  importSheets:()=>openImport(),
   pFav:id=>{const p=P(id);p.fav=!p.fav;changed()},
   pFavF:()=>{S.pfav=!S.pfav;S.plimit=0;render()},
   pMore:()=>{S.plimit=(S.plimit||80)+80;$('#plist').innerHTML=pListHTML()},
@@ -2266,6 +2269,85 @@ Object.assign(ACT,{
 ACT.psort=k=>{S.psort=k;render()};
 ACT.quickCreate=()=>{const p={id:uid(),name:S.pq.trim(),createdAt:Date.now()};db.patients.push(p);S.pq='';changed();toast('Paciente cadastrado');openFolder(p.id)};
 
+/* ================= IMPORTAR PACIENTES (planilhas de outro sistema) ================= */
+const _scripts={};
+function loadScript(src){return _scripts[src]||(_scripts[src]=new Promise((ok,err)=>{const el=document.createElement('script');el.src=src;el.async=true;el.crossOrigin='anonymous';el.onload=ok;el.onerror=()=>{delete _scripts[src];err(new Error('Não foi possível carregar o leitor de planilhas. Verifique a internet.'))};document.head.appendChild(el)}))}
+const XLSX_URL='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',JSZIP_URL='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+const UFS={'acre':'AC','alagoas':'AL','amapa':'AP','amazonas':'AM','bahia':'BA','ceara':'CE','distrito federal':'DF','espirito santo':'ES','goias':'GO','maranhao':'MA','mato grosso':'MT','mato grosso do sul':'MS','minas gerais':'MG','para':'PA','paraiba':'PB','parana':'PR','pernambuco':'PE','piaui':'PI','rio de janeiro':'RJ','rio grande do norte':'RN','rio grande do sul':'RS','rondonia':'RO','roraima':'RR','santa catarina':'SC','sao paulo':'SP','sergipe':'SE','tocantins':'TO'};
+// nomes de coluna aceitos (comparados sem acento, minúsculos)
+const ICOLS={extId:['id','codigo','cod','prontuario'],name:['nome','nome completo','paciente','cliente'],cpf:['cpf'],rg:['rg'],birth:['data de nascimento','nascimento','dt nascimento','data nascimento','aniversario'],email:['email','e-mail'],gender:['sexo','genero'],obs:['observacao','observacoes','obs','anotacoes'],source:['origem','como conheceu','canal'],phone:['celular','whatsapp','telefone celular','telefone','fone'],phone2:['telefone residencial','telefone fixo','fixo'],phone3:['telefone comercial'],cep:['cep'],street:['endereco','logradouro','rua'],num:['n°','nº','no','numero','num'],compl:['complemento'],bairro:['bairro'],city:['cidade','municipio'],uf:['estado','uf'],ins:['convenio'],plan:['plano'],card:['n° matricula','nº matricula','matricula','carteirinha'],resp:['nome do responsavel','responsavel'],respDoc:['documento do responsavel'],last:['ultimo atendimento','ultima consulta','ultima visita']};
+const pad2=n=>String(n).padStart(2,'0');
+const fmtPhone=v=>{let d=digits(v);if(d.startsWith('55')&&d.length>11)d=d.slice(2);return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length===10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:String(v||'').trim()};
+function cellDate(v){if(v instanceof Date&&!isNaN(v))return{d:`${v.getFullYear()}-${pad2(v.getMonth()+1)}-${pad2(v.getDate())}`,t:v.getHours()||v.getMinutes()?`${pad2(v.getHours())}:${pad2(v.getMinutes())}`:''};
+  const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/.exec(String(v||'').trim());if(m)return{d:`${m[3]}-${pad2(m[2])}-${pad2(m[1])}`,t:m[4]?`${pad2(m[4])}:${m[5]}`:''};
+  const m2=/^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2}))?/.exec(String(v||'').trim());if(m2)return{d:`${m2[1]}-${m2[2]}-${m2[3]}`,t:m2[4]&&!(m2[4]==='00'&&m2[5]==='00')?`${m2[4]}:${m2[5]}`:''};return null}
+function rowToPatient(get){
+  const t=k=>{const v=get(k);if(v==null)return'';const s=v instanceof Date?v:String(v).trim();return s==='-'||s==='—'?'':s};
+  const name=String(t('name')).replace(/\s+/g,' ').trim();if(name.replace(/[.\-\s]/g,'').length<2)return null;
+  const p={id:uid(),name,createdAt:Date.now(),importedAt:new Date().toISOString()};
+  if(t('extId'))p.extId=String(t('extId'));
+  const c=digits(t('cpf'));if(c.length===11)p.cpf=maskCPF(c);else if(c)p.cpf=c;
+  if(t('rg'))p.rg=String(t('rg'));
+  const b=cellDate(t('birth'));if(b)p.birth=b.d;
+  if(t('email'))p.email=String(t('email')).toLowerCase();
+  const g=norm(t('gender'));if(g.startsWith('f'))p.gender='F';else if(g.startsWith('m'))p.gender='M';
+  if(t('phone'))p.phone=fmtPhone(t('phone'));
+  const f2=[t('phone2'),t('phone3')].filter(Boolean).map(fmtPhone);if(f2.length)p.phone2=f2.join(' · ');
+  if(!p.phone&&f2.length&&digits(f2[0]).length===11)p.phone=f2[0];
+  const ce=digits(t('cep'));if(ce.length===8)p.cep=`${ce.slice(0,5)}-${ce.slice(5)}`;
+  const city=String(t('city')),ufRaw=String(t('uf')),uf=UFS[norm(ufRaw)]||ufRaw;
+  const addr=[t('street'),t('bairro'),city&&uf?`${city}/${uf}`:city||uf].filter(Boolean).join(', ');if(addr)p.address=addr;
+  if(t('num'))p.addrNum=String(t('num'));if(t('compl'))p.addrCompl=String(t('compl'));
+  const ins=[t('ins'),t('plan'),t('card')&&'carteirinha '+t('card')].filter(Boolean).join(' · ');if(ins)p.insurance=ins;
+  if(t('source'))p.source=String(t('source'));
+  const resp=[t('resp'),t('respDoc')].filter(Boolean).join(' · ');if(resp)p.emergencyName=resp;
+  const lv=cellDate(t('last'));if(lv){p.lastVisit=lv.d;p.lastVisitAt=lv.d+'T'+(lv.t||'00:00')}
+  let obs=String(t('obs')||'').replace(/^\s*-\s*Observa[çc][õo]es\s*-\s*/i,'').trim(),evo=null;
+  const mi=/Indicad[oa] por:[ \t]*(.*)/i.exec(obs);if(mi&&mi[1].trim()){p.referredBy=mi[1].trim();if(!p.source)p.source='Indicação'}
+  obs=obs.replace(/^\s*[ÚU]ltima Visita:.*$/gim,'').replace(/^\s*Indicad[oa] por:.*$/gim,'').trim();
+  if(obs)evo={id:uid(),patientId:p.id,type:'observacao',text:obs,at:p.lastVisitAt?new Date(p.lastVisitAt+':00').toISOString():new Date().toISOString(),author:'',pinned:false,imported:true,createdAt:new Date().toISOString()};
+  return{p,evo}}
+async function readSheets(files,onStep){
+  await loadScript(XLSX_URL);const book=[];
+  for(const f of files){const nm=f.name.toLowerCase();
+    if(nm.endsWith('.zip')){await loadScript(JSZIP_URL);const z=await JSZip.loadAsync(f);const ent=Object.values(z.files).filter(e=>!e.dir&&!/(^|\/)(__MACOSX|\.)/.test(e.name)&&/\.(xlsx|xls|csv)$/i.test(e.name));
+      for(const e of ent){book.push({name:e.name.split('/').pop(),data:await e.async('arraybuffer')});onStep&&onStep(book.length)}}
+    else if(/\.(xlsx|xls|csv)$/.test(nm)){book.push({name:f.name,data:await f.arrayBuffer()});onStep&&onStep(book.length)}}
+  const out=[];let rows=0,noName=0,badFiles=[];
+  for(const b of book){let wb;try{wb=XLSX.read(b.data,{type:'array',cellDates:true})}catch(e){badFiles.push(b.name);continue}
+    const ws=wb.Sheets[wb.SheetNames[0]];const A=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});if(!A.length)continue;
+    const H=A[0].map(h=>norm(String(h||'')).replace(/\s+/g,' ').trim());const col={};
+    for(const [k,names] of Object.entries(ICOLS)){const i=H.findIndex(h=>names.includes(h));if(i>-1)col[k]=i}
+    if(col.name==null){badFiles.push(b.name);continue}
+    for(const r of A.slice(1)){if(!r||r.every(v=>v==null||v===''))continue;rows++;const x=rowToPatient(k=>col[k]==null?null:r[col[k]]);if(x)out.push(x);else noName++}}
+  return{items:out,files:book.length,rows,noName,badFiles}}
+function openImport(){let parsed=null,busy=false;
+  openModal({title:'Importar pacientes',size:'md',
+    body:`<div class="stack"><label class="imp-drop" data-drop><input type="file" data-files multiple accept=".xlsx,.xls,.csv,.zip" hidden>${ic('up','style="width:28px;height:28px;opacity:.6"')}<b>Escolha as planilhas ou o .zip</b><span class="small muted">Pode selecionar vários arquivos de uma vez, ou arrastar para cá.</span></label><div data-res></div></div>`,
+    foot:`<button class="btn" data-x>Fechar</button><button class="btn dark" data-go disabled>${ic('check')}Importar</button>`,
+    onMount:(el,m)=>{const res=$('[data-res]',el),go=$('[data-go]',el),inp=$('[data-files]',el),drop=$('[data-drop]',el);$('[data-x]',el).onclick=m.close;
+      const handle=async files=>{if(!files.length||busy)return;busy=true;go.disabled=true;res.innerHTML=`<div class="small muted">Lendo arquivos…</div>`;
+        try{const r=await readSheets([...files],n=>{res.innerHTML=`<div class="small muted">Lendo arquivos… ${n}</div>`});
+          const byExt=new Map(),byCpf=new Map(),byKey=new Map();db.patients.forEach(p=>{if(p.extId)byExt.set(String(p.extId),p);const c=digits(p.cpf);if(c.length===11)byCpf.set(c,p);byKey.set(norm(p.name)+'|'+(p.birth||''),p)});
+          const seen=new Set();let dupFile=0;const novos=[],exist=[];
+          for(const x of r.items){const k=x.p.extId?'e'+x.p.extId:digits(x.p.cpf).length===11?'c'+digits(x.p.cpf):'n'+norm(x.p.name)+'|'+(x.p.birth||'');if(seen.has(k)){dupFile++;continue}seen.add(k);
+            const ex=(x.p.extId&&byExt.get(String(x.p.extId)))||(digits(x.p.cpf).length===11&&byCpf.get(digits(x.p.cpf)))||(x.p.birth&&byKey.get(norm(x.p.name)+'|'+x.p.birth));
+            (ex?exist:novos).push(ex?{x,ex}:x)}
+          parsed={novos,exist};
+          res.innerHTML=`<div class="imp-sum"><div><b>${novos.length}</b><span>novos pacientes</span></div><div><b>${exist.length}</b><span>já cadastrados</span></div><div><b>${novos.filter(x=>x.evo).length}</b><span>observações para o prontuário</span></div></div>
+            <div class="small muted">${r.files} arquivo${r.files===1?'':'s'} · ${r.rows} linha${r.rows===1?'':'s'}${r.noName?` · ${r.noName} sem nome (ignoradas)`:''}${dupFile?` · ${dupFile} repetida(s) entre os arquivos`:''}${r.badFiles.length?` · não consegui ler: ${r.badFiles.map(esc).join(', ')}`:''}</div>
+            ${exist.length?`<label class="sw-row" style="margin-top:10px"><span><b>Completar quem já existe</b><small>Preenche só os campos que estão vazios no cadastro atual</small></span><span class="switch"><input type="checkbox" data-fill checked><i></i></span></label>`:''}`;
+          go.disabled=!novos.length&&!exist.length;go.innerHTML=`${ic('check')}Importar ${novos.length} paciente${novos.length===1?'':'s'}`}
+        catch(e){res.innerHTML=`<div class="small" style="color:#c0392b">${esc(e.message||'Erro ao ler os arquivos')}</div>`}
+        busy=false};
+      inp.onchange=()=>handle(inp.files);
+      drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('over')});drop.addEventListener('dragleave',()=>drop.classList.remove('over'));
+      drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('over');handle(e.dataTransfer.files)});
+      go.onclick=()=>{if(!parsed)return;const fill=$('[data-fill]',el)?.checked;let filled=0;
+        parsed.novos.forEach(x=>{db.patients.push(x.p);if(x.evo)db.evolutions.push(x.evo)});
+        if(fill)parsed.exist.forEach(({x,ex})=>{let ch=false;for(const [k,v] of Object.entries(x.p)){if(['id','createdAt','importedAt'].includes(k))continue;if(v&&!ex[k]){ex[k]=v;ch=true}}if(ch)filled++});
+        const n=parsed.novos.length;m.close();changed();toast(`${n} paciente${n===1?'':'s'} importado${n===1?'':'s'}${filled?` · ${filled} completado${filled===1?'':'s'}`:''}`)}}})}
+
 /* ================= PRONTUÁRIO: evoluções e etiquetas ================= */
 const ptags=()=>db.settings.tags||(db.settings.tags=['Alergia','Paciente VIP','Gestante','Pele sensível']);
 const EVT=[['evolucao','Evolução','edit'],['anamnese','Anamnese','doc'],['observacao','Observações','edit'],['prescricao','Prescrição','doc'],['procedimento','Procedimento','tag']];
@@ -2621,6 +2703,7 @@ function vAjustes(){const s=db.settings,f=(k,l,a='')=>`<label class="field"><spa
       <div>${window.LUMIERE_DEMO?'<span class="badge">Demonstração: as mensagens abrem no WhatsApp para enviar</span>':!WA.checked?'<span class="badge">Verificando…</span>':!WA.configured?'<span class="badge">Envio manual: o WhatsApp abre com a mensagem pronta</span>':WA.state==='open'?'<span class="badge ok">● Conectado · campanhas e avisos saem automaticamente</span>':'<span class="badge warn">● Desconectado</span>'}</div>
       ${WA.configured&&!window.LUMIERE_DEMO?`<div class="row wrap" style="gap:8px">${WA.state!=='open'?`<button class="btn sm dark" data-act="waQr">${ic('phone')}Conectar (QR Code)</button>`:''}<button class="btn sm" data-act="waCheck">${ic('check')}Verificar</button><button class="btn sm" data-act="waHook">${ic('inbox')}Ativar respostas das campanhas</button></div>`:''}
     </div></div>
+    <div class="glass card"><h3>${ic('users','style="width:18px;height:18px"')}Importar pacientes</h3><div class="stack small"><span class="muted">Traga a lista de outro sistema: planilhas Excel (.xlsx), CSV ou um .zip com várias. Quem já está cadastrado não é duplicado.</span><div><button class="btn sm dark" data-act="importSheets">${ic('up')}Importar planilhas</button></div></div></div>
     <button class="glass card proc-link" data-nav="procedimentos"><span>${ic('tag')}<b>Procedimentos e valores</b></span><span class="small muted">Catálogo por categoria ›</span></button>
     <div class="glass card"><h3>${ic('user','style="width:18px;height:18px"')}Sua conta</h3><div class="stack small"><div class="row between wrap"><div><div class="muted">Conectada como</div><b style="font-size:14px">${esc(session?session.user.email:'')}</b></div><button class="btn sm" data-act="logout">${ic('logout')}Sair</button></div><div id="syncTxt">${syncLabel()}</div><div class="muted">Seus dados ficam salvos na nuvem e aparecem em qualquer aparelho em que você entrar.</div></div></div>
     <div class="glass card"><h3>${ic('doc','style="width:18px;height:18px"')}Mensagem de orçamento</h3><label class="field"><span>Introdução</span><textarea class="in" data-chg="set" data-k="budgetIntro">${esc(s.budgetIntro)}</textarea></label><div class="small muted" style="margin-top:6px">A lista de procedimentos, desconto e total são adicionados automaticamente. O modelo de retorno é editado na aba Retornos.</div></div>
