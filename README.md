@@ -11,8 +11,17 @@ Sistema web leve (um único `index.html`, sem instalação) com visual em vidro 
 - **Aviso para a doutora**: a partir do dia configurado, a Agenda mostra o resumo dos retornos do **mês seguinte** para enviar ao seu WhatsApp. Com a Evolution API configurada, o resumo pode chegar sozinho ao abrir o sistema.
 - **Backup**: exportar e importar um arquivo `.json`.
 
-## Como usar
-Abra o `index.html` no navegador ou publique a pasta em qualquer hospedagem estática (GitHub Pages, Netlify, Vercel). No celular, use “Adicionar à tela inicial” para abrir como aplicativo.
+## Hospedagem (Cloudflare)
+O site fica na pasta `public/` e é publicado no **Cloudflare Workers** (arquivos estáticos, sem servidor), configurado em `wrangler.jsonc`.
+
+**Publicar automaticamente a cada atualização no GitHub**
+1. Cloudflare → **Workers & Pages → Create → Import a repository** e escolha este repositório.
+2. Branch de produção: a branch do projeto. Comando de build: deixe vazio. Comando de deploy: `npx wrangler deploy`.
+3. Ao terminar, o endereço será algo como `https://clinica-estetica.SEU-USUARIO.workers.dev`. Domínio próprio: **Settings → Domains & Routes → Add → Custom domain**.
+
+**Publicar manualmente:** `npx wrangler deploy` na raiz do projeto.
+
+No celular, abra o endereço no Safari/Chrome e use “Adicionar à tela de início” para abrir como aplicativo.
 
 ## Login e nuvem (Supabase)
 As contas são criadas **só pelo administrador**, no painel do Supabase. A tela do sistema tem apenas **Entrar**.
@@ -38,7 +47,7 @@ Os dados ficam na tabela `lumiere_data` e aparecem em qualquer aparelho em que e
 Claro, Escuro ou Automático (segue o aparelho), em **Ajustes → Aparência** ou pelo botão de sol/lua no menu lateral.
 
 ## WhatsApp automático com Evolution API (Railway)
-A configuração fica **no código**, e a doutora não vê nada técnico. No início do `<script>` do `index.html`, preencha:
+A configuração fica **no código**, e a doutora não vê nada técnico. No início do `<script>` do `public/index.html`, preencha:
 
 ```js
 const EVOLUTION={
