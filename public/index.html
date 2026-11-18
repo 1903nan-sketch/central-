@@ -153,6 +153,46 @@ textarea.in{height:auto;min-height:84px;padding:11px 13px;resize:vertical}
 .empty b{display:block;color:var(--ink-2);font-weight:600;margin-bottom:4px}
 /* ---------- calendar ---------- */
 .agenda-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+/* ===== Agenda em quadro (semana) ===== */
+.ag-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px;flex-wrap:wrap}
+.wk{padding:0;overflow:hidden}
+.wk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 12px;flex-wrap:wrap}
+.wk-head h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}.wk-head h2 em{font-style:normal;color:var(--ink-3);font-weight:500}
+.wk-grid{display:grid;grid-template-columns:54px repeat(var(--n),minmax(0,1fr));border-top:.5px solid var(--line)}
+.wk-dh{position:sticky;top:0;z-index:3;padding:10px 6px 9px;text-align:center;border-left:.5px solid var(--line);border-bottom:.5px solid var(--line);background:var(--cell,#fff);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer}
+.wk-dh .wd{font-size:11.5px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+.wk-dh .dn{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 6px;border-radius:15px;font-size:17px;font-weight:600;margin-top:2px}
+.wk-dh.today .dn{background:var(--ink);color:var(--bg)}
+.wk-dh .rt{display:block;font-size:10.5px;color:#b45309;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-corner{position:sticky;top:0;z-index:3;border-bottom:.5px solid var(--line);background:var(--cell,#fff)}
+.wk-body{max-height:min(72vh,820px);overflow-y:auto;overscroll-behavior:contain}
+.wk-times{position:relative}
+.wk-times span{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.wk-col{position:relative;border-left:.5px solid var(--line);background-image:repeating-linear-gradient(to bottom,var(--line) 0 .5px,transparent .5px var(--hh)),repeating-linear-gradient(to bottom,transparent 0 calc(var(--hh)/2),rgba(127,127,127,.06) calc(var(--hh)/2) calc(var(--hh)/2 + .5px),transparent calc(var(--hh)/2 + .5px) var(--hh));cursor:copy}
+.wk-col.today{background-color:rgba(0,122,255,.035)}
+.wk-col.past{background-color:rgba(127,127,127,.035)}
+.wk-ev{position:absolute;left:3px;right:3px;border-radius:12px;padding:7px 9px 7px 10px;text-align:left;overflow:hidden;display:flex;flex-direction:column;gap:3px;cursor:pointer;transition:transform .15s,box-shadow .15s;border:.5px solid rgba(0,0,0,.04);box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.wk-ev:hover{transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(20,30,50,.25);z-index:2}
+.wk-ev.cat-clinica{background:#e3effd}.wk-ev.cat-estetica{background:#e2f5e6}.wk-ev.cat-cirurgia{background:#fbe6ea}.wk-ev.cat-none{background:#eef0f3}
+.wk-ev.st-cancelada{opacity:.55}.wk-ev.st-cancelada .wn{text-decoration:line-through}
+.wk-ev .wtop{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.wk-st{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:11px;background:rgba(255,255,255,.85);font-size:11px;font-weight:600;white-space:nowrap}
+.wk-st svg{width:12px;height:12px}
+.wk-st.agendada{color:#a16207}.wk-st.realizada{color:#15803d}.wk-st.cancelada{color:#b91c1c}
+.wk-ev .wv{font-size:11px;font-weight:600;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.wk-st{flex:0 0 auto}
+.wk-ev .wn{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-ev .wt{font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.wk-ev .wp{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-ev .wp:before{content:"";flex:0 0 3px;height:14px;border-radius:2px;background:var(--bar,#8e8e93)}
+.wk-ev.cat-clinica{--bar:#2f7de1}.wk-ev.cat-estetica{--bar:#34a853}.wk-ev.cat-cirurgia{--bar:#e0476b}
+.wk-ev.sm{padding:0 9px;gap:6px;flex-direction:row;align-items:center}.wk-ev.sm .wtop,.wk-ev.sm .wp{display:none}.wk-ev.sm .wn{flex:0 1 auto;min-width:0}.wk-ev.sm .wt{flex:0 0 auto;color:var(--ink-3)}
+.wk-ev.md{gap:2px;padding:6px 9px}.wk-ev.md .wtop{display:none}
+.wk-now{position:absolute;left:0;right:0;height:2px;background:#ff3b30;z-index:2;pointer-events:none}.wk-now:before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:5px;background:#ff3b30}
+.wk-legend{display:flex;gap:14px;flex-wrap:wrap;padding:10px 18px 14px;font-size:12px;color:var(--ink-3);border-top:.5px solid var(--line)}
+.wk-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+:root[data-theme="dark"] .wk-ev.cat-clinica{background:rgba(47,125,225,.22)}:root[data-theme="dark"] .wk-ev.cat-estetica{background:rgba(52,168,83,.2)}:root[data-theme="dark"] .wk-ev.cat-cirurgia{background:rgba(224,71,107,.22)}:root[data-theme="dark"] .wk-ev.cat-none{background:rgba(255,255,255,.08)}
+:root[data-theme="dark"] .wk-st{background:rgba(0,0,0,.35)}:root[data-theme="dark"] .wk-st.agendada{color:#fbbf24}:root[data-theme="dark"] .wk-st.realizada{color:#4ade80}:root[data-theme="dark"] .wk-st.cancelada{color:#f87171}
+@media (max-width:760px){.wk-head{padding:14px 14px 10px}.wk-grid{grid-template-columns:44px repeat(var(--n),minmax(0,1fr))}.wk-times span{right:5px;font-size:10.5px}}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
 .cal-head h2{margin:0;font-size:19px;font-weight:600;text-transform:capitalize;letter-spacing:-.3px}
 .cal-week,.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
@@ -1321,7 +1361,8 @@ const badge=(m,k)=>{const[l,c]=m[k]||[k,''];return`<span class="badge ${c}">${l}
 const av=(name,cls='')=>`<div class="avatar ${cls}">${esc(initials(name))}</div>`;
 
 /* ================= estado da interface ================= */
-const S={cf:{proc:'',cat:'',from:'',to:'',bst:''},pmode:'cards',view:'agenda',anim:true,calMonth:mKey(today()),selDay:today(),calSlide:'',pq:'',psort:'recent',bf:'todos',bq:'',retMode:'month',retMonth:mKey(addMonths(today(),1)),retSel:null,retSelKey:''};
+const AGV_KEY='lumiere.agview';const agvStored=()=>{try{return localStorage.getItem(AGV_KEY)||''}catch(e){return''}};
+const S={agView:agvStored()==='semana'?'semana':'mes',wkRef:today(),cf:{proc:'',cat:'',from:'',to:'',bst:''},pmode:'cards',view:'agenda',anim:true,calMonth:mKey(today()),selDay:today(),calSlide:'',pq:'',psort:'recent',bf:'todos',bq:'',retMode:'month',retMonth:mKey(addMonths(today(),1)),retSel:null,retSelKey:''};
 
 /* ================= toast / modal / menu / datepicker ================= */
 function toast(msg){const box=$('#toasts');[...box.children].forEach(c=>{if(c.textContent===msg)c.remove()});while(box.children.length>=2)box.firstChild.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='.3s';t.style.opacity='0';t.style.transform='translateY(8px)'},2600);setTimeout(()=>t.remove(),2950)}
@@ -1416,9 +1457,53 @@ function vAgenda(){
     <div class="stat"><span class="lbl">${ic('money')}Faturado em ${mName(mk)}</span><span class="val">${money(rev)}</span><span class="sub">${prev?`+ ${money(prev)} previsto`:'consultas realizadas'}</span></div>
     <div class="stat"><span class="lbl">${ic('users')}Pacientes</span><span class="val">${db.patients.length}</span><span class="sub">${newP} novo${newP===1?'':'s'} este mês</span></div>
   </div>
-  <div class="agenda-grid"><div class="card glass" id="calCard">${calHTML()}</div><div class="daypanel glass" id="dayPanel">${dayHTML()}</div></div>`;
+  <div class="ag-bar"><div class="seg" role="tablist" aria-label="Modo da agenda">${[['mes','Mês','cal'],['semana','Semana','clock']].map(([k,l,i])=>`<button role="tab" class="${S.agView===k?'on':''}" data-act="agView" data-id="${k}" style="display:inline-flex;align-items:center;gap:6px">${ic(i,'style="width:14px;height:14px"')}${l}</button>`).join('')}</div></div>
+  ${S.agView==='semana'?`<div class="card glass wk" id="wkCard">${weekHTML()}</div>`:`<div class="agenda-grid"><div class="card glass" id="calCard">${calHTML()}</div><div class="daypanel glass" id="dayPanel">${dayHTML()}</div></div>`}`;
+  if(S.agView==='semana')requestAnimationFrame(()=>{const b=$('#wkBody');if(b&&!b.dataset.s){b.dataset.s='1';const f=$('.wk-times span');const lo=f?toMin(f.textContent)-60:420;b.scrollTop=Math.max(0,((Math.min(new Date().getHours(),17)-1)*60-lo)/60*WK_HH)}});
   return html;
 }
+/* ===== Agenda em quadro: colunas por dia, linhas por horário ===== */
+const WK_HH=80; // altura de 1 hora em px
+const toMin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?+m[1]*60+ +m[2]:null};
+const fromMin=n=>`${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;
+const shortName=n=>{const w=String(n||'').trim().split(/\s+/);return w.length>1?`${w[0]} ${w[w.length-1][0]}.`:w[0]||''};
+function apptDur(a){const d=(a.items||[]).reduce((s,i)=>{const pr=i.procId&&procById(i.procId);return s+((pr&&+pr.duration)||0)*(+i.qty||1)},0);return Math.max(30,Math.min(d||30,360))}
+function apptCat(a){const c=[...new Set((a.items||[]).filter(i=>i.name).map(procCat))];return c.includes('cirurgia')?'cirurgia':c[0]||'none'}
+function wkCount(){const w=innerWidth;return w<760?1:w<1100?3:7}
+function wkDays(){const n=wkCount(),r=parse(S.wkRef);let st=new Date(r);if(n===7){const dw=(r.getDay()+6)%7;st.setDate(r.getDate()-dw)}return Array.from({length:n},(_,i)=>{const d=new Date(st);d.setDate(st.getDate()+i);return iso(d)})}
+function weekHTML(){
+  const days=wkDays(),n=days.length,t=today(),now=new Date(),nowMin=now.getHours()*60+now.getMinutes();
+  const byDay={};days.forEach(d=>byDay[d]=[]);let lo=7*60,hi=20*60;
+  db.appointments.forEach(a=>{if(!byDay[a.date])return;const st=toMin(a.time);if(st==null)return;const en=st+apptDur(a);byDay[a.date].push({a,st,en});lo=Math.min(lo,Math.floor(st/60)*60);hi=Math.max(hi,Math.ceil(en/60)*60)});
+  const untimed=days.reduce((s,d)=>s+db.appointments.filter(a=>a.date===d&&toMin(a.time)==null&&a.status!=='cancelada').length,0);
+  const H=(hi-lo)/60,px=m=>(m-lo)/60*WK_HH;
+  const rt={};activeReturns().forEach(r=>{if(byDay[r.date])(rt[r.date]=rt[r.date]||[]).push(r)});
+  const d0=parse(days[0]),d1=parse(days[n-1]);
+  const title=n===1?`${cap(d0.toLocaleDateString('pt-BR',{weekday:'long'}))}, ${d0.getDate()} <em>de ${MONTHS[d0.getMonth()]}</em>`:`${d0.getDate()}${d0.getMonth()!==d1.getMonth()?' '+MONTHS[d0.getMonth()].slice(0,3):''} – ${d1.getDate()} <em>${MONTHS[d1.getMonth()]} ${d1.getFullYear()}</em>`;
+  const STI={agendada:['clock','Agendada'],realizada:['check','Realizada'],cancelada:['x','Cancelada']};
+  const col=d=>{const L=byDay[d].sort((x,y)=>x.st-y.st||y.en-x.en);
+    // divide em faixas quando há horários sobrepostos
+    let group=[],gEnd=-1;const out=[];const flush=()=>{const lanes=[];group.forEach(e=>{let k=lanes.findIndex(end=>end<=e.st);if(k<0){k=lanes.length;lanes.push(0)}lanes[k]=e.en;e.k=k});group.forEach(e=>e.n=lanes.length);out.push(...group);group=[]};
+    L.forEach(e=>{if(e.st>=gEnd&&group.length)flush();group.push(e);gEnd=Math.max(gEnd,e.en)});if(group.length)flush();
+    const evs=out.map(({a,st,en,k,n:ln})=>{const p=P(a.patientId),h=Math.max(30,px(en)-px(st)-3),sz=h<56?'sm':h<100?'md':'';const si=STI[a.status]||STI.agendada;const pn=procNames(a.items)||'Sem procedimento';
+      return`<button class="wk-ev cat-${apptCat(a)} st-${a.status} ${sz}" data-act="editAppt" data-id="${a.id}" style="top:${px(st)+1}px;height:${h}px;left:calc(${k/ln*100}% + 3px);right:auto;width:calc(${100/ln}% - 6px)" title="${esc((p?.name||'')+' · '+a.time+' · '+pn)}">
+        <span class="wtop"><span class="wk-st ${a.status}">${ic(si[0])}${si[1]}</span><span class="wv">${money(calc(a).total)}</span></span>
+        <span class="wn">${esc(sz==='sm'&&p?shortName(p.name):(p?.name||'Paciente removido'))}</span><span class="wt">${fromMin(st)} – ${fromMin(en)}</span><span class="wp">${esc(pn)}</span></button>`}).join('');
+    const nowL=d===t&&nowMin>=lo&&nowMin<=hi?`<div class="wk-now" style="top:${px(nowMin)}px"></div>`:'';
+    return`<div class="wk-col ${d===t?'today':d<t?'past':''}" data-wkday="${d}" style="height:${H*WK_HH}px">${evs}${nowL}</div>`};
+  return`<div class="wk-head"><h2>${title}</h2><div class="row"><button class="btn sm" data-act="wkToday">Hoje</button><button class="btn sm icon" data-act="wkPrev" aria-label="Anterior">${ic('chevL')}</button><button class="btn sm icon" data-act="wkNext" aria-label="Próximo">${ic('chevR')}</button><button class="btn sm dark" data-act="newAppt" data-id="${days.includes(t)?t:days[0]}">${ic('plus')}<span class="btn-label">Nova consulta</span></button></div></div>
+  <div class="wk-body" id="wkBody"><div class="wk-grid" style="--n:${n};--hh:${WK_HH}px">
+    <div class="wk-corner"></div>${days.map(d=>{const dd=parse(d),R=rt[d]||[];return`<div class="wk-dh ${d===t?'today':''}" data-act="day" data-id="${d}"><div class="wd">${dd.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','')}</div><div class="dn">${dd.getDate()}</div>${R.length?`<span class="rt">${R.length} retorno${R.length>1?'s':''}</span>`:''}</div>`}).join('')}
+    <div class="wk-times" style="height:${H*WK_HH}px">${Array.from({length:H+1},(_,i)=>i?`<span style="top:${i*WK_HH}px">${fromMin(lo+i*60)}</span>`:'').join('')}</div>
+    ${days.map(col).join('')}
+  </div></div>
+  <div class="wk-legend"><span><i style="background:#2f7de1"></i>Clínica (avaliação)</span><span><i style="background:#34a853"></i>Estética</span><span><i style="background:#e0476b"></i>Cirurgia</span><span>Toque num horário vazio para agendar${untimed?` · ${untimed} consulta${untimed>1?'s':''} sem horário (veja no modo Mês)`:''}</span></div>`;
+}
+function wkRender(scroll){const c=$('#wkCard');if(!c)return;const b=$('#wkBody',c),top=b?b.scrollTop:0;c.innerHTML=weekHTML();const nb=$('#wkBody',c);
+  if(scroll){const lo=+(($('.wk-times span',c)||{}).textContent||'08:00').slice(0,2)-1;const target=Math.max(0,(Math.min(new Date().getHours(),17)-1-lo)*WK_HH);nb.scrollTop=target}else nb.scrollTop=top}
+let _wkW=innerWidth;addEventListener('resize',()=>{if(S.view==='agenda'&&S.agView==='semana'&&wkCount()!==(_wkW<760?1:_wkW<1100?3:7)){_wkW=innerWidth;wkRender()}else _wkW=innerWidth});
+document.addEventListener('click',e=>{const c=e.target.closest('.wk-col');if(!c||e.target.closest('.wk-ev'))return;const r=c.getBoundingClientRect(),lo=toMin(($('.wk-times span',c.parentNode)||{}).textContent||'08:00')-60;
+  let m=lo+Math.floor((e.clientY-r.top)/WK_HH*2)*30;m=Math.max(0,Math.min(23*60+30,m));openAppt({date:c.dataset.wkday,time:fromMin(m)})});
 function calHTML(){
   const k=S.calMonth,y=+k.slice(0,4),m=+k.slice(5,7)-1,f1=new Date(y,m,1),start=new Date(y,m,1-f1.getDay());
   const weeks=Math.ceil((f1.getDay()+new Date(y,m+1,0).getDate())/7),t=today();
@@ -1451,6 +1536,10 @@ Object.assign(ACT,{
   day:id=>{openDaySheet(id);return;S.selDay=id;if(mKey(id)!==S.calMonth){S.calSlide=id>S.calMonth?'next':'prev';S.calMonth=mKey(id)}else S.calSlide='';$('#calCard').innerHTML=calHTML();$('#dayPanel').innerHTML=dayHTML();S.calSlide=''},
   calPrev:()=>{S.calMonth=mShift(S.calMonth,-1);S.calSlide='prev';$('#calCard').innerHTML=calHTML();S.calSlide=''},
   calNext:()=>{S.calMonth=mShift(S.calMonth,1);S.calSlide='next';$('#calCard').innerHTML=calHTML();S.calSlide=''},
+  agView:id=>{S.agView=id==='semana'?'semana':'mes';try{localStorage.setItem(AGV_KEY,S.agView)}catch(e){}render();if(S.agView==='semana')wkRender(true)},
+  wkPrev:()=>{const d=parse(S.wkRef);d.setDate(d.getDate()-wkCount());S.wkRef=iso(d);wkRender()},
+  wkNext:()=>{const d=parse(S.wkRef);d.setDate(d.getDate()+wkCount());S.wkRef=iso(d);wkRender()},
+  wkToday:()=>{S.wkRef=today();wkRender(true)},
   calToday:()=>{S.calMonth=mKey(today());S.selDay=today();$('#calCard').innerHTML=calHTML();$('#dayPanel').innerHTML=dayHTML()},
   newAppt:id=>openAppt({date:id||S.selDay||today()}),
   editAppt:id=>openAppt({id}),
