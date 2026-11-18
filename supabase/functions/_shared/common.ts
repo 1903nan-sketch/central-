@@ -24,23 +24,36 @@ export async function internal(key: string) {
 }
 
 /* ---------- WhatsApp (Evolution API v2) ---------- */
-export const evoConfigured = () => !!(env("EVOLUTION_URL") && env("EVOLUTION_API_KEY") && env("EVOLUTION_INSTANCE"));
+// URL e nome da instância: segredo do Supabase ou, se faltar, a tabela lumiere_internal
+// (evolution_url / evolution_instance). A chave fica só nos segredos (EVOLUTION_API_KEY).
+const CFG: Record<string, string> = {};
+export async function loadEvo() {
+  for (const [k, ik, def] of [["EVOLUTION_URL", "evolution_url", ""], ["EVOLUTION_INSTANCE", "evolution_instance", "clinica"]]) {
+    CFG[k] = env(k) || (await internal(ik)) || def;
+  }
+  CFG.EVOLUTION_API_KEY = env("EVOLUTION_API_KEY");
+}
+const cfg = (k: string) => CFG[k] ?? env(k);
+export const evoConfigured = () => !!(cfg("EVOLUTION_URL") && cfg("EVOLUTION_API_KEY") && cfg("EVOLUTION_INSTANCE"));
+export const evoInstance = () => cfg("EVOLUTION_INSTANCE");
 const evoBase = () => {
-  let b = env("EVOLUTION_URL").replace(/\/+$/, "");
+  let b = cfg("EVOLUTION_URL").replace(/\/+$/, "");
   if (!/^https?:\/\//.test(b)) b = "https://" + b;
   return b;
 };
-const inst = () => encodeURIComponent(env("EVOLUTION_INSTANCE"));
+const inst = () => encodeURIComponent(cfg("EVOLUTION_INSTANCE"));
 export async function evo(path: string, init: RequestInit = {}) {
   const r = await fetch(evoBase() + path.replace("{inst}", inst()), {
     ...init,
-    headers: { "Content-Type": "application/json", apikey: env("EVOLUTION_API_KEY"), ...(init.headers ?? {}) },
+    headers: { "Content-Type": "application/json", apikey: cfg("EVOLUTION_API_KEY"), ...(init.headers ?? {}) },
   });
   let j: any = null;
   try { j = await r.json(); } catch { /* sem corpo */ }
   if (!r.ok) {
     const m = j?.response?.message ?? j?.message ?? j?.error;
-    throw new Error((Array.isArray(m) ? m.join(" ") : typeof m === "string" ? m : "") || `Evolution respondeu ${r.status}`);
+    const err = new Error((Array.isArray(m) ? m.join(" ") : typeof m === "string" ? m : "") || `Evolution respondeu ${r.status}`);
+    (err as any).status = r.status;
+    throw err;
   }
   return j;
 }

@@ -1,7 +1,7 @@
 // Fila de envio das campanhas. Chamada a cada minuto pelo pg_cron.
 // Envia um lote pequeno, com intervalo aleatório entre as mensagens,
 // só em horário comercial (8h–20h, horário de Brasília).
-import { json, admin, internal, evoSend, evoConfigured } from "../_shared/common.ts";
+import { json, admin, internal, evoSend, evoConfigured, loadEvo } from "../_shared/common.ts";
 
 const LOTE = 4;                 // mensagens por execução (por minuto)
 const ESPERA_MIN = 8_000;       // intervalo aleatório entre mensagens
@@ -19,6 +19,7 @@ Deno.serve(async (req) => {
   if (!segredo || req.headers.get("x-cron-secret") !== segredo) {
     return json({ error: "não autorizado" }, 401);
   }
+  await loadEvo();
   if (!evoConfigured()) return json({ skipped: "Evolution não configurada" });
   if (!horarioComercial()) return json({ skipped: "fora do horário comercial" });
 
