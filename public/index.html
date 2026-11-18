@@ -1009,7 +1009,8 @@ html{background:var(--bg)}
 .cstats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.cstats div{display:flex;flex-direction:column}.cstats b{font-size:20px;letter-spacing:-.02em}.cstats small{font-size:11.5px;color:var(--ink-3)}
 .cp-t{margin:0;font-size:22px;letter-spacing:-.02em}
 .rep{padding:12px 14px;border-radius:16px;background:var(--cell,#fff);box-shadow:0 0 0 .5px var(--line)}
-.pv-n{font-size:17px}.pv-list{max-height:280px;margin-top:12px;display:flex;flex-direction:column;border-top:.5px solid var(--line)}
+.pv-n{font-size:17px}.pv-tools{gap:8px;margin-top:14px}.pv-q{flex:1 1 220px;position:relative;display:flex;align-items:center}.pv-q svg{position:absolute;left:12px;width:16px;height:16px;opacity:.5;pointer-events:none}.pv-q .in{padding-left:36px;width:100%}
+.pv-list{max-height:280px;margin-top:12px;display:flex;flex-direction:column;border-top:.5px solid var(--line)}
 .pv-it{display:flex;align-items:center;gap:12px;padding:9px 2px;border-bottom:.5px solid var(--line);cursor:pointer}.pv-it .grow{display:flex;flex-direction:column;min-width:0}.pv-it small{color:var(--ink-3);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .proc-link{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left}.proc-link span:first-child{display:flex;align-items:center;gap:8px}.proc-link svg{width:18px;height:18px}
 @media (max-width:860px){.rt-h{display:none}.rt-r,.rtable.st .rt-r{grid-template-columns:1fr auto;row-gap:2px}.rt-r span:nth-child(n+3){font-size:12.5px;color:var(--ink-3)}.f-stats{grid-template-columns:repeat(2,1fr)!important}.cstats b{font-size:17px}}
@@ -1726,11 +1727,15 @@ function openCampEditor(base){
       <div class="chips">${['nome','procedimento','data'].map(v=>`<button type="button" class="chip" data-var="${v}">{${v}}</button>`).join('')}</div>
       <div class="small muted">O rodapé “Se não quiser mais receber mensagens, é só avisar.” entra automaticamente em todas as mensagens.</div></div>
     <div class="fsec">${ic('eye')}Pré-visualização</div>
-    <div class="box" data-prev></div>
+    <div class="box"><div data-prev></div>
+      <div data-pvwrap style="display:none"><div class="row wrap pv-tools"><label class="pv-q">${ic('search')}<input class="in" data-pvq placeholder="Buscar paciente pelo nome ou telefone" autocomplete="off"></label><button type="button" class="btn sm" data-pvall="1">Marcar todas</button><button type="button" class="btn sm" data-pvall="0">Desmarcar todas</button></div><div data-pvl></div></div></div>
   </div>`,
   foot:`<button class="btn" data-cancel>Cancelar</button><button class="btn" data-draft>Salvar rascunho</button><button class="btn dark" data-send>${ic('send')}Enviar</button>`,
   onMount:(el,m)=>{
-    const prevBox=$('[data-prev]',el);let T={list:[]},timer;
+    const prevBox=$('[data-prev]',el),pvWrap=$('[data-pvwrap]',el),pvList=$('[data-pvl]',el);let T={list:[]},timer,q='';
+    const pvMatch=x=>{if(!q)return true;const dq=q.replace(/\D/g,'');return norm(x.p.name).includes(q)||(dq.length>=3&&String(x.p.phone||'').replace(/\D/g,'').includes(dq))};
+    const filterList=()=>{let n=0;$$('.pv-it',pvList).forEach(it=>{const x=T.list.find(t=>t.p.id===$('[data-pv]',it).dataset.pv);const ok=!!x&&pvMatch(x);it.style.display=ok?'':'none';if(ok)n++});
+      const e=$('[data-pvnone]',pvList);if(e)e.outerHTML='';if(!n&&T.list.length)pvList.insertAdjacentHTML('beforeend','<div class="small muted" data-pvnone style="padding:12px 4px">Ninguém com esse nome na lista.</div>')};
     const sync=()=>{
       $$('[data-f]',el).forEach(g=>$$('button',g).forEach(b=>b.classList.toggle('on',b.dataset.v===String(f[g.dataset.f]))));
       const pr=f.proc&&procById(f.proc);$('[data-fproc]',el).innerHTML=`${ic('tag')}<span>${pr?esc(pr.name):'Qualquer procedimento'}</span><span class="dd">▾</span>`;$('[data-fproc]',el).classList.toggle('on',!!pr);
@@ -1743,7 +1748,9 @@ function openCampEditor(base){
     const preview=()=>{T=campaignTargets(f);tpl=$('[data-ct]',el).value;const sel=T.list.filter(x=>!excluded.has(x.p.id));const ex=sel[0]||T.list[0];
       prevBox.innerHTML=`<div class="row between wrap" style="gap:8px;margin-bottom:10px"><b class="pv-n">${sel.length} paciente${sel.length===1?'':'s'} vão receber</b><span class="small muted">${[T.optOut?`${T.optOut} fora das campanhas`:'',T.noPhone?`${T.noPhone} sem WhatsApp`:'',excluded.size?`${[...excluded].filter(id=>T.list.some(x=>x.p.id===id)).length} desmarcada(s)`:''].filter(Boolean).join(' · ')}</span></div>
         ${ex?`<div class="small muted" style="margin-bottom:6px">Exemplo para ${esc(ex.p.name)}:</div><div class="msg-prev">${esc(campMsg(tpl,ex))}</div>`:'<div class="small muted">Nenhuma paciente com esses filtros.</div>'}
-        ${T.list.length?`<div class="pv-list scroll">${T.list.map(x=>`<label class="pv-it"><input type="checkbox" class="ck" data-pv="${x.p.id}" ${excluded.has(x.p.id)?'':'checked'}><span class="grow"><b>${esc(x.p.name)}</b><small>${esc(x.p.phone)}${x.match?` · ${esc(x.match.name)} em ${fmtD(x.match.date)}`:''}</small></span></label>`).join('')}</div>`:''}`;
+`;
+      pvWrap.style.display=T.list.length?'':'none';
+      pvList.innerHTML=T.list.length?`<div class="pv-list scroll">${T.list.map(x=>`<label class="pv-it"><input type="checkbox" class="ck" data-pv="${x.p.id}" ${excluded.has(x.p.id)?'':'checked'}><span class="grow"><b>${esc(x.p.name)}</b><small>${esc(x.p.phone)}${x.match?` · ${esc(x.match.name)} em ${fmtD(x.match.date)}`:''}</small></span></label>`).join('')}</div>`:'';filterList();
       $('[data-send]',el).innerHTML=`${ic('send')}Enviar para ${sel.length}`;$('[data-send]',el).disabled=!sel.length};
     sync();$('[data-fn="lastMonths"]',el).value=f.lastMonths;['bairro','cidade','cep','ageMin','ageMax'].forEach(k=>$(`[data-fn="${k}"]`,el).value=f[k]||'');
     el.addEventListener('click',async e=>{
@@ -1751,10 +1758,11 @@ function openCampEditor(base){
       const ch=e.target.closest('[data-fsrc] [data-v],[data-fskin] [data-v]');if(ch){f[ch.closest('[data-fsrc]')?'source':'skin']=ch.dataset.v;sync();return}
       const fd=e.target.closest('[data-fd]');if(fd){const v=await pickDate(fd,f[fd.dataset.fd]||today(),[['Limpar','']]);if(v!==null){f[fd.dataset.fd]=v;sync()}return}
       const fp=e.target.closest('[data-fproc]');if(fp){const L=db.procedures.filter(x=>!f.cat||x.cat===f.cat).sort((a,b)=>a.name.localeCompare(b.name));openMenu(fp,[{label:'Qualquer procedimento',icon:'tag',fn:()=>{f.proc='';sync()}},...L.map(x=>({label:esc(x.name),icon:x.cat==='cirurgia'?'scalpel':'tag',fn:()=>{f.proc=x.id;sync()}}))]);return}
+      const pa=e.target.closest('[data-pvall]');if(pa){T.list.filter(pvMatch).forEach(x=>pa.dataset.pvall==='1'?excluded.delete(x.p.id):excluded.add(x.p.id));preview();return}
       const vr=e.target.closest('[data-var]');if(vr){const t=$('[data-ct]',el),a=t.selectionStart,b=t.selectionEnd,v=`{${vr.dataset.var}}`;t.value=t.value.slice(0,a)+v+t.value.slice(b);t.focus();t.selectionStart=t.selectionEnd=a+v.length;preview();return}
     });
     el.addEventListener('change',e=>{const pv=e.target.closest('[data-pv]');if(pv){pv.checked?excluded.delete(pv.dataset.pv):excluded.add(pv.dataset.pv);preview()}if(e.target.matches('[data-fob]')){f.openBudget=e.target.checked;sync()}});
-    el.addEventListener('input',e=>{const k=e.target.dataset.fn;if(k){f[k]=e.target.value.trim();sync()}if(e.target.matches('[data-ct]'))preview()});
+    el.addEventListener('input',e=>{if(e.target.matches('[data-pvq]')){q=norm(e.target.value.trim());filterList();return}const k=e.target.dataset.fn;if(k){f[k]=e.target.value.trim();sync()}if(e.target.matches('[data-ct]'))preview()});
     $('[data-cancel]',el).onclick=m.close;
     const save=async send=>{name=$('[data-cn]',el).value.trim();tpl=$('[data-ct]',el).value.trim();
       if(!name){toast('Dê um nome para a campanha');$('[data-cn]',el).focus();return}if(!tpl){toast('Escreva a mensagem');return}
