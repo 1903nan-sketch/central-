@@ -1080,6 +1080,7 @@ html{background:var(--bg)}
 .pl-a{display:flex;gap:6px;justify-content:flex-end}
 .pl-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}.ptag.sm{height:20px;padding:0 8px;font-size:11px}
 .pl .match{margin-top:4px}
+.fchip.warnf{color:#b45309}
 .pl-a .fav{color:var(--ink-4)}.pl-a .fav.on{color:#f59e0b}.pl-a .fav.on svg{fill:#f59e0b}.fchip.fav-f.on{color:#b45309}.fchip.fav-f.on svg{fill:#f59e0b;color:#f59e0b}
 @media (max-width:900px){.pl-h{display:none}.pl-r{grid-template-columns:1fr auto;gap:4px 10px;padding:12px 14px}.pl-p{grid-column:1/2}.pl-a{grid-column:2;grid-row:1}
   .pl-c{grid-column:1/-1;padding-left:52px;font-size:12.5px;color:var(--ink-2)}.pl-c:before{content:attr(data-l)': ';color:var(--ink-3)}.pl-c small{display:inline;margin-left:6px}.pl-c:has(.muted:only-child){display:none}}
@@ -1571,6 +1572,7 @@ function dayHTML(){
 Object.assign(ACT,{
   importSheets:()=>openImport(),
   pFav:id=>{const p=P(id);p.fav=!p.fav;changed()},
+  pMiss:(id,a)=>{openMenu(a,[{label:'Todos os cadastros',icon:'users',fn:()=>{S.pmiss='';S.plimit=0;render()}},...PMISS.map(([k,l,i,fn])=>({label:`${esc(l)} <span class="muted" style="margin-left:auto;padding-left:14px">${db.patients.filter(fn).length}</span>`,icon:i,fn:()=>{S.pmiss=k;S.plimit=0;render()}}))])},
   pFavF:()=>{S.pfav=!S.pfav;S.plimit=0;render()},
   pMore:()=>{S.plimit=(S.plimit||80)+80;$('#plist').innerHTML=pListHTML()},
   pNewAppt:id=>openAppt({patientId:id,date:today()}),
@@ -2199,16 +2201,30 @@ function patientStats(id){
   const lv=(P(id)||{}).lastVisit||'';const l0=done[0]?.date||'';
   return{A,done,total:done.reduce((s,a)=>s+calc(a).total,0),last:l0>lv?l0:lv,nextR,nextA};
 }
+const phoneBad=p=>{const d=digits(p.phone);return !!d&&!(d.length===10||d.length===11||(d.startsWith('55')&&(d.length===12||d.length===13)))};
+let _ds=null,_dsK='';const doneSet=()=>{const k=db.appointments.length+'|'+db.appointments.filter(a=>a.status==='realizada').length;if(k!==_dsK){_ds=new Set(db.appointments.filter(a=>a.status==='realizada').map(a=>a.patientId));_dsK=k}return _ds};
+const PMISS=[
+  ['semtel','Sem telefone','phone',p=>!digits(p.phone)],
+  ['telinv','Telefone com número estranho','phone',phoneBad],
+  ['semcpf','Sem CPF','doc',p=>digits(p.cpf).length!==11],
+  ['semend','Sem endereço','folder',p=>!(p.address||'').trim()],
+  ['semcep','Sem CEP','folder',p=>digits(p.cep).length!==8],
+  ['semnasc','Sem data de nascimento','cal',p=>!p.birth],
+  ['sememail','Sem e-mail','send',p=>!(p.email||'').includes('@')],
+  ['semsexo','Sem sexo','user',p=>!p.gender],
+  ['semvisita','Sem nenhum atendimento','clock',p=>!p.lastVisit&&!doneSet().has(p.id)],
+];
 function pMatches(p,q,qd){
   if(norm([p.name,p.socialName,p.email,p.address,p.addrCompl,p.insurance,p.rg,p.instagram,(p.tags||[]).join(' ')].filter(Boolean).join(' | ')).includes(q))return true;
   if(qd&&qd.length>=3&&[p.phone,p.phone2,p.cpf,p.cep,p.rg].some(v=>digits(v).includes(qd)))return true;
   return false}
 const pCity=p=>{const a=(p.address||'').split(', ').filter(Boolean);return a.length>1?a[a.length-1]:''};
 function ageYM(b){if(!b)return'';const d=parse(b),n=new Date();let m=(n.getFullYear()-d.getFullYear())*12+n.getMonth()-d.getMonth();if(n.getDate()<d.getDate())m--;if(m<0)return'';const y=Math.floor(m/12),r=m%12;return y?`${y}a${r?r+'m':''}`:`${r}m`}
-function crmFilterActive(){const f=S.cf;return !!(S.pfav||f.proc||f.cat||f.from||f.to||f.bst)}
+function crmFilterActive(){const f=S.cf;return !!(S.pmiss||S.pfav||f.proc||f.cat||f.from||f.to||f.bst)}
 function crmFiltered(){const f=S.cf,q=norm(S.pq),qd=digits(S.pq);
   const byProc=!!(f.proc||f.cat||f.from||f.to);
-  const okP=p=>(!S.pfav||p.fav)&&(!q||pMatches(p,q,qd))&&(!f.bst||db.budgets.some(b=>b.patientId===p.id&&b.status===f.bst));
+  const mf=S.pmiss&&PMISS.find(x=>x[0]===S.pmiss);
+  const okP=p=>(!S.pfav||p.fav)&&(!mf||mf[3](p))&&(!q||pMatches(p,q,qd))&&(!f.bst||db.budgets.some(b=>b.patientId===p.id&&b.status===f.bst));
   const R=realized().filter(r=>(!f.proc||r.procId===f.proc)&&(!f.cat||r.cat===f.cat)&&(!f.from||r.date>=f.from)&&(!f.to||r.date<=f.to)&&okP(P(r.patientId)));
   const byP={};R.forEach(r=>(byP[r.patientId]=byP[r.patientId]||[]).push(r));
   const pats=db.patients.filter(p=>okP(p)&&(!byProc||byP[p.id]));
@@ -2218,6 +2234,7 @@ function vPacientes(){const f=S.cf,pr=f.proc&&procById(f.proc);
   `<div class="row wrap" style="margin-bottom:12px;gap:10px"><div class="searchbar">${ic('search')}<input class="in" placeholder="Buscar por nome, CPF, telefone, e-mail, cidade, bairro, etiqueta…" data-inp="pq" value="${esc(S.pq)}"></div>
   <div class="seg">${[['cards','Pacientes'],['tabela','Procedimentos realizados']].map(([k,l])=>`<button class="${S.pmode===k?'on':''}" data-act="pmode" data-id="${k}">${l}</button>`).join('')}</div></div>
   <div class="crm-f glass">
+    <button class="fchip ${S.pmiss?'on warnf':''}" data-act="pMiss">${ic('user')}${S.pmiss?esc(PMISS.find(x=>x[0]===S.pmiss)[1]):'Cadastro incompleto'}<span class="dd">▾</span></button>
     <button class="fchip fav-f ${S.pfav?'on':''}" data-act="pFavF">${ic('star')}Favoritas${db.patients.some(p=>p.fav)?` · ${db.patients.filter(p=>p.fav).length}`:''}</button>
     <button class="fchip ${f.proc?'on':''}" data-act="cfProc">${ic('tag')}${pr?esc(pr.name):'Procedimento'}<span class="dd">▾</span></button>
     <div class="seg">${[['','Todas'],...CATS.map(([k])=>[k,catShort(k)])].map(([k,l])=>`<button class="${f.cat===k?'on':''}" data-act="cfCat" data-id="${k}">${l}</button>`).join('')}</div>
@@ -2264,7 +2281,7 @@ Object.assign(ACT,{
   cfProc:(_,a)=>{const L=db.procedures.filter(x=>!S.cf.cat||x.cat===S.cf.cat).sort((x,y)=>x.name.localeCompare(y.name));openMenu(a,[{label:'Qualquer procedimento',icon:'tag',fn:()=>{S.cf.proc='';render()}},...L.map(x=>({label:esc(x.name),icon:x.cat==='cirurgia'?'scalpel':x.kind==='consulta'?'steth':'tag',fn:()=>{S.cf.proc=x.id;render()}}))])},
   cfDate:async(k,a)=>{const v=await pickDate(a,S.cf[k]||today(),[['Limpar','']]);if(v===null)return;S.cf[k]=v;render()},
   cfBst:(_,a)=>openMenu(a,[{label:'Qualquer status',icon:'doc',fn:()=>{S.cf.bst='';render()}},...Object.entries(BST).map(([k,[l]])=>({label:'Orçamento '+l.toLowerCase(),icon:'doc',fn:()=>{S.cf.bst=k;render()}}))]),
-  cfClear:()=>{S.pfav=false;S.cf={proc:'',cat:'',from:'',to:'',bst:''};render()}
+  cfClear:()=>{S.pmiss='';S.pfav=false;S.cf={proc:'',cat:'',from:'',to:'',bst:''};render()}
 });
 ACT.psort=k=>{S.psort=k;render()};
 ACT.quickCreate=()=>{const p={id:uid(),name:S.pq.trim(),createdAt:Date.now()};db.patients.push(p);S.pq='';changed();toast('Paciente cadastrado');openFolder(p.id)};
